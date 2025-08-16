@@ -5,32 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Southern Table</title>
 <style>
-  body{font-family:"Helvetica Neue",sans-serif;margin:0;background:#800020;color:white;}
-  header{display:flex;align-items:center;padding:10px;background:#800020;position:sticky;top:0;z-index:1000;}
-  header img{height:60px;margin-right:15px;}
-  header h1{margin:0;font-size:1.8rem;}
-  nav{margin-left:auto;}
-  nav button{margin:5px;background:#800020;color:white;border:2px solid gold;border-radius:6px;padding:10px;cursor:pointer;}
-  section{display:none;padding:15px;}
-  .active{display:block;}
-  footer{position:sticky;bottom:0;background:#333;color:white;padding:10px;text-align:center;}
-  img.thumbnail{width:100px;height:100px;object-fit:cover;margin:5px;border:2px solid gold;border-radius:8px;}
-  #cartBtn{font-size:24px;background:black;color:white;border:2px solid gold;border-radius:6px;padding:5px 10px;cursor:pointer;}
-  input[type=number]{width:50px;}
+body{font-family:"Helvetica Neue",sans-serif;margin:0;background:#800020;color:white;}
+header{display:flex;align-items:center;padding:10px;background:#800020;position:sticky;top:0;z-index:1000;}
+header img{height:60px;margin-right:15px;}
+header h1{margin:0;font-size:1.8rem;}
+nav{margin-left:auto;}
+nav button{margin:5px;background:#800020;color:white;border:2px solid gold;border-radius:6px;padding:10px;cursor:pointer;}
+section{display:none;padding:15px;}
+.active{display:block;}
+footer{position:sticky;bottom:0;background:#333;color:white;padding:10px;text-align:center;}
+img.thumbnail{width:100px;height:100px;object-fit:cover;margin:5px;border:2px solid gold;border-radius:8px;}
+#cartBtn{font-size:24px;background:black;color:white;border:2px solid gold;border-radius:6px;padding:5px 10px;cursor:pointer;}
+input[type=number]{width:50px;}
+textarea{width:100%;height:60px;}
+input, select{padding:5px;margin:5px 0;border-radius:5px;border:none;}
+button.saveBtn{background:#800020;color:white;border:2px solid gold;padding:8px 12px;margin-top:10px;border-radius:6px;cursor:pointer;}
 </style>
 </head>
 <body>
 
+<!-- Admin Login Overlay -->
+<div id="adminLoginOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2000;">
+<h2>Admin Login</h2>
+<label>Username: <input type="text" id="adminUsername"></label><br>
+<label>Password: <input type="password" id="adminPassword"></label><br>
+<label>4-Digit PIN: <input type="password" id="adminPin"></label><br>
+<button onclick="checkAdminLogin()">Login</button>
+<p id="loginError" style="color:red;"></p>
+</div>
+
 <header>
-  <img src="logo.png" alt="The Southern Table Logo">
-  <h1>The Southern Table</h1>
-  <nav>
-    <button onclick="showSection('hoodies')">Hoodies</button>
-    <button onclick="showSection('exclusives')">Exclusives</button>
-    <button onclick="showSection('crunchythangs')">Crunchy Thangs</button>
-    <button onclick="showSection('mission-goals')">Mission & Goals + FAQ</button>
-    <button onclick="showSection('checkout')">Checkout</button>
-  </nav>
+<img src="logo.png" alt="The Southern Table Logo">
+<h1>The Southern Table</h1>
+<nav>
+<button onclick="showSection('hoodies')">Hoodies</button>
+<button onclick="showSection('exclusives')">Exclusives</button>
+<button onclick="showSection('crunchythangs')">Crunchy Thangs</button>
+<button onclick="showSection('mission-goals')">Mission & Goals + FAQ</button>
+<button onclick="showSection('checkout')">Checkout</button>
+</nav>
 </header>
 
 <!-- Hoodies Tab -->
@@ -39,7 +52,7 @@
 <p>Formed in 2025, The Southern Table was created with the vision of building a cohesive, wavey movement blending style, comfort, and community. Each hoodie represents high-quality rustic designs. Limited edition drops bring exclusivity, while classic hoodies remain staples for the Southern-inspired lifestyle.</p>
 <div id="hoodieImages"></div>
 <input type="file" id="hoodieUpload" multiple accept="image/*">
-<button onclick="saveImages('hoodie')">Save Hoodies</button>
+<button class="saveBtn" onclick="saveImages('hoodie')">Save Hoodies</button>
 </section>
 
 <!-- Exclusives Tab -->
@@ -48,7 +61,7 @@
 <p>Limited edition/random clothing pieces. Upload images and descriptions below:</p>
 <div id="exclusiveImages"></div>
 <input type="file" id="exclusiveUpload" multiple accept="image/*">
-<button onclick="saveImages('exclusive')">Save Exclusives</button>
+<button class="saveBtn" onclick="saveImages('exclusive')">Save Exclusives</button>
 </section>
 
 <!-- Crunchy Thangs Tab -->
@@ -57,7 +70,7 @@
 <p>Food truck initiative. Upload logo and food images:</p>
 <div id="crunchyImages"></div>
 <input type="file" id="crunchyUpload" multiple accept="image/*">
-<button onclick="saveImages('crunchythangs')">Save Crunchy Thangs</button>
+<button class="saveBtn" onclick="saveImages('crunchythangs')">Save Crunchy Thangs</button>
 </section>
 
 <!-- Mission & Goals + FAQ -->
@@ -70,22 +83,22 @@
 
 <h2>FAQ</h2>
 <dl>
-  <dt>How long will it take to receive my hoodie?</dt>
-  <dd>Made to order via Printify. Production: 2–5 business days, then shipping within U.S. (3–7 days). Limited edition may take slightly longer.</dd>
-  <dt>When can I place an order?</dt>
-  <dd>Every Wednesday and Saturday morning (A.M.).</dd>
-  <dt>Do you offer local delivery?</dt>
-  <dd>Local Brooklyn delivery +$5, in-person pickup free.</dd>
-  <dt>Can I pay with a card?</dt>
-  <dd>Cash/CashApp only. Card payments coming soon.</dd>
-  <dt>What sizes do you offer?</dt>
-  <dd>S–3XL. Extra $10 for 2XL/3XL.</dd>
-  <dt>Can I change/cancel an order?</dt>
-  <dd>Contact us ASAP. Once production begins, cancellations not possible.</dd>
-  <dt>Are hoodies limited edition?</dt>
-  <dd>Some drops are limited. Year-round basics always available.</dd>
-  <dt>How do I contact you?</dt>
-  <dd>Use phone number provided or CashApp.</dd>
+<dt>How long will it take to receive my hoodie?</dt>
+<dd>Made to order via Printify. Production: 2–5 business days, then shipping within U.S. (3–7 days). Limited edition may take slightly longer.</dd>
+<dt>When can I place an order?</dt>
+<dd>Every Wednesday and Saturday morning (A.M.).</dd>
+<dt>Do you offer local delivery?</dt>
+<dd>Local Brooklyn delivery +$5, in-person pickup free.</dd>
+<dt>Can I pay with a card?</dt>
+<dd>Cash/CashApp only. Card payments coming soon.</dd>
+<dt>What sizes do you offer?</dt>
+<dd>S–3XL. Extra $10 for 2XL/3XL.</dd>
+<dt>Can I change/cancel an order?</dt>
+<dd>Contact us ASAP. Once production begins, cancellations not possible.</dd>
+<dt>Are hoodies limited edition?</dt>
+<dd>Some drops are limited. Year-round basics always available.</dd>
+<dt>How do I contact you?</dt>
+<dd>Use phone number provided or CashApp.</dd>
 </dl>
 </section>
 
@@ -97,59 +110,57 @@
 <label><input type="radio" name="orderType" value="single" checked onchange="toggleOrderType()"> Single Order</label>
 <label><input type="radio" name="orderType" value="bulk" onchange="toggleOrderType()"> Bulk Order</label>
 
-<!-- Single Order Fields -->
 <div id="singleOrderFields">
-  <form id="singleOrderForm">
-    <label>Full Name: <input type="text" id="singleName" required></label><br>
-    <label>Phone: <input type="text" id="singlePhone" required></label><br>
-    <p>Select Hoodie Size:</p>
-    <label><input type="radio" name="singleHoodieSize" value="S" checked> S</label>
-    <label><input type="radio" name="singleHoodieSize" value="M"> M</label>
-    <label><input type="radio" name="singleHoodieSize" value="L"> L</label>
-    <label><input type="radio" name="singleHoodieSize" value="XL"> XL</label>
-    <label><input type="radio" name="singleHoodieSize" value="2XL"> 2XL (+$10)</label>
-    <label><input type="radio" name="singleHoodieSize" value="3XL"> 3XL (+$10)</label><br><br>
-    <p>Select Color:</p>
-    <select id="singleColor">
-      <option value="Black">Black</option>
-      <option value="Burgundy">Burgundy</option>
-      <option value="Gold">Gold</option>
-      <option value="Grey">Grey</option>
-    </select><br><br>
-    <label>Delivery Method:</label>
-    <select id="singleDelivery" required>
-      <option value="pickup">In-Person Pickup (Melrose St. 11237)</option>
-      <option value="local">Local Brooklyn Delivery (+$5)</option>
-      <option value="outside">Outside Brooklyn - Enter Shipping Address</option>
-    </select><br>
-    <label>Special Notes / Substitutions:<br><textarea id="singleNotes"></textarea></label><br>
-    <p>Total: $<span id="singleTotal">75</span></p>
-    <button type="button" onclick="saveSingleOrder()">Place Single Order</button>
-  </form>
+<form id="singleOrderForm">
+<label>Full Name: <input type="text" id="singleName" required></label><br>
+<label>Phone: <input type="text" id="singlePhone" required></label><br>
+<p>Select Hoodie Size:</p>
+<label><input type="radio" name="singleHoodieSize" value="S" checked> S</label>
+<label><input type="radio" name="singleHoodieSize" value="M"> M</label>
+<label><input type="radio" name="singleHoodieSize" value="L"> L</label>
+<label><input type="radio" name="singleHoodieSize" value="XL"> XL</label>
+<label><input type="radio" name="singleHoodieSize" value="2XL"> 2XL (+$10)</label>
+<label><input type="radio" name="singleHoodieSize" value="3XL"> 3XL (+$10)</label><br><br>
+<p>Select Color:</p>
+<select id="singleColor">
+<option value="Black">Black</option>
+<option value="Burgundy">Burgundy</option>
+<option value="Gold">Gold</option>
+<option value="Grey">Grey</option>
+</select><br><br>
+<label>Delivery Method:</label>
+<select id="singleDelivery" required>
+<option value="pickup">In-Person Pickup (Melrose St. 11237)</option>
+<option value="local">Local Brooklyn Delivery (+$5)</option>
+<option value="outside">Outside Brooklyn - Enter Shipping Address</option>
+</select><br>
+<label>Special Notes / Substitutions:<br><textarea id="singleNotes"></textarea></label><br>
+<p>Total: $<span id="singleTotal">75</span></p>
+<button type="button" onclick="saveSingleOrder()">Place Single Order</button>
+</form>
 </div>
 
-<!-- Bulk Order Fields -->
 <div id="bulkOrderFields" style="display:none;">
-  <form id="bulkOrderForm">
-    <label>Full Name: <input type="text" id="bulkName" required></label><br>
-    <label>Phone: <input type="text" id="bulkPhone" required></label><br>
-    <p>Hoodie Color Selection (Max 10 per color):</p>
-    <table id="bulkTable">
-      <tr><td>Black</td><td><input type="number" class="colorQty" data-color="Black" min="0" max="10" value="0"></td></tr>
-      <tr><td>Burgundy</td><td><input type="number" class="colorQty" data-color="Burgundy" min="0" max="10" value="0"></td></tr>
-      <tr><td>Gold</td><td><input type="number" class="colorQty" data-color="Gold" min="0" max="10" value="0"></td></tr>
-      <tr><td>Grey</td><td><input type="number" class="colorQty" data-color="Grey" min="0" max="10" value="0"></td></tr>
-    </table>
-    <label>Delivery Method:</label>
-    <select id="bulkDelivery" required>
-      <option value="pickup">In-Person Pickup (Melrose St. 11237)</option>
-      <option value="local">Local Brooklyn Delivery (+$5)</option>
-      <option value="outside">Outside Brooklyn - Enter Shipping Address</option>
-    </select><br>
-    <label>Special Notes / Substitutions:<br><textarea id="bulkNotes"></textarea></label><br>
-    <p>Total: $<span id="bulkTotal">0</span></p>
-    <button type="button" onclick="saveBulkOrder()">Place Bulk Order</button>
-  </form>
+<form id="bulkOrderForm">
+<label>Full Name: <input type="text" id="bulkName" required></label><br>
+<label>Phone: <input type="text" id="bulkPhone" required></label><br>
+<p>Hoodie Color Selection (Max 10 per color):</p>
+<table id="bulkTable">
+<tr><td>Black</td><td><input type="number" class="colorQty" data-color="Black" min="0" max="10" value="0"></td></tr>
+<tr><td>Burgundy</td><td><input type="number" class="colorQty" data-color="Burgundy" min="0" max="10" value="0"></td></tr>
+<tr><td>Gold</td><td><input type="number" class="colorQty" data-color="Gold" min="0" max="10" value="0"></td></tr>
+<tr><td>Grey</td><td><input type="number" class="colorQty" data-color="Grey" min="0" max="10" value="0"></td></tr>
+</table>
+<label>Delivery Method:</label>
+<select id="bulkDelivery" required>
+<option value="pickup">In-Person Pickup (Melrose St. 11237)</option>
+<option value="local">Local Brooklyn Delivery (+$5)</option>
+<option value="outside">Outside Brooklyn - Enter Shipping Address</option>
+</select><br>
+<label>Special Notes / Substitutions:<br><textarea id="bulkNotes"></textarea></label><br>
+<p>Total: $<span id="bulkTotal">0</span></p>
+<button type="button" onclick="saveBulkOrder()">Place Bulk Order</button>
+</form>
 </div>
 
 <div id="cashappTag" style="margin-top:20px;text-align:center;">
@@ -164,31 +175,93 @@
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
 <script>
-emailjs.init("YOUR_PUBLIC_KEY"); // replace with your EmailJS public key
+emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS public key
 
-// Show selected tab
-function showSection(id){
-  document.querySelectorAll("section").forEach(s=>s.style.display="none");
-  document.getElementById(id).style.display="block";
-  document.querySelectorAll("nav button").forEach(b=>b.style.background="#800020");
-  document.querySelector(`nav button[onclick="showSection('${id}')"]`).style.background="gold";
+// Admin credentials
+const ADMIN_USER="thesoutherntable";
+const ADMIN_PASS="crunchythangs";
+const ADMIN_PIN="1812";
+
+function checkAdminLogin(){
+let user=document.getElementById("adminUsername").value.trim();
+let pass=document.getElementById("adminPassword").value.trim();
+let pin=document.getElementById("adminPin").value.trim();
+if(user===ADMIN_USER && pass===ADMIN_PASS && pin===ADMIN_PIN){
+document.getElementById("adminLoginOverlay").style.display="none";
+showSection('hoodies');
+}else{
+document.getElementById("loginError").innerText="Incorrect credentials";
+}
 }
 
 document.addEventListener("DOMContentLoaded",()=>{showSection('hoodies');});
 
-// Toggle single/bulk order forms
-function toggleOrderType() {
-  let type = document.querySelector('input[name="orderType"]:checked').value;
-  if(type === "single"){
-    document.getElementById("singleOrderFields").style.display = "block";
-    document.getElementById("bulkOrderFields").style.display = "none";
-  } else {
-    document.getElementById("singleOrderFields").style.display = "none";
-    document.getElementById("bulkOrderFields").style.display = "block";
-  }
+// Show selected tab
+function showSection(id){
+document.querySelectorAll("section").forEach(s=>s.style.display="none");
+document.getElementById(id).style.display="block";
+document.querySelectorAll("nav button").forEach(b=>b.style.background="#800020");
+document.querySelector(`nav button[onclick="showSection('${id}')"]`).style.background="gold";
 }
 
-// Save images per section
-function saveImages(section){
-  let input=document.getElement
+// Toggle single/bulk order forms
+function toggleOrderType() {
+let type=document.querySelector('input[name="orderType"]:checked').value;
+if(type==="single"){
+document.getElementById("singleOrderFields").style.display="block";
+document.getElementById("bulkOrderFields").style.display="none";
+}else{
+document.getElementById("singleOrderFields").style.display="none";
+document.getElementById("bulkOrderFields").style.display="block";
+updateBulkTotal();
+}
+}
 
+// Display uploaded images per section
+function saveImages(section){
+let input=document.getElementById(section+'Upload');
+let container=document.getElementById(section+'Images');
+container.innerHTML="";
+for(let file of input.files){
+let reader=new FileReader();
+reader.onload=function(e){
+let img=document.createElement("img");
+img.src=e.target.result;
+img.className="thumbnail";
+container.appendChild(img);
+};
+reader.readAsDataURL(file);
+}
+alert(section+" images saved!");
+}
+
+// Single Order
+function saveSingleOrder(){
+alert("Single order saved!");
+// Optionally integrate EmailJS here
+}
+
+// Bulk total calculation
+function updateBulkTotal(){
+let total=0;
+document.querySelectorAll('.colorQty').forEach(i=>{
+let qty=parseInt(i.value)||0;
+total+=qty*75;
+});
+let delivery=document.getElementById('bulkDelivery').value;
+if(delivery==="local") total+=5;
+document.getElementById('bulkTotal').innerText=total;
+}
+
+// Bulk Order
+function saveBulkOrder(){
+alert("Bulk order saved!");
+// Optionally integrate EmailJS here
+}
+
+document.querySelectorAll('.colorQty').forEach(input=>{
+input.addEventListener('change', updateBulkTotal);
+});
+</script>
+</body>
+</html>
