@@ -1,5 +1,190 @@
 
+<!D
 <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Southern Table</title>
+<style>
+body { font-family:'Segoe UI', Helvetica, Arial, sans-serif; background:#800020; color:#fff; padding:10px; line-height:1.6; margin:0; }
+h1,h2 { font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif; font-weight:700; color:#000; text-align:center; margin-bottom:15px; }
+p,label,span { color:#fff; font-size:1em; }
+.section { background:#900030; padding:20px; margin-bottom:25px; border-radius:10px; }
+img.logo,.item img { max-width:100%; height:auto; display:block; margin:10px auto; }
+.item { background:#b03040; padding:15px; margin-bottom:20px; border-radius:8px; border:1px solid #ccc; }
+input,textarea,select { display:block; width:100%; margin-top:8px; margin-bottom:15px; padding:12px; border-radius:5px; border:1px solid #ccc; font-size:1em; }
+button{ padding:15px 25px; cursor:pointer; border-radius:5px; border:2px solid gold; background:#800020; color:#fff; font-weight:600; font-size:1.1em; width:100%; margin-bottom:15px; transition:0.3s; }
+button:hover{ background:#900030; border-color:#ffd700; }
+table{width:100%;border-collapse:collapse;background:#fff;color:#000;font-size:0.9em;}
+th,td{border:1px solid #ccc;padding:6px;text-align:center;}
+.orders-container { overflow-x:auto; width:100%; -webkit-overflow-scrolling: touch; }
+.gallery { display:flex;flex-wrap:wrap;justify-content:center; }
+.gallery-item { width:120px; margin:5px; text-align:center; }
+.gallery-item img { width:100%;border-radius:5px; }
+@media(max-width:1024px){ h1,h2{font-size:1.8em;} input,select,textarea,button{font-size:1em;} .section{padding:15px;margin-bottom:20px;} }
+@media(max-width:768px){ h1,h2{font-size:1.5em;} input,select,textarea,button{font-size:0.95em;} .section{padding:12px;margin-bottom:15px;} }
+@media(max-width:480px){ h1,h2{font-size:1.3em;} input,select,textarea,button{font-size:0.9em;padding:10px;} .section{padding:10px;margin-bottom:12px;} table, th, td {font-size:0.8em;} }
+</style>
+</head>
+<body>
+
+<!-- Admin Login -->
+<div id="loginScreen" class="section">
+  <h1>Welcome to The Southern Table</h1>
+  <p>Admin? Enter your credentials below. Customers can scroll down.</p>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button id="loginBtn">Login</button>
+</div>
+
+<!-- Admin Panel -->
+<div id="adminPanel" style="display:none;">
+  <h1>Admin Dashboard</h1>
+
+  <!-- Logo -->
+  <div class="section">
+    <h2>Edit Logo</h2>
+    <input type="file" id="logoUpload" accept="image/*">
+    <img id="logoPreview" src="" alt="Logo Preview">
+  </div>
+
+  <!-- Mission & Goal -->
+  <div class="section">
+    <h2>Edit Mission & Goal</h2>
+    <textarea id="aboutText" rows="4">Mission & Goal content editable via admin.</textarea>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section">
+    <h2>Edit FAQ</h2>
+    <textarea id="faqText" rows="4">Typical questions about orders, delivery, payment. Card payments coming soon!</textarea>
+  </div>
+
+  <!-- Year-Round Hoodies -->
+  <div class="section">
+    <h2>Year-Round Hoodie Descriptions</h2>
+    <div id="hoodieDescriptions">
+      <div class="gallery-item">
+        <img src="hoodie1.png">
+        <input type="text" placeholder="Description for Hoodie 1">
+      </div>
+      <div class="gallery-item">
+        <img src="hoodie2.png">
+        <input type="text" placeholder="Description for Hoodie 2">
+      </div>
+      <div class="gallery-item">
+        <img src="hoodie3.png">
+        <input type="text" placeholder="Description for Hoodie 3">
+      </div>
+      <div class="gallery-item">
+        <img src="hoodie4.png">
+        <input type="text" placeholder="Description for Hoodie 4">
+      </div>
+      <div class="gallery-item">
+        <img src="hoodie5.png">
+        <input type="text" placeholder="Description for Hoodie 5">
+      </div>
+    </div>
+  </div>
+
+  <!-- Exclusives -->
+  <div class="section">
+    <h2>Exclusives (LTO)</h2>
+    <input type="file" id="exclusiveUpload" accept="image/*" multiple>
+    <div id="exclusivePreview" class="gallery"></div>
+  </div>
+
+  <!-- Crunchy Thangs -->
+  <div class="section">
+    <h2>Crunchy Thangs</h2>
+    <label>Upload Crunchy Thangs Logo:</label>
+    <input type="file" id="ctLogoUpload" accept="image/*">
+    <img id="ctLogoPreview" src="" alt="Crunchy Thangs Logo">
+    <label>Upload Food Pictures:</label>
+    <input type="file" id="ctFoodUpload" accept="image/*" multiple>
+    <div id="ctFoodPreview" class="gallery"></div>
+  </div>
+
+  <!-- CashApp QR -->
+  <div class="section">
+    <h2>CashApp QR</h2>
+    <input type="file" id="cashappUpload" accept="image/*">
+    <img id="cashappPreview" src="" alt="CashApp QR Preview">
+  </div>
+
+  <button id="saveBtn">Save All Changes</button>
+
+  <!-- Orders Log -->
+  <div class="section">
+    <h2>Orders Log</h2>
+    <div class="orders-container">
+      <table id="ordersTable">
+        <thead>
+          <tr><th>Timestamp</th><th>Name</th><th>Size</th><th>Qty</th><th>Price</th><th>Phone</th><th>Delivery/Address</th><th>Payment</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Customer App -->
+<div id="customerApp">
+  <img id="logo" class="logo" src="default-logo.png" alt="Logo">
+
+  <div class="section">
+    <h2>Mission & Goal</h2>
+    <div id="about">Mission & Goal content editable via admin.</div>
+  </div>
+
+  <div class="section">
+    <h2>Year-Round Hoodies</h2>
+    <div id="customerHoodies" class="gallery"></div>
+  </div>
+
+  <div class="section">
+    <h2>Exclusives</h2>
+    <div id="customerExclusives" class="gallery"></div>
+  </div>
+
+  <div class="section">
+    <h2>Crunchy Thangs</h2>
+    <img id="ctLogo" src="default-ct-logo.png" alt="Crunchy Thangs Logo" class="logo">
+    <div id="customerCTGallery" class="gallery"></div>
+  </div>
+
+  <div class="section">
+    <h2>Hoodies Order</h2>
+    <label>Name:</label><input type="text" id="custName" placeholder="Your Name">
+    <label>Phone:</label><input type="text" id="custPhone" placeholder="Phone Number" required>
+    <label>Size:</label>
+    <select id="custSize">
+      <option value="S">S</option><option value="M">M</option><option value="L">L</option>
+      <option value="XL">XL</option><option value="2XL">2XL (+$10)</option>
+      <option value="3XL">3XL (+$10)</option>
+    </select>
+    <label>Quantity:</label><input type="number" id="custQty" value="1" min="1">
+    <label>Delivery:</label>
+    <select id="custDelivery">
+      <option value="In-Person Free">In-Person Free</option>
+      <option value="Brooklyn +$5">Brooklyn +$5</option>
+    </select>
+    <label>Address (if Brooklyn):</label><input type="text" id="custAddress" placeholder="Street, City, ZIP">
+    <label>Payment:</label>
+    <select id="custPayment">
+      <option value="Cash">Cash / CashApp</option>
+    </select>
+    <label>CashApp QR:</label>
+    <img id="cashappQR" src="default-qr.png" alt="CashApp QR" style="max-width:150px; display:block; margin:10px auto;">
+    <p>Total: $<span id="totalPrice">75</span></p>
+    <button id="submitOrder">Submit Order</button>
+  </div>
+
+  <div class="section">
+    <h2>FAQ</h2>
+    <div id="faq">Typical questions about orders, delivery, payment.
+      OCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
