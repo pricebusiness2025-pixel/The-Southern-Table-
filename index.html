@@ -130,9 +130,12 @@ th,td{border:1px solid #ccc;padding:8px;text-align:center;}
 <script>
 // --- Admin / Customer JS ---
 const ADMIN_USER="The Southern Table";
-const ADMIN_PASS="Crunchy Thangs";
+const ADMIN_PASS="CrunchyThangs";
 
 // Login
+const ADMIN_USER="The Southern Table";
+const ADMIN_PASS="Crunchy Thangs";
+
 document.getElementById('loginBtn').addEventListener('click',()=>{
   const user=document.getElementById('username').value;
   const pass=document.getElementById('password').value;
@@ -141,7 +144,6 @@ document.getElementById('loginBtn').addEventListener('click',()=>{
     document.getElementById('customerApp').style.display='none';
     document.getElementById('adminPanel').style.display='block';
     loadAdminData();
-    refreshOrders();
   } else alert('Incorrect username or password');
 });
 
