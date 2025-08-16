@@ -5,175 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Southern Table</title>
 <style>
-  body {
-    margin:0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f2f2f2; /* Light gray background */
-    color: black;
-  }
-  h2,h3,h4 {
-    background-color: #800020; /* Burgundy headers */
-    color:white;
-    padding:10px;
-    border-radius:4px;
-  }
-  label, p { color:black; }
-  table { width:100%; border-collapse: collapse; margin-bottom: 20px; background-color: #e0e0e0; }
-  th, td { border:1px solid #999; padding:8px; text-align:center; }
-  th { background-color: #800020; color:white; }
-  input, select, textarea, button { margin:5px 0; padding:8px; font-family:inherit; }
-  button {
-    background-color:#800020;
-    color:white;
-    border:2px solid gold;
-    cursor:pointer;
-    padding:8px 12px;
-    border-radius:4px;
-  }
-  button:hover { background-color:#a00030; }
-  footer {
-    position:sticky;
-    bottom:0;
-    background-color:#800020;
-    color:white;
-    padding:10px;
-    text-align:center;
-    border-top:2px solid gold;
-  }
-  .image-section img { max-width:100px; margin:5px; border:1px solid gold; }
-  .carousel { display:flex; overflow-x:auto; gap:10px; padding:10px 0; }
-</style>
-<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-<script>
-  (function(){emailjs.init("YOUR_PUBLIC_KEY");})();
-</script>
-</head>
-<body>
-
-<!-- ================= CUSTOMER CHECKOUT ================= -->
-<section id="checkout">
-  <h2>Checkout</h2>
-  <form id="orderForm">
-    <label>Full Name: <input type="text" id="name" required></label><br>
-    <label>Phone: <input type="text" id="phone" required></label><br>
-
-    <p>Select Size:</p>
-    <label><input type="radio" name="hoodieSize" value="S" checked> S</label>
-    <label><input type="radio" name="hoodieSize" value="M"> M</label>
-    <label><input type="radio" name="hoodieSize" value="L"> L</label>
-    <label><input type="radio" name="hoodieSize" value="XL"> XL</label>
-    <label><input type="radio" name="hoodieSize" value="2XL"> 2XL (+$10)</label>
-    <label><input type="radio" name="hoodieSize" value="3XL"> 3XL (+$10)</label><br><br>
-
-    <p>Hoodie Color Selection (Max 10 per color):</p>
-    <table id="bulkTable">
-      <thead>
-        <tr><th>Color</th><th>Quantity</th><th>Unit Price</th><th>Subtotal</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Black</td><td><input type="number" class="colorQty" data-color="Black" min="0" max="10" value="0"></td><td>$75</td><td class="subTotal" id="subBlack">$0</td></tr>
-        <tr><td>Burgundy</td><td><input type="number" class="colorQty" data-color="Burgundy" min="0" max="10" value="0"></td><td>$75</td><td class="subTotal" id="subBurgundy">$0</td></tr>
-        <tr><td>Gold</td><td><input type="number" class="colorQty" data-color="Gold" min="0" max="10" value="0"></td><td>$75</td><td class="subTotal" id="subGold">$0</td></tr>
-        <tr><td>Grey</td><td><input type="number" class="colorQty" data-color="Grey" min="0" max="10" value="0"></td><td>$75</td><td class="subTotal" id="subGrey">$0</td></tr>
-      </tbody>
-    </table>
-
-    <label>Delivery Method:</label>
-    <select id="delivery" required>
-      <option value="pickup">In-Person Pickup (Melrose St. 11237) - $75</option>
-      <option value="local">Local Brooklyn Delivery (+$5)</option>
-      <option value="outside">Outside Brooklyn - Enter Direct Shipping Address</option>
-    </select><br>
-
-    <label>Special Notes / Substitutions:<br>
-      <textarea id="notes"></textarea>
-    </label><br>
-
-    <p><strong>Payment:</strong> Single orders: Cash or CashApp | Bulk orders: CashApp only | Card coming soon</p>
-    <p>Total: $<span id="grandTotal">0</span></p>
-    <button type="button" onclick="saveOrder()">Save Order</button>
-  </form>
-</section>
-
-<!-- ================= ADMIN PANEL ================= -->
-<section id="admin">
-  <h2>Admin Panel – Saved Orders</h2>
-  <form id="adminLoginForm">
-    <label>Username: <input type="text" id="adminUsername" required></label><br>
-    <label>Password: <input type="password" id="adminPassword" required></label><br>
-    <label>4-digit PIN: <input type="password" id="adminPin" required maxlength="4"></label><br>
-    <button type="button" onclick="adminLogin()">Log In</button>
-  </form>
-  <div id="adminContent" style="display:none;">
-    <button onclick="loadOrders()">Load Orders</button>
-    <button onclick="clearOrders()">Clear All Orders</button>
-    <table id="ordersTable">
-      <thead><tr><th>Order #</th><th>Name</th><th>Phone</th><th>Qty</th><th>Color</th><th>Unit Price</th><th>Total</th><th>Notes</th><th>Date</th></tr></thead>
-      <tbody></tbody>
-    </table>
-
-    <!-- Image Management -->
-    <h3>Image Management</h3>
-    <div>
-      <h4>Hoodies</h4>
-      <input type="file" id="hoodieFiles" multiple accept="image/*">
-      <textarea id="hoodieDesc" placeholder="Comma-separated descriptions"></textarea>
-      <button onclick="saveHoodieImages()">Save Hoodie Images</button>
-      <div id="hoodiePreview" class="carousel"></div>
-    </div>
-    <div>
-      <h4>Exclusives</h4>
-      <input type="file" id="exclusivesFiles" multiple accept="image/*">
-      <textarea id="exclusivesDesc" placeholder="Comma-separated descriptions"></textarea>
-      <button onclick="saveExclusivesImages()">Save Exclusives Images</button>
-      <div id="exclusivesPreview" class="carousel"></div>
-    </div>
-    <div>
-      <h4>Crunchy Thangs</h4>
-      <input type="file" id="crunchyFiles" multiple accept="image/*">
-      <textarea id="crunchyDesc" placeholder="Comma-separated descriptions"></textarea>
-      <button onclick="saveCrunchyImages()">Save Crunchy Images</button>
-      <div id="crunchyPreview" class="carousel"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= STICKY FOOTER ================= -->
-<footer>
-  &copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024
-</footer>
-
-<script>
-// Admin credentials hidden
-const ADMIN_CREDS = { username:"thesoutherntable", password:"crunchythangs", pin:"1812" };
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Southern Table</title>
-<style>
-  body{font-family: "Helvetica Neue", sans-serif; margin:0; background:#800020; color:white;}
-  header, nav, section{padding:15px;}
-  nav button{margin:5px; background:#800020; color:white; border:2px solid gold; border-radius:6px; padding:10px; cursor:pointer;}
-  section{display:none;}
+  body{font-family:"Helvetica Neue",sans-serif;margin:0;background:#800020;color:white;}
+  header{display:flex;align-items:center;padding:10px;background:#800020;position:sticky;top:0;z-index:1000;}
+  header img{height:60px;margin-right:15px;}
+  header h1{margin:0;font-size:1.8rem;}
+  nav{margin-left:auto;}
+  nav button{margin:5px;background:#800020;color:white;border:2px solid gold;border-radius:6px;padding:10px;cursor:pointer;}
+  section{display:none;padding:15px;}
   .active{display:block;}
-  footer{position:sticky; bottom:0; background:#333; color:white; padding:10px; text-align:center;}
-  img.thumbnail{width:100px; height:100px; object-fit:cover; margin:5px; border:2px solid gold; border-radius:8px;}
-  #cartBtn{font-size:24px; background:black; color:white; border:2px solid gold; border-radius:6px; padding:5px 10px; cursor:pointer;}
+  footer{position:sticky;bottom:0;background:#333;color:white;padding:10px;text-align:center;}
+  img.thumbnail{width:100px;height:100px;object-fit:cover;margin:5px;border:2px solid gold;border-radius:8px;}
+  #cartBtn{font-size:24px;background:black;color:white;border:2px solid gold;border-radius:6px;padding:5px 10px;cursor:pointer;}
   input[type=number]{width:50px;}
 </style>
 </head>
 <body>
 
 <header>
+  <img src="logo.png" alt="The Southern Table Logo">
   <h1>The Southern Table</h1>
   <nav>
     <button onclick="showSection('hoodies')">Hoodies</button>
     <button onclick="showSection('exclusives')">Exclusives</button>
     <button onclick="showSection('crunchythangs')">Crunchy Thangs</button>
-    <button onclick="showSection('mission-goals')">Mission & Goals</button>
+    <button onclick="showSection('mission-goals')">Mission & Goals + FAQ</button>
     <button onclick="showSection('checkout')">Checkout</button>
   </nav>
 </header>
@@ -181,7 +36,7 @@ const ADMIN_CREDS = { username:"thesoutherntable", password:"crunchythangs", pin
 <!-- Hoodies Tab -->
 <section id="hoodies">
 <h2>Hoodies</h2>
-<p id="hoodieDesc">Formed in 2025, The Southern Table was created with the vision of building a cohesive, wavey movement that blends style, comfort, and community. Each hoodie represents our commitment to high-quality, rustic designs and year-round wearable pieces that connect creativity with authenticity. Limited edition drops bring exclusivity, while our classic hoodies remain staples for anyone embracing the Southern-inspired lifestyle.</p>
+<p>Formed in 2025, The Southern Table was created with the vision of building a cohesive, wavey movement blending style, comfort, and community. Each hoodie represents high-quality rustic designs. Limited edition drops bring exclusivity, while classic hoodies remain staples for the Southern-inspired lifestyle.</p>
 <div id="hoodieImages"></div>
 <input type="file" id="hoodieUpload" multiple accept="image/*">
 <button onclick="saveImages('hoodie')">Save Hoodies</button>
@@ -190,7 +45,7 @@ const ADMIN_CREDS = { username:"thesoutherntable", password:"crunchythangs", pin
 <!-- Exclusives Tab -->
 <section id="exclusives">
 <h2>Exclusives</h2>
-<p>Limited edition drops and random clothing pieces. Upload images and descriptions below:</p>
+<p>Limited edition/random clothing pieces. Upload images and descriptions below:</p>
 <div id="exclusiveImages"></div>
 <input type="file" id="exclusiveUpload" multiple accept="image/*">
 <button onclick="saveImages('exclusive')">Save Exclusives</button>
@@ -211,83 +66,93 @@ const ADMIN_CREDS = { username:"thesoutherntable", password:"crunchythangs", pin
 <p>High-quality, comfortable hoodies—available year-round with rustic style. Limited edition drops bring exclusive designs for those who want something truly unique. Every order is seamless, delivering standout pieces with creativity, authenticity, and comfort.</p>
 
 <h2>Goals</h2>
-<p>Our goal is to fuel the community through the Crunchy Thangs food truck initiative, bringing Southern-inspired flavors and quality products to NY. We aim to connect comfort, style, and local creativity through both our year-round hoodie selections and exclusive drops.</p>
+<p>Fuel the community through Crunchy Thangs LLC food truck initiative. Southern-inspired, NY-driven flavors with a focus on style, comfort, and creativity.</p>
 
 <h2>FAQ</h2>
 <dl>
   <dt>How long will it take to receive my hoodie?</dt>
-  <dd>Our hoodies are made to order through Printify. Standard production time is 2–5 business days, then shipping within the U.S.:
-    <ul>
-      <li>US Domestic: 3–7 business days</li>
-    </ul>
-    Note: Limited edition drops may take slightly longer.
-  </dd>
+  <dd>Made to order via Printify. Production: 2–5 business days, then shipping within U.S. (3–7 days). Limited edition may take slightly longer.</dd>
   <dt>When can I place an order?</dt>
-  <dd>Orders are accepted every Wednesday and Saturday in the morning (A.M.).</dd>
+  <dd>Every Wednesday and Saturday morning (A.M.).</dd>
   <dt>Do you offer local delivery?</dt>
-  <dd>Yes! Local Brooklyn delivery is available for +$5, or in-person pickup is free.</dd>
+  <dd>Local Brooklyn delivery +$5, in-person pickup free.</dd>
   <dt>Can I pay with a card?</dt>
-  <dd>Currently, we accept Cash/CashApp only. Card payments will be available soon.</dd>
+  <dd>Cash/CashApp only. Card payments coming soon.</dd>
   <dt>What sizes do you offer?</dt>
-  <dd>Hoodies are available in S–3XL. Extra production fee of $10 applies for 2XL and 3XL sizes.</dd>
-  <dt>Can I change or cancel my order?</dt>
-  <dd>Please contact us as soon as possible. Once production begins through Printify, orders cannot be canceled.</dd>
-  <dt>Are the hoodies limited edition?</dt>
-  <dd>Some drops are limited edition—once they sell out, they won’t be restocked. Year-round basics are always available.</dd>
-  <dt>How do I contact you with questions?</dt>
-  <dd>Use the phone number you provide when ordering or reach out via CashApp if needed.</dd>
+  <dd>S–3XL. Extra $10 for 2XL/3XL.</dd>
+  <dt>Can I change/cancel an order?</dt>
+  <dd>Contact us ASAP. Once production begins, cancellations not possible.</dd>
+  <dt>Are hoodies limited edition?</dt>
+  <dd>Some drops are limited. Year-round basics always available.</dd>
+  <dt>How do I contact you?</dt>
+  <dd>Use phone number provided or CashApp.</dd>
 </dl>
 </section>
 
 <!-- Checkout Tab -->
 <section id="checkout">
 <h2>Checkout</h2>
-<button id="cartBtn">🛒 View Cart</button>
 
-<div id="cartModal" style="display:none; background:#f2f2f2; color:black; border:2px solid gold; padding:15px; border-radius:6px;">
-<h3>Your Order</h3>
-<table>
-<thead><tr><th>Color</th><th>Quantity</th><th>Unit Price</th><th>Subtotal</th></tr></thead>
-<tbody id="cartItems"></tbody>
-</table>
-<p>Total: $<span id="cartTotal">0</span></p>
-<button type="button" onclick="document.getElementById('cartModal').style.display='none'">Close</button>
+<p>Order Type:</p>
+<label><input type="radio" name="orderType" value="single" checked onchange="toggleOrderType()"> Single Order</label>
+<label><input type="radio" name="orderType" value="bulk" onchange="toggleOrderType()"> Bulk Order</label>
+
+<!-- Single Order Fields -->
+<div id="singleOrderFields">
+  <form id="singleOrderForm">
+    <label>Full Name: <input type="text" id="singleName" required></label><br>
+    <label>Phone: <input type="text" id="singlePhone" required></label><br>
+    <p>Select Hoodie Size:</p>
+    <label><input type="radio" name="singleHoodieSize" value="S" checked> S</label>
+    <label><input type="radio" name="singleHoodieSize" value="M"> M</label>
+    <label><input type="radio" name="singleHoodieSize" value="L"> L</label>
+    <label><input type="radio" name="singleHoodieSize" value="XL"> XL</label>
+    <label><input type="radio" name="singleHoodieSize" value="2XL"> 2XL (+$10)</label>
+    <label><input type="radio" name="singleHoodieSize" value="3XL"> 3XL (+$10)</label><br><br>
+    <p>Select Color:</p>
+    <select id="singleColor">
+      <option value="Black">Black</option>
+      <option value="Burgundy">Burgundy</option>
+      <option value="Gold">Gold</option>
+      <option value="Grey">Grey</option>
+    </select><br><br>
+    <label>Delivery Method:</label>
+    <select id="singleDelivery" required>
+      <option value="pickup">In-Person Pickup (Melrose St. 11237)</option>
+      <option value="local">Local Brooklyn Delivery (+$5)</option>
+      <option value="outside">Outside Brooklyn - Enter Shipping Address</option>
+    </select><br>
+    <label>Special Notes / Substitutions:<br><textarea id="singleNotes"></textarea></label><br>
+    <p>Total: $<span id="singleTotal">75</span></p>
+    <button type="button" onclick="saveSingleOrder()">Place Single Order</button>
+  </form>
 </div>
 
-<form id="orderForm">
-<label>Full Name: <input type="text" id="name" required></label><br>
-<label>Phone: <input type="text" id="phone" required></label><br>
+<!-- Bulk Order Fields -->
+<div id="bulkOrderFields" style="display:none;">
+  <form id="bulkOrderForm">
+    <label>Full Name: <input type="text" id="bulkName" required></label><br>
+    <label>Phone: <input type="text" id="bulkPhone" required></label><br>
+    <p>Hoodie Color Selection (Max 10 per color):</p>
+    <table id="bulkTable">
+      <tr><td>Black</td><td><input type="number" class="colorQty" data-color="Black" min="0" max="10" value="0"></td></tr>
+      <tr><td>Burgundy</td><td><input type="number" class="colorQty" data-color="Burgundy" min="0" max="10" value="0"></td></tr>
+      <tr><td>Gold</td><td><input type="number" class="colorQty" data-color="Gold" min="0" max="10" value="0"></td></tr>
+      <tr><td>Grey</td><td><input type="number" class="colorQty" data-color="Grey" min="0" max="10" value="0"></td></tr>
+    </table>
+    <label>Delivery Method:</label>
+    <select id="bulkDelivery" required>
+      <option value="pickup">In-Person Pickup (Melrose St. 11237)</option>
+      <option value="local">Local Brooklyn Delivery (+$5)</option>
+      <option value="outside">Outside Brooklyn - Enter Shipping Address</option>
+    </select><br>
+    <label>Special Notes / Substitutions:<br><textarea id="bulkNotes"></textarea></label><br>
+    <p>Total: $<span id="bulkTotal">0</span></p>
+    <button type="button" onclick="saveBulkOrder()">Place Bulk Order</button>
+  </form>
+</div>
 
-<p>Select Hoodie Size:</p>
-<label><input type="radio" name="hoodieSize" value="S" checked> S</label>
-<label><input type="radio" name="hoodieSize" value="M"> M</label>
-<label><input type="radio" name="hoodieSize" value="L"> L</label>
-<label><input type="radio" name="hoodieSize" value="XL"> XL</label>
-<label><input type="radio" name="hoodieSize" value="2XL"> 2XL (+$10)</label>
-<label><input type="radio" name="hoodieSize" value="3XL"> 3XL (+$10)</label><br><br>
-
-<p>Hoodie Color Selection (Max 10 per color):</p>
-<table id="bulkTable">
-<tr><td>Black</td><td><input type="number" class="colorQty" data-color="Black" min="0" max="10" value="0"></td></tr>
-<tr><td>Burgundy</td><td><input type="number" class="colorQty" data-color="Burgundy" min="0" max="10" value="0"></td></tr>
-<tr><td>Gold</td><td><input type="number" class="colorQty" data-color="Gold" min="0" max="10" value="0"></td></tr>
-<tr><td>Grey</td><td><input type="number" class="colorQty" data-color="Grey" min="0" max="10" value="0"></td></tr>
-</table>
-
-<label>Delivery Method:</label>
-<select id="delivery" required>
-<option value="pickup">In-Person Pickup (Melrose St. 11237)</option>
-<option value="local">Local Brooklyn Delivery (+$5)</option>
-<option value="outside">Outside Brooklyn - Enter Shipping Address</option>
-</select><br>
-
-<label>Special Notes / Substitutions:<br><textarea id="notes"></textarea></label><br>
-
-<p>Total: $<span id="grandTotal">0</span></p>
-<button type="button" onclick="saveOrder()">Place Order</button>
-</form>
-
-<div id="cashappTag" style="margin-top:20px; text-align:center;">
+<div id="cashappTag" style="margin-top:20px;text-align:center;">
 <h4>Scan to Pay via CashApp</h4>
 <img src="cashapp_qr.png" alt="CashApp QR" style="width:100%; max-width:300px; border:2px solid gold; border-radius:8px;">
 </div>
@@ -301,75 +166,29 @@ const ADMIN_CREDS = { username:"thesoutherntable", password:"crunchythangs", pin
 <script>
 emailjs.init("YOUR_PUBLIC_KEY"); // replace with your EmailJS public key
 
+// Show selected tab
 function showSection(id){
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+  document.querySelectorAll("section").forEach(s=>s.style.display="none");
+  document.getElementById(id).style.display="block";
+  document.querySelectorAll("nav button").forEach(b=>b.style.background="#800020");
+  document.querySelector(`nav button[onclick="showSection('${id}')"]`).style.background="gold";
 }
-showSection('hoodies'); // default section
+
+document.addEventListener("DOMContentLoaded",()=>{showSection('hoodies');});
+
+// Toggle single/bulk order forms
+function toggleOrderType() {
+  let type = document.querySelector('input[name="orderType"]:checked').value;
+  if(type === "single"){
+    document.getElementById("singleOrderFields").style.display = "block";
+    document.getElementById("bulkOrderFields").style.display = "none";
+  } else {
+    document.getElementById("singleOrderFields").style.display = "none";
+    document.getElementById("bulkOrderFields").style.display = "block";
+  }
+}
 
 // Save images per section
 function saveImages(section){
-  let input = document.getElementById(section+"Upload");
-  let container = document.getElementById(section+"Images");
-  container.innerHTML="";
-  Array.from(input.files).forEach(file=>{
-    let reader = new FileReader();
-    reader.onload=function(e){
-      let img = document.createElement("img");
-      img.src = e.target.result;
-      img.className="thumbnail";
-      container.appendChild(img);
-      let stored = JSON.parse(localStorage.getItem(section)||"[]");
-      stored.push(e.target.result);
-      localStorage.setItem(section, JSON.stringify(stored));
-    };
-    reader.readAsDataURL(file);
-  });
-}
+  let input=document.getElement
 
-// Load saved images
-["hoodie","exclusive","crunchythangs"].forEach(section=>{
-  let stored = JSON.parse(localStorage.getItem(section)||"[]");
-  let container = document.getElementById(section+"Images");
-  stored.forEach(src=>{
-    let img = document.createElement("img");
-    img.src = src; img.className="thumbnail"; container.appendChild(img);
-  });
-});
-
-// Checkout cart
-function updateTotals(){
-  const size = document.querySelector('input[name="hoodieSize"]:checked').value;
-  let grandTotal=0;
-  ["Black","Burgundy","Gold","Grey"].forEach(color=>{
-    const qty=parseInt(document.querySelector(`.colorQty[data-color="${color}"]`).value)||0;
-    let unit=75; if(size==="2XL"||size==="3XL") unit+=10;
-    grandTotal+=qty*unit;
-  });
-  if(document.getElementById("delivery").value==="local") grandTotal+=5;
-  document.getElementById("grandTotal").innerText=grandTotal;
-}
-document.querySelectorAll(".colorQty, input[name='hoodieSize'], #delivery").forEach(el=>el.addEventListener("input",updateTotals));
-
-// Cart preview
-document.getElementById("cartBtn").addEventListener("click", ()=>{
-  const cartBody=document.getElementById("cartItems"); cartBody.innerHTML=""; let total=0;
-  const size=document.querySelector('input[name="hoodieSize"]:checked').value;
-  document.querySelectorAll(".colorQty").forEach(input=>{
-    const qty=parseInt(input.value)||0; if(qty>0){
-      let price=75; if(size==="2XL"||size==="3XL") price+=10;
-      const sub=qty*price; total+=sub;
-      const row=document.createElement("tr");
-      row.innerHTML=`<td>${input.dataset.color}</td><td>${qty}</td><td>$${price}</td><td>$${sub}</td>`;
-      cartBody.appendChild(row);
-    }
-  });
-  document.getElementById("cartTotal").innerText=total;
-  document.getElementById("cartModal").style.display="block";
-});
-
-// Save order via EmailJS
-function saveOrder(){
-  updateTotals();
-  const orderData={
-    orderNumber:Date.now
