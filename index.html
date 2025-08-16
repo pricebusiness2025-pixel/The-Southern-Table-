@@ -1,7 +1,205 @@
 
 <!D
 <!DOC
+<!DOCTYP
 <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Southern Table</title>
+
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+  (function(){ emailjs.init("YOUR_PUBLIC_KEY"); })(); // replace with your EmailJS public key
+</script>
+
+<style>
+body { display:flex; flex-direction:column; min-height:100vh; margin:0; font-family:"Arial", sans-serif; background:#fff; color:#000;}
+main { flex:1; }
+.navbar { position: sticky; top:0; width:100%; background:#800020; color:white; display:flex; justify-content:center; padding:12px 0; }
+.navbar a { color:white; text-decoration:none; margin:0 15px; font-weight:bold;}
+.navbar a:hover { text-decoration:underline;}
+footer { background:#f9f9f9; text-align:center; padding:15px 0; font-size:14px; color:#555; border-top:1px solid #ddd; position:sticky; bottom:0; width:100%; }
+footer nav { margin-bottom:8px; }
+footer nav a { color:#333; text-decoration:none; margin:0 6px; font-weight:500; }
+footer nav a:hover { text-decoration:underline; }
+#backToTop { display:none; position:fixed; bottom:80px; right:20px; z-index:100; font-size:16px; padding:10px 14px; background:#800020; color:#fff; border:2px solid gold; border-radius:8px; cursor:pointer;}
+#backToTop:hover { background:#a00030;}
+form input, form select, form textarea, form button { margin-bottom:12px; padding:8px; font-size:14px;}
+button { cursor:pointer; background:#800020; color:#fff; border:2px solid gold; border-radius:6px; padding:8px 12px;}
+button:hover { background:#a00030;}
+#ordersTable, #orderSummary { width:100%; border-collapse:collapse; margin-top:15px;}
+#ordersTable th, #ordersTable td, #orderSummary th, #orderSummary td { border:1px solid #ddd; padding:8px; text-align:center;}
+#ordersTable th, #orderSummary th { background:#f4f4f4;}
+.image-section img { width:120px; margin:5px; display:block;}
+.image-wrapper { display:inline-block; text-align:center; margin:5px;}
+.image-wrapper p { font-size:12px; text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <a href="#mission">Mission</a>
+  <a href="#hoodies">Hoodies</a>
+  <a href="#exclusives">Exclusives</a>
+  <a href="#crunchy-thangs">Crunchy Thangs</a>
+  <a href="#faq">FAQ</a>
+  <a href="#checkout">Checkout</a>
+  <a href="#admin">Admin</a>
+</div>
+
+<main>
+<section id="mission">
+  <h2>Mission</h2>
+  <p>Our mission at The Southern Table: Offer year-round hoodies with limited edition drops while fueling our Crunchy Thangs food truck with love and quality.</p>
+</section>
+
+<section id="hoodies">
+  <h2>Hoodies</h2>
+  <div id="hoodieSectionDisplay" class="image-section"></div>
+</section>
+
+<section id="exclusives">
+  <h2>Exclusives</h2>
+  <div id="exclusivesSectionDisplay" class="image-section"></div>
+</section>
+
+<section id="crunchy-thangs">
+  <h2>Crunchy Thangs</h2>
+  <div id="crunchySectionDisplay" class="image-section"></div>
+</section>
+
+<section id="faq">
+  <h2>FAQ</h2>
+  <ul>
+    <li>Orders placed every Wednesday and Saturday (AM).</li>
+    <li>Shipping/local Brooklyn delivery only (delivery +$5, in-person free).</li>
+    <li>Cash for single orders, CashApp for bulk.</li>
+    <li>Sizes: S–3XL (XL+ production fee +$10).</li>
+    <li>Card payments coming soon.</li>
+    <li>Last-minute substitutions must be resubmitted before cutoff.</li>
+  </ul>
+</section>
+
+<section id="checkout">
+  <h2>Checkout</h2>
+  <form id="orderForm">
+    <label>Full Name: <input type="text" id="name" required></label><br>
+    <label>Phone: <input type="text" id="phone" required></label><br>
+    <label>Hoodie Quantity (Max 10): <input type="number" id="hoodieQty" min="1" max="10" required></label><br>
+
+    <p>Select Size:</p>
+    <label><input type="radio" name="hoodieSize" value="S" checked> S</label>
+    <label><input type="radio" name="hoodieSize" value="M"> M</label>
+    <label><input type="radio" name="hoodieSize" value="L"> L</label>
+    <label><input type="radio" name="hoodieSize" value="XL"> XL</label>
+    <label><input type="radio" name="hoodieSize" value="2XL"> 2XL (+$10)</label>
+    <label><input type="radio" name="hoodieSize" value="3XL"> 3XL (+$10)</label><br><br>
+
+    <p>Select Hoodie Color:</p>
+    <label><input type="radio" name="hoodieColor" value="Black" required> Black</label>
+    <label><input type="radio" name="hoodieColor" value="Burgundy"> Burgundy</label>
+    <label><input type="radio" name="hoodieColor" value="Gold"> Gold</label>
+    <label><input type="radio" name="hoodieColor" value="Grey"> Grey</label><br><br>
+
+    <label>Delivery Method:</label>
+    <select id="delivery" required>
+      <option value="pickup">In-Person Pickup (Melrose St. 11237) - $75</option>
+      <option value="local">Local Brooklyn Delivery (+$5)</option>
+      <option value="outside">Outside Brooklyn - Enter Direct Shipping Address</option>
+    </select><br>
+
+    <label>Special Notes / Substitutions:<br>
+      <textarea id="notes"></textarea>
+    </label><br>
+
+    <button type="button" onclick="saveOrder()">Save Order</button>
+  </form>
+
+  <h3>Order Summary</h3>
+  <table id="orderSummary">
+    <thead>
+      <tr>
+        <th>Quantity</th>
+        <th>Size</th>
+        <th>Unit Price</th>
+        <th>Delivery</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="sumQty">0</td>
+        <td id="sumSize">-</td>
+        <td id="sumUnitPrice">$75</td>
+        <td id="sumDelivery">In-Person Pickup</td>
+        <td id="sumTotal">$0</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Payment: Cash for single orders. CashApp for bulk. Card coming soon.</p>
+</section>
+
+<section id="admin">
+  <h2>Admin Panel – Saved Orders</h2>
+  <p>Admin only. Username: <strong>thesoutherntable</strong> / Password: <strong>crunchythangs</strong> + PIN: <strong>1812</strong></p>
+  <button onclick="loadOrders()">Load Orders</button>
+  <button onclick="clearOrders()">Clear All Orders</button>
+
+  <table id="ordersTable">
+    <thead>
+      <tr>
+        <th>Order #</th><th>Name</th><th>Phone</th><th>Qty</th>
+        <th>Color</th><th>Unit Price</th><th>Total</th><th>Notes</th><th>Date</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h3>Image Management</h3>
+  <div>
+    <h4>Hoodies Section</h4>
+    <input type="file" id="hoodieFiles" multiple accept="image/*">
+    <textarea id="hoodieDesc" placeholder="Comma-separated descriptions"></textarea>
+    <button onclick="saveHoodieImages()">Save Hoodie Images</button>
+    <div id="hoodiePreview" class="image-section"></div>
+  </div>
+
+  <div>
+    <h4>Exclusives Section</h4>
+    <input type="file" id="exclusivesFiles" multiple accept="image/*">
+    <textarea id="exclusivesDesc" placeholder="Comma-separated descriptions"></textarea>
+    <button onclick="saveExclusivesImages()">Save Exclusives Images</button>
+    <div id="exclusivesPreview" class="image-section"></div>
+  </div>
+
+  <div>
+    <h4>Crunchy Thangs Section</h4>
+    <input type="file" id="crunchyFiles" multiple accept="image/*">
+    <textarea id="crunchyDesc" placeholder="Comma-separated descriptions"></textarea>
+    <button onclick="saveCrunchyImages()">Save Crunchy Images</button>
+    <div id="crunchyPreview" class="image-section"></div>
+  </div>
+</section>
+</main>
+
+<button id="backToTop" onclick="scrollToTop()">Back to Top</button>
+
+<footer>
+  <nav>
+    <a href="#mission">Mission</a> |
+    <a href="#hoodies">Hoodies</a> |
+    <a href="#exclusives">Exclusives</a> |
+    <a href="#crunchy-thangs">Crunchy Thangs</a> |
+    <a href="#faq">FAQ</a> |
+    <a href="#checkout">Checkout</a> |
+    <a href="#admin">Admin</a>
+  </nav>
+  <p>© 2025 The Southern Table — Est. 2025</p>
+  <p>© 2024 Crunchy Th
+      E html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
