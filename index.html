@@ -8,21 +8,27 @@
   body {
     margin:0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #800020; /* Burgundy */
-    color: white;
+    background-color: #f2f2f2; /* Light gray background */
+    color: black;
   }
-  h2 { color: black; }
-  h3,h4 { color: black; }
-  label, p { color: white; }
-  table { width:100%; border-collapse: collapse; margin-bottom: 20px;}
-  th, td { border:1px solid grey; padding:8px; text-align:center; color:white;}
-  th { background-color: black; }
+  h2,h3,h4 {
+    background-color: #800020; /* Burgundy headers */
+    color:white;
+    padding:10px;
+    border-radius:4px;
+  }
+  label, p { color:black; }
+  table { width:100%; border-collapse: collapse; margin-bottom: 20px; background-color: #e0e0e0; }
+  th, td { border:1px solid #999; padding:8px; text-align:center; }
+  th { background-color: #800020; color:white; }
   input, select, textarea, button { margin:5px 0; padding:8px; font-family:inherit; }
   button {
     background-color:#800020;
     color:white;
     border:2px solid gold;
     cursor:pointer;
+    padding:8px 12px;
+    border-radius:4px;
   }
   button:hover { background-color:#a00030; }
   footer {
@@ -35,6 +41,7 @@
     border-top:2px solid gold;
   }
   .image-section img { max-width:100px; margin:5px; border:1px solid gold; }
+  .carousel { display:flex; overflow-x:auto; gap:10px; padding:10px 0; }
 </style>
 <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
 <script>
@@ -112,6 +119,97 @@
       <input type="file" id="hoodieFiles" multiple accept="image/*">
       <textarea id="hoodieDesc" placeholder="Comma-separated descriptions"></textarea>
       <button onclick="saveHoodieImages()">Save Hoodie Images</button>
-      <div id="hoodiePreview" class="image-section"></div>
-  
-      
+      <div id="hoodiePreview" class="carousel"></div>
+    </div>
+    <div>
+      <h4>Exclusives</h4>
+      <input type="file" id="exclusivesFiles" multiple accept="image/*">
+      <textarea id="exclusivesDesc" placeholder="Comma-separated descriptions"></textarea>
+      <button onclick="saveExclusivesImages()">Save Exclusives Images</button>
+      <div id="exclusivesPreview" class="carousel"></div>
+    </div>
+    <div>
+      <h4>Crunchy Thangs</h4>
+      <input type="file" id="crunchyFiles" multiple accept="image/*">
+      <textarea id="crunchyDesc" placeholder="Comma-separated descriptions"></textarea>
+      <button onclick="saveCrunchyImages()">Save Crunchy Images</button>
+      <div id="crunchyPreview" class="carousel"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STICKY FOOTER ================= -->
+<footer>
+  &copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024
+</footer>
+
+<script>
+// Admin credentials hidden
+const ADMIN_CREDS = { username:"thesoutherntable", password:"crunchythangs", pin:"1812" };
+
+// Admin login
+function adminLogin() {
+  const u = document.getElementById("adminUsername").value;
+  const p = document.getElementById("adminPassword").value;
+  const pin = document.getElementById("adminPin").value;
+  if(u===ADMIN_CREDS.username && p===ADMIN_CREDS.password && pin===ADMIN_CREDS.pin){
+    document.getElementById("adminLoginForm").style.display="none";
+    document.getElementById("adminContent").style.display="block";
+    alert("Admin access granted!");
+  } else alert("Incorrect login credentials or PIN!");
+}
+
+// Update totals
+function updateTotals(){
+  let colors=["Black","Burgundy","Gold","Grey"];
+  let size=document.querySelector('input[name="hoodieSize"]:checked').value;
+  let grandTotal=0;
+  colors.forEach(color=>{
+    let qty=parseInt(document.querySelector(`.colorQty[data-color="${color}"]`).value)||0;
+    let unit=75;if(size==="2XL"||size==="3XL")unit+=10;
+    let sub=qty*unit;document.getElementById("sub"+color).innerText="$"+sub;grandTotal+=sub;
+  });
+  let delivery=document.getElementById("delivery").value;
+  if(delivery==="local")grandTotal+=5;
+  document.getElementById("grandTotal").innerText=grandTotal;
+}
+document.querySelectorAll(".colorQty, input[name='hoodieSize'], #delivery").forEach(el=>el.addEventListener("input",updateTotals));
+
+// Save order with EmailJS
+function saveOrder(){
+  updateTotals();
+  const orderData={
+    orderNumber:Date.now(),
+    name:document.getElementById("name").value,
+    phone:document.getElementById("phone").value,
+    colors:{},
+    size:document.querySelector('input[name="hoodieSize"]:checked').value,
+    delivery:document.getElementById("delivery").value,
+    notes:document.getElementById("notes").value,
+    total:document.getElementById("grandTotal").innerText
+  };
+  ["Black","Burgundy","Gold","Grey"].forEach(c=>orderData.colors[c]=parseInt(document.querySelector(`.colorQty[data-color="${c}"]`).value)||0);
+  emailjs.send('service_xpjp0i7','YOUR_TEMPLATE_ID',{
+    to_email:'pricebusiness2025@gmail.com',
+    orderNumber:orderData.orderNumber,
+    name:orderData.name,
+    phone:orderData.phone,
+    size:orderData.size,
+    colors:JSON.stringify(orderData.colors),
+    delivery:orderData.delivery,
+    notes:orderData.notes,
+    total:orderData.total
+  }).then(()=>{alert("Order sent successfully!")},(err)=>{alert("Error sending order: "+err.text)});
+}
+
+// Placeholder functions for loading/saving images
+function saveHoodieImages(){alert("Hoodie images saved (mock)");}
+function saveExclusivesImages(){alert("Exclusives images saved (mock)");}
+function saveCrunchyImages(){alert("Crunchy images saved (mock)");}
+
+function loadOrders(){alert("Load orders function (mock)");}
+function clearOrders(){alert("Clear all orders function (mock)");}
+</script>
+
+</body>
+</html>
