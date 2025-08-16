@@ -1,5 +1,217 @@
 
-<!D
+<
+<!-- ================= CUSTOMER CHECKOUT WITH BULK TABLE ================= -->
+<section id="checkout">
+  <h2>Checkout</h2>
+  <form id="orderForm">
+    <label>Full Name: <input type="text" id="name" required></label><br>
+    <label>Phone: <input type="text" id="phone" required></label><br>
+
+    <p>Select Size:</p>
+    <label><input type="radio" name="hoodieSize" value="S" checked> S</label>
+    <label><input type="radio" name="hoodieSize" value="M"> M</label>
+    <label><input type="radio" name="hoodieSize" value="L"> L</label>
+    <label><input type="radio" name="hoodieSize" value="XL"> XL</label>
+    <label><input type="radio" name="hoodieSize" value="2XL"> 2XL (+$10)</label>
+    <label><input type="radio" name="hoodieSize" value="3XL"> 3XL (+$10)</label><br><br>
+
+    <p>Hoodie Color Selection (Max 10 per color):</p>
+    <table id="bulkTable">
+      <thead>
+        <tr>
+          <th>Color</th><th>Quantity</th><th>Unit Price</th><th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Black</td>
+          <td><input type="number" class="colorQty" data-color="Black" min="0" max="10" value="0"></td>
+          <td>$75</td>
+          <td class="subTotal" id="subBlack">$0</td>
+        </tr>
+        <tr>
+          <td>Burgundy</td>
+          <td><input type="number" class="colorQty" data-color="Burgundy" min="0" max="10" value="0"></td>
+          <td>$75</td>
+          <td class="subTotal" id="subBurgundy">$0</td>
+        </tr>
+        <tr>
+          <td>Gold</td>
+          <td><input type="number" class="colorQty" data-color="Gold" min="0" max="10" value="0"></td>
+          <td>$75</td>
+          <td class="subTotal" id="subGold">$0</td>
+        </tr>
+        <tr>
+          <td>Grey</td>
+          <td><input type="number" class="colorQty" data-color="Grey" min="0" max="10" value="0"></td>
+          <td>$75</td>
+          <td class="subTotal" id="subGrey">$0</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <label>Delivery Method:</label>
+    <select id="delivery" required>
+      <option value="pickup">In-Person Pickup (Melrose St. 11237) - $75</option>
+      <option value="local">Local Brooklyn Delivery (+$5)</option>
+      <option value="outside">Outside Brooklyn - Enter Direct Shipping Address</option>
+    </select><br>
+
+    <label>Special Notes / Substitutions:<br>
+      <textarea id="notes"></textarea>
+    </label><br>
+
+    <p><strong>Payment:</strong> Single orders: Cash or CashApp | Bulk orders: CashApp only | Card coming soon</p>
+
+    <p>Total: $<span id="grandTotal">0</span></p>
+
+    <button type="button" onclick="saveOrder()">Save Order</button>
+  </form>
+</section>
+
+<!-- ================= ADMIN PANEL ================= -->
+<section id="admin">
+  <h2>Admin Panel – Saved Orders</h2>
+
+  <form id="adminLoginForm">
+    <label>Username: <input type="text" id="adminUsername" required></label><br>
+    <label>Password: <input type="password" id="adminPassword" required></label><br>
+    <label>4-digit PIN: <input type="password" id="adminPin" required maxlength="4"></label><br>
+    <button type="button" onclick="adminLogin()">Log In</button>
+  </form>
+
+  <div id="adminContent" style="display:none;">
+    <button onclick="loadOrders()">Load Orders</button>
+    <button onclick="clearOrders()">Clear All Orders</button>
+
+    <table id="ordersTable">
+      <thead>
+        <tr>
+          <th>Order #</th><th>Name</th><th>Phone</th><th>Qty</th>
+          <th>Color</th><th>Unit Price</th><th>Total</th><th>Notes</th><th>Date</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- Image Management -->
+    <h3>Image Management</h3>
+    <div>
+      <h4>Hoodies</h4>
+      <input type="file" id="hoodieFiles" multiple accept="image/*">
+      <textarea id="hoodieDesc" placeholder="Comma-separated descriptions"></textarea>
+      <button onclick="saveHoodieImages()">Save Hoodie Images</button>
+      <div id="hoodiePreview" class="image-section"></div>
+    </div>
+    <div>
+      <h4>Exclusives</h4>
+      <input type="file" id="exclusivesFiles" multiple accept="image/*">
+      <textarea id="exclusivesDesc" placeholder="Comma-separated descriptions"></textarea>
+      <button onclick="saveExclusivesImages()">Save Exclusives Images</button>
+      <div id="exclusivesPreview" class="image-section"></div>
+    </div>
+    <div>
+      <h4>Crunchy Thangs</h4>
+      <input type="file" id="crunchyFiles" multiple accept="image/*">
+      <textarea id="crunchyDesc" placeholder="Comma-separated descriptions"></textarea>
+      <button onclick="saveCrunchyImages()">Save Crunchy Images</button>
+      <div id="crunchyPreview" class="image-section"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STICKY FOOTER ================= -->
+<footer style="position:sticky; bottom:0; background-color:#800020; color:white; padding:10px; text-align:center; border-top:2px solid gold;">
+  &copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024
+</footer>
+
+<script>
+// Admin login
+const ADMIN_USERNAME = "thesoutherntable";
+const ADMIN_PASSWORD = "crunchythangs";
+const ADMIN_PIN = "1812";
+
+function adminLogin() {
+  const username = document.getElementById("adminUsername").value;
+  const password = document.getElementById("adminPassword").value;
+  const pin = document.getElementById("adminPin").value;
+
+  if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD && pin === ADMIN_PIN){
+    document.getElementById("adminLoginForm").style.display = "none";
+    document.getElementById("adminContent").style.display = "block";
+    alert("Admin access granted!");
+  } else {
+    alert("Incorrect login credentials or PIN!");
+  }
+}
+
+// Calculate subtotals and grand total
+function updateTotals() {
+  let colors = ["Black","Burgundy","Gold","Grey"];
+  let size = document.querySelector('input[name="hoodieSize"]:checked').value;
+  let grandTotal = 0;
+
+  colors.forEach(color => {
+    let qty = parseInt(document.querySelector(`.colorQty[data-color="${color}"]`).value) || 0;
+    let unit = 75;
+    if(size === "2XL" || size === "3XL") unit += 10;
+    let sub = qty * unit;
+    document.getElementById("sub"+color).innerText = "$" + sub;
+    grandTotal += sub;
+  });
+
+  let delivery = document.getElementById("delivery").value;
+  if(delivery === "local") grandTotal += 5;
+  document.getElementById("grandTotal").innerText = grandTotal;
+}
+
+// Update totals whenever quantity or size changes
+document.querySelectorAll(".colorQty, input[name='hoodieSize'], #delivery").forEach(el=>{
+  el.addEventListener("input", updateTotals);
+});
+
+// Save order function with EmailJS
+function saveOrder() {
+  updateTotals();
+  const orderData = {
+    orderNumber: Date.now(),
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    colors: {},
+    size: document.querySelector('input[name="hoodieSize"]:checked').value,
+    delivery: document.getElementById("delivery").value,
+    notes: document.getElementById("notes").value,
+    total: document.getElementById("grandTotal").innerText
+  };
+
+  ["Black","Burgundy","Gold","Grey"].forEach(color=>{
+    orderData.colors[color] = parseInt(document.querySelector(`.colorQty[data-color="${color}"]`).value) || 0;
+  });
+
+  // EmailJS send
+  emailjs.send('service_xpjp0i7', 'YOUR_TEMPLATE_ID', {
+    to_email: 'pricebusiness2025@gmail.com',
+    orderNumber: orderData.orderNumber,
+    name: orderData.name,
+    phone: orderData.phone,
+    size: orderData.size,
+    colors: JSON.stringify(orderData.colors),
+    delivery: orderData.delivery,
+    notes: orderData.notes,
+    total: orderData.total
+  }).then(res=>{
+    alert("Order saved & email sent!");
+  }, err=>{
+    alert("Order saved but email failed: "+err.text);
+  });
+}
+
+// Placeholder image save functions
+function saveHoodieImages(){alert("Hoodie images saved!");}
+function saveExclusivesImages(){alert("Exclusives images saved!");}
+function saveCrunchyImages(){alert("Crunchy images saved!");}
+        </script>
+  !D
 <!DOC
 <!DOCTYP
 <!DOCTYPE html>
