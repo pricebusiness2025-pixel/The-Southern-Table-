@@ -5,195 +5,236 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Southern Table</title>
 <style>
-  body {margin:0;font-family: 'Arial', sans-serif; background:#800020; color:white;}
-  header {display:flex;align-items:center;justify-content:center;padding:10px;background:#800020;}
-  header img {height:50px;margin-right:10px;}
-  nav {display:flex;justify-content:center;background:#600018;}
-  nav button {margin:5px;padding:10px 15px;background:#800020;color:white;border:2px solid gold;border-radius:6px;cursor:pointer;}
-  nav button:hover {background:#a02040;}
-  .tabContent {display:none;padding:20px;}
-  .saveBtn {margin-top:10px;padding:8px 15px;background:#800020;color:white;border:2px solid gold;border-radius:6px;cursor:pointer;}
-  footer {position:sticky;bottom:0;background:#600018;color:white;text-align:center;padding:10px;}
-  img.thumbnail{max-width:120px;margin:5px;border:1px solid #ccc;padding:3px;}
-  input, select {padding:5px;margin:5px;border-radius:4px;}
+  body {margin:0; font-family: 'Helvetica Neue', sans-serif; background: #800020; color: #fff;}
+  header, footer {background:#800020; color:#fff; text-align:center; padding:10px; position:sticky; top:0; z-index:10;}
+  footer {position:fixed; bottom:0; width:100%; font-size:0.9em;}
+  h1,h2,h3 {color:#000;}
+  .subtext {color:#fff;}
+  button {background:#800020; color:#fff; border:2px solid gold; padding:8px 15px; cursor:pointer; margin:5px; border-radius:6px;}
+  button:hover {background:gold; color:#800020;}
+  .tab {display:none; padding:20px;}
+  .active {display:block;}
+  .input-field {margin:5px 0; padding:8px; width:90%;}
+  .thumbnail {width:100px; height:100px; object-fit:cover; margin:5px;}
+  table {width:100%; border-collapse:collapse; margin:10px 0;}
+  th, td {border:1px solid #333; padding:8px;}
+  .cart {font-size:1.5em; cursor:pointer;}
+  .receipt {border:2px solid #333; background:#fff; color:#000; padding:20px; margin:10px 0; width:90%;}
 </style>
 </head>
 <body>
 
-<!-- Start Overlay -->
-<div id="startOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#800020;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3000;">
+<header>
+  <img id="headerLogo" src="" alt="The Southern Table Logo" style="max-height:60px;">
   <h1>The Southern Table</h1>
-  <button onclick="openAdmin()">Admin</button>
-  <div style="margin-top:20px;">
-    <h3>Customer Access</h3>
-    <input type="text" id="customerCode" placeholder="Enter Access Code">
-    <button onclick="openCustomer()">Enter</button>
-    <p id="codeError" style="color:red;"></p>
+  <button onclick="showTab('loginTab')">Admin / Customer Login</button>
+</header>
+
+<div id="loginTab" class="tab active">
+  <h2>Enter Login Code</h2>
+  <input type="text" id="loginCode" class="input-field" placeholder="Enter code (1000 for Customer)">
+  <button onclick="login()">Enter</button>
+</div>
+
+<!-- Admin Tab -->
+<div id="adminTab" class="tab">
+  <h2>Admin Dashboard</h2>
+  <div>
+    <h3>Upload Header/Footer Logo</h3>
+    <input type="file" id="headerUpload" onchange="uploadHeader(event)">
+    <input type="file" id="footerUpload" onchange="uploadFooter(event)">
+  </div>
+
+  <div>
+    <h3>Hoodie Selection Images</h3>
+    <input type="file" multiple onchange="uploadImages(event,'hoodies')">
+    <div id="hoodieGallery"></div>
+  </div>
+
+  <div>
+    <h3>Exclusives Images</h3>
+    <input type="file" multiple onchange="uploadImages(event,'exclusives')">
+    <div id="exclusivesGallery"></div>
+  </div>
+
+  <div>
+    <h3>Crunchy Thangs Images</h3>
+    <input type="file" multiple onchange="uploadImages(event,'crunchy')">
+    <div id="crunchyGallery"></div>
+  </div>
+
+  <div>
+    <h3>CashApp QR for Checkout</h3>
+    <input type="file" onchange="uploadCashAppQR(event)">
+    <img id="cashQR" src="" alt="CashApp QR" style="width:150px;height:150px;">
+  </div>
+
+  <div>
+    <h3>Receipts History</h3>
+    <div id="receiptHistory"></div>
   </div>
 </div>
 
-<!-- Admin Login Overlay -->
-<div id="adminLoginOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);color:white;align-items:center;justify-content:center;z-index:4000;flex-direction:column;">
-  <h2>Admin Login</h2>
-  <input type="text" id="adminUser" placeholder="Username"><br>
-  <input type="password" id="adminPass" placeholder="Password"><br>
-  <input type="password" id="adminPin" placeholder="4-digit PIN"><br>
-  <button onclick="loginAdmin()">Login</button>
-  <p id="adminError" style="color:red;"></p>
+<!-- Customer Tab -->
+<div id="customerTab" class="tab">
+  <h2>Welcome to The Southern Table</h2>
+  <p>Use code <strong>1000</strong> to access orders.</p>
+
+  <div>
+    <h3>Hoodies</h3>
+    <div id="customerHoodies"></div>
+    <p>Total: $<span id="totalPrice">0</span></p>
+    <button onclick="checkout()">Place Order 🛒</button>
+  </div>
+
+  <div>
+    <h3>Exclusives</h3>
+    <div id="customerExclusives"></div>
+  </div>
+
+  <div>
+    <h3>Mission & Goals / FAQ</h3>
+    <p><strong>Mission:</strong> High-quality, comfortable hoodies—available year-round with rustic style. Limited edition drops bring exclusive designs for those who want something truly unique. Every order is seamless, delivering standout pieces with creativity, authenticity, and comfort.</p>
+    <p><strong>Goal:</strong> Food truck initiative, Crunchy Thangs LLC, Southern inspiration....NY driven.</p>
+    <p><strong>FAQ:</strong><br>
+      Q: How long will it take to receive my hoodie?<br>
+      A: Standard production 2–5 business days, then shipping 3–7 business days within U.S.<br>
+      Q: When can I place an order?<br>
+      A: Orders accepted Wednesday & Saturday (AM).<br>
+      Q: Local delivery?<br>
+      A: Brooklyn +$5, in-person pickup free.<br>
+      Q: Payment?<br>
+      A: Cash/CashApp only, card coming soon.<br>
+      Q: Sizes?<br>
+      A: S–3XL, extra $10 for 2XL & 3XL.<br>
+      Q: Can I change/cancel?<br>
+      A: Contact admin ASAP before production.<br>
+      Q: Are hoodies limited edition?<br>
+      A: Some drops limited, year-round basics always available.<br>
+      Q: Contact?<br>
+      A: Phone number provided in order or CashApp.
+    </p>
+  </div>
+
+  <div>
+    <h3>Checkout</h3>
+    <p>Cash Pickup: Monday & Thursday (single orders only)</p>
+    <p>CashApp Bulk Orders (Card coming soon)</p>
+    <img id="customerCashQR" src="" style="width:150px;height:150px;">
+  </div>
 </div>
 
-<!-- Header -->
-<header>
-  <img id="headerLogo" src="" alt="Logo">
-  <h1>The Southern Table</h1>
-</header>
-
-<!-- Navigation -->
-<nav>
-  <button onclick="showSection('hoodies')">Hoodies</button>
-  <button onclick="showSection('exclusives')">Exclusives</button>
-  <button onclick="showSection('crunchythangs')">Crunchy Thangs</button>
-  <button onclick="showSection('missionfaq')">Mission & FAQ</button>
-  <button onclick="showSection('checkout')">Checkout 🛒</button>
-</nav>
-
-<!-- Tabs -->
-<div id="hoodies" class="tabContent">
-  <h2>Hoodies Selection</h2>
-  <p>High-quality hoodies S–3XL, year-round basics.</p>
-  <div id="hoodieImages"></div>
-  <input type="file" id="uploadHoodie" multiple accept="image/*">
-  <button class="saveBtn" onclick="saveImages('hoodie')">Save Images</button>
-</div>
-
-<div id="exclusives" class="tabContent">
-  <h2>Limited Edition Drops</h2>
-  <div id="exclusiveImages"></div>
-  <input type="file" id="uploadExclusive" multiple accept="image/*">
-  <button class="saveBtn" onclick="saveImages('exclusive')">Save Images</button>
-</div>
-
-<div id="crunchythangs" class="tabContent">
-  <h2>Crunchy Thangs</h2>
-  <div id="crunchyImages"></div>
-  <input type="file" id="uploadCrunchy" multiple accept="image/*">
-  <button class="saveBtn" onclick="saveImages('crunchy')">Save Images</button>
-</div>
-
-<div id="missionfaq" class="tabContent">
-  <h2>Mission & Goals</h2>
-  <p><strong>Mission:</strong> High-quality, comfortable hoodies—available year-round with rustic style. Limited edition drops bring exclusive designs for those who want something truly unique. Every order is seamless, delivering standout pieces with creativity, authenticity, and comfort.</p>
-  <p><strong>Goal:</strong> Food truck initiative, Crunchy Thangs LLC, Southern inspiration, NY-driven.</p>
-  <h3>FAQ</h3>
-  <ul>
-    <li>Orders placed every Wednesday and Saturday A.M.</li>
-    <li>Local Brooklyn delivery +$5, in-person pickup free</li>
-    <li>Currently Cash/CashApp only. Card coming soon.</li>
-    <li>Hoodie sizes S–3XL, $75 each. Extra $10 for 2XL–3XL</li>
-    <li>Limited edition drops may sell out</li>
-    <li>Contact via phone provided when ordering or CashApp</li>
-  </ul>
-</div>
-
-<div id="checkout" class="tabContent">
-  <h2>Checkout</h2>
-  <div id="cashappTag"><img src="" alt="CashApp QR" class="thumbnail"></div>
-  <input type="file" id="cashappUpload" accept="image/*">
-  <button class="saveBtn" onclick="saveCashappQR()">Save QR</button>
-</div>
-
-<!-- Footer -->
 <footer>
   &copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-/* Tab Function */
-function showSection(sectionId){
-  document.querySelectorAll('.tabContent').forEach(tab => tab.style.display='none');
-  document.getElementById(sectionId).style.display='block';
+let adminPin = '1812';
+let adminUsername = 'thesoutherntable';
+let adminPassword = 'crunchythangs';
+let hoodies = [];
+let exclusives = [];
+let crunchy = [];
+let cart = [];
+let receipts = {}; // Monthly receipt history
+
+function showTab(tabId){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
 }
 
-/* Customer Access */
-function openCustomer(){
-  let codeInput = document.getElementById('customerCode').value.trim();
-  if(codeInput === "1000"){
-    document.getElementById('startOverlay').style.display='none';
-    showSection('hoodies');
-  } else {
-    document.getElementById('codeError').innerText = "Incorrect access code!";
+// Login handling
+function login(){
+  const code = document.getElementById('loginCode').value;
+  if(code==='1000'){ showTab('customerTab'); loadCustomerImages(); return; }
+
+  let user = prompt('Username');
+  let pass = prompt('Password');
+  let pin = prompt('4-digit PIN');
+
+  if(user===adminUsername && pass===adminPassword && pin===adminPin){
+    showTab('adminTab');
+    updateReceiptHistory();
+  } else { alert('Incorrect credentials'); }
+}
+
+// Upload images
+function uploadImages(event,type){
+  let files = event.target.files;
+  let gallery = document.getElementById(type+'Gallery');
+  for(let f of files){
+    let url = URL.createObjectURL(f);
+    gallery.innerHTML += `<img src="${url}" class="thumbnail">`;
+    if(type==='hoodies') hoodies.push({src:url, name:f.name});
+    if(type==='exclusives') exclusives.push({src:url, name:f.name});
+    if(type==='crunchy') crunchy.push({src:url, name:f.name});
   }
+  loadCustomerImages();
 }
 
-/* Admin Access */
-function openAdmin(){
-  document.getElementById('startOverlay').style.display='none';
-  document.getElementById('adminLoginOverlay').style.display='flex';
+function uploadHeader(event){
+  let url = URL.createObjectURL(event.target.files[0]);
+  document.getElementById('headerLogo').src = url;
+}
+function uploadFooter(event){ /* optional footer image */ }
+
+// CashApp QR
+function uploadCashAppQR(event){
+  let url = URL.createObjectURL(event.target.files[0]);
+  document.getElementById('cashQR').src=url;
+  document.getElementById('customerCashQR').src=url;
 }
 
-function loginAdmin(){
-  let user = document.getElementById('adminUser').value.trim();
-  let pass = document.getElementById('adminPass').value.trim();
-  let pin = document.getElementById('adminPin').value.trim();
-  if(user==="thesoutherntable" && pass==="crunchythangs" && pin==="1812"){
-    document.getElementById('adminLoginOverlay').style.display='none';
-    alert("Admin login successful!");
-  } else {
-    document.getElementById('adminError').innerText="Incorrect credentials!";
-  }
+// Customer images load
+function loadCustomerImages(){
+  let ch = document.getElementById('customerHoodies');
+  ch.innerHTML='';
+  hoodies.forEach(h=>{
+    ch.innerHTML += `<div>
+      <img src="${h.src}" class="thumbnail">
+      <p class="subtext">${h.name}</p>
+      <label>Size:</label>
+      <select onchange="updateCart(this,'${h.name}')">
+        <option>S</option>
+        <option>M</option>
+        <option>L</option>
+        <option>XL</option>
+        <option>2XL</option>
+        <option>3XL</option>
+      </select>
+      <label>Qty:</label>
+      <input type="number" value="1" min="1" max="10" onchange="updateCart(this,'${h.name}')">
+    </div>`;
+  });
+  let ce = document.getElementById('customerExclusives');
+  ce.innerHTML='';
+  exclusives.forEach(e=>{
+    ce.innerHTML += `<div><img src="${e.src}" class="thumbnail"><p class="subtext">${e.name}</p></div>`;
+  });
 }
 
-/* Save Header Logo */
-function saveHeaderLogo(){
-  let input=document.getElementById('headerLogoUpload');
-  if(input.files.length){
-    let reader=new FileReader();
-    reader.onload=function(e){
-      document.getElementById('headerLogo').src=e.target.result;
-      alert("Header logo updated!");
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
+// Cart / checkout
+function updateCart(input, hoodieName){
+  let container = input.parentNode;
+  let size = container.querySelector('select').value;
+  let qty = parseInt(container.querySelector('input').value);
+  let price = 75 + ((size==='2XL'||size==='3XL')?10:0);
+
+  // Bulk discount
+  if(qty>=5 && qty<=9) price *= 0.95;
+
+  // Remove existing hoodie if exists
+  cart = cart.filter(c=>c.name!==hoodieName);
+  cart.push({type:'hoodie', name:hoodieName, size:size, qty:qty, price:price});
+  updateTotal();
 }
 
-/* Save CashApp QR */
-function saveCashappQR(){
-  let input=document.getElementById('cashappUpload');
-  if(input.files.length){
-    let reader=new FileReader();
-    reader.onload=function(e){
-      document.querySelector('#cashappTag img').src=e.target.result;
-      alert("CashApp QR updated!");
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
+function updateTotal(){
+  let total = cart.reduce((sum,o)=>sum+o.price*o.qty,0);
+  document.getElementById('totalPrice').textContent = total.toFixed(2);
 }
 
-/* Save Section Images */
-function saveImages(type){
-  let inputId = "";
-  let displayId = "";
-  if(type==="hoodie"){inputId="uploadHoodie"; displayId="hoodieImages";}
-  else if(type==="exclusive"){inputId="uploadExclusive"; displayId="exclusiveImages";}
-  else if(type==="crunchy"){inputId="uploadCrunchy"; displayId="crunchyImages";}
+function checkout(){
+  if(cart.length
   
-  let input=document.getElementById(inputId);
-  let display=document.getElementById(displayId);
-  display.innerHTML="";
-  if(input.files.length){
-    Array.from(input.files).forEach(file=>{
-      let reader=new FileReader();
-      reader.onload=function(e){
-        let img=document.createElement('img');
-        img.src=e.target.result;
-        img.className="thumbnail";
-        display.appendChild(img);
-      }
-      reader.readAsDataURL(file);
-    });
-    alert("Images saved!");
-  }
-}
-</script>
-</body>
-</html>
