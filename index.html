@@ -5,263 +5,195 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Southern Table</title>
 <style>
-body{font-family:"Helvetica Neue",sans-serif;margin:0;background:#800020;color:white;}
-header{display:flex;align-items:center;padding:10px;background:#800020;position:sticky;top:0;z-index:1000;}
-header img{height:60px;margin-right:15px;}
-header h1{margin:0;font-size:1.8rem;}
-nav{margin-left:auto;}
-nav button{margin:5px;background:#800020;color:white;border:2px solid gold;border-radius:6px;padding:10px;cursor:pointer;}
-section{display:none;padding:15px;}
-.active{display:block;}
-footer{position:sticky;bottom:0;background:#333;color:white;padding:10px;text-align:center;}
-img.thumbnail{width:100px;height:100px;object-fit:cover;margin:5px;border:2px solid gold;border-radius:8px;}
-#cartBtn{font-size:24px;background:black;color:white;border:2px solid gold;border-radius:6px;padding:5px 10px;cursor:pointer;}
-input[type=number]{width:50px;}
-textarea{width:100%;height:60px;}
-input, select{padding:5px;margin:5px 0;border-radius:5px;border:none;}
-button.saveBtn{background:#800020;color:white;border:2px solid gold;padding:8px 12px;margin-top:10px;border-radius:6px;cursor:pointer;}
+  body {margin:0;font-family: 'Arial', sans-serif; background:#800020; color:white;}
+  header {display:flex;align-items:center;justify-content:center;padding:10px;background:#800020;}
+  header img {height:50px;margin-right:10px;}
+  nav {display:flex;justify-content:center;background:#600018;}
+  nav button {margin:5px;padding:10px 15px;background:#800020;color:white;border:2px solid gold;border-radius:6px;cursor:pointer;}
+  nav button:hover {background:#a02040;}
+  .tabContent {display:none;padding:20px;}
+  .saveBtn {margin-top:10px;padding:8px 15px;background:#800020;color:white;border:2px solid gold;border-radius:6px;cursor:pointer;}
+  footer {position:sticky;bottom:0;background:#600018;color:white;text-align:center;padding:10px;}
+  img.thumbnail{max-width:120px;margin:5px;border:1px solid #ccc;padding:3px;}
+  input, select {padding:5px;margin:5px;border-radius:4px;}
 </style>
 </head>
 <body>
 
-<!-- Admin Login Overlay -->
-<div id="adminLoginOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2000;">
-<h2>Admin Login</h2>
-<label>Username: <input type="text" id="adminUsername"></label><br>
-<label>Password: <input type="password" id="adminPassword"></label><br>
-<label>4-Digit PIN: <input type="password" id="adminPin"></label><br>
-<button onclick="checkAdminLogin()">Login</button>
-<p id="loginError" style="color:red;"></p>
+<!-- Start Overlay -->
+<div id="startOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#800020;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3000;">
+  <h1>The Southern Table</h1>
+  <button onclick="openAdmin()">Admin</button>
+  <div style="margin-top:20px;">
+    <h3>Customer Access</h3>
+    <input type="text" id="customerCode" placeholder="Enter Access Code">
+    <button onclick="openCustomer()">Enter</button>
+    <p id="codeError" style="color:red;"></p>
+  </div>
 </div>
 
+<!-- Admin Login Overlay -->
+<div id="adminLoginOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);color:white;align-items:center;justify-content:center;z-index:4000;flex-direction:column;">
+  <h2>Admin Login</h2>
+  <input type="text" id="adminUser" placeholder="Username"><br>
+  <input type="password" id="adminPass" placeholder="Password"><br>
+  <input type="password" id="adminPin" placeholder="4-digit PIN"><br>
+  <button onclick="loginAdmin()">Login</button>
+  <p id="adminError" style="color:red;"></p>
+</div>
+
+<!-- Header -->
 <header>
-<img src="logo.png" alt="The Southern Table Logo">
-<h1>The Southern Table</h1>
-<nav>
-<button onclick="showSection('hoodies')">Hoodies</button>
-<button onclick="showSection('exclusives')">Exclusives</button>
-<button onclick="showSection('crunchythangs')">Crunchy Thangs</button>
-<button onclick="showSection('mission-goals')">Mission & Goals + FAQ</button>
-<button onclick="showSection('checkout')">Checkout</button>
-</nav>
+  <img id="headerLogo" src="" alt="Logo">
+  <h1>The Southern Table</h1>
 </header>
 
-<!-- Hoodies Tab -->
-<section id="hoodies">
-<h2>Hoodies</h2>
-<p>Formed in 2025, The Southern Table was created with the vision of building a cohesive, wavey movement blending style, comfort, and community. Each hoodie represents high-quality rustic designs. Limited edition drops bring exclusivity, while classic hoodies remain staples for the Southern-inspired lifestyle.</p>
-<div id="hoodieImages"></div>
-<input type="file" id="hoodieUpload" multiple accept="image/*">
-<button class="saveBtn" onclick="saveImages('hoodie')">Save Hoodies</button>
-</section>
+<!-- Navigation -->
+<nav>
+  <button onclick="showSection('hoodies')">Hoodies</button>
+  <button onclick="showSection('exclusives')">Exclusives</button>
+  <button onclick="showSection('crunchythangs')">Crunchy Thangs</button>
+  <button onclick="showSection('missionfaq')">Mission & FAQ</button>
+  <button onclick="showSection('checkout')">Checkout 🛒</button>
+</nav>
 
-<!-- Exclusives Tab -->
-<section id="exclusives">
-<h2>Exclusives</h2>
-<p>Limited edition/random clothing pieces. Upload images and descriptions below:</p>
-<div id="exclusiveImages"></div>
-<input type="file" id="exclusiveUpload" multiple accept="image/*">
-<button class="saveBtn" onclick="saveImages('exclusive')">Save Exclusives</button>
-</section>
-
-<!-- Crunchy Thangs Tab -->
-<section id="crunchythangs">
-<h2>Crunchy Thangs</h2>
-<p>Food truck initiative. Upload logo and food images:</p>
-<div id="crunchyImages"></div>
-<input type="file" id="crunchyUpload" multiple accept="image/*">
-<button class="saveBtn" onclick="saveImages('crunchythangs')">Save Crunchy Thangs</button>
-</section>
-
-<!-- Mission & Goals + FAQ -->
-<section id="mission-goals">
-<h2>Mission</h2>
-<p>High-quality, comfortable hoodies—available year-round with rustic style. Limited edition drops bring exclusive designs for those who want something truly unique. Every order is seamless, delivering standout pieces with creativity, authenticity, and comfort.</p>
-
-<h2>Goals</h2>
-<p>Fuel the community through Crunchy Thangs LLC food truck initiative. Southern-inspired, NY-driven flavors with a focus on style, comfort, and creativity.</p>
-
-<h2>FAQ</h2>
-<dl>
-<dt>How long will it take to receive my hoodie?</dt>
-<dd>Made to order via Printify. Production: 2–5 business days, then shipping within U.S. (3–7 days). Limited edition may take slightly longer.</dd>
-<dt>When can I place an order?</dt>
-<dd>Every Wednesday and Saturday morning (A.M.).</dd>
-<dt>Do you offer local delivery?</dt>
-<dd>Local Brooklyn delivery +$5, in-person pickup free.</dd>
-<dt>Can I pay with a card?</dt>
-<dd>Cash/CashApp only. Card payments coming soon.</dd>
-<dt>What sizes do you offer?</dt>
-<dd>S–3XL. Extra $10 for 2XL/3XL.</dd>
-<dt>Can I change/cancel an order?</dt>
-<dd>Contact us ASAP. Once production begins, cancellations not possible.</dd>
-<dt>Are hoodies limited edition?</dt>
-<dd>Some drops are limited. Year-round basics always available.</dd>
-<dt>How do I contact you?</dt>
-<dd>Use phone number provided or CashApp.</dd>
-</dl>
-</section>
-
-<!-- Checkout Tab -->
-<section id="checkout">
-<h2>Checkout</h2>
-
-<p>Order Type:</p>
-<label><input type="radio" name="orderType" value="single" checked onchange="toggleOrderType()"> Single Order</label>
-<label><input type="radio" name="orderType" value="bulk" onchange="toggleOrderType()"> Bulk Order</label>
-
-<div id="singleOrderFields">
-<form id="singleOrderForm">
-<label>Full Name: <input type="text" id="singleName" required></label><br>
-<label>Phone: <input type="text" id="singlePhone" required></label><br>
-<p>Select Hoodie Size:</p>
-<label><input type="radio" name="singleHoodieSize" value="S" checked> S</label>
-<label><input type="radio" name="singleHoodieSize" value="M"> M</label>
-<label><input type="radio" name="singleHoodieSize" value="L"> L</label>
-<label><input type="radio" name="singleHoodieSize" value="XL"> XL</label>
-<label><input type="radio" name="singleHoodieSize" value="2XL"> 2XL (+$10)</label>
-<label><input type="radio" name="singleHoodieSize" value="3XL"> 3XL (+$10)</label><br><br>
-<p>Select Color:</p>
-<select id="singleColor">
-<option value="Black">Black</option>
-<option value="Burgundy">Burgundy</option>
-<option value="Gold">Gold</option>
-<option value="Grey">Grey</option>
-</select><br><br>
-<label>Delivery Method:</label>
-<select id="singleDelivery" required>
-<option value="pickup">In-Person Pickup (Melrose St. 11237)</option>
-<option value="local">Local Brooklyn Delivery (+$5)</option>
-<option value="outside">Outside Brooklyn - Enter Shipping Address</option>
-</select><br>
-<label>Special Notes / Substitutions:<br><textarea id="singleNotes"></textarea></label><br>
-<p>Total: $<span id="singleTotal">75</span></p>
-<button type="button" onclick="saveSingleOrder()">Place Single Order</button>
-</form>
+<!-- Tabs -->
+<div id="hoodies" class="tabContent">
+  <h2>Hoodies Selection</h2>
+  <p>High-quality hoodies S–3XL, year-round basics.</p>
+  <div id="hoodieImages"></div>
+  <input type="file" id="uploadHoodie" multiple accept="image/*">
+  <button class="saveBtn" onclick="saveImages('hoodie')">Save Images</button>
 </div>
 
-<div id="bulkOrderFields" style="display:none;">
-<form id="bulkOrderForm">
-<label>Full Name: <input type="text" id="bulkName" required></label><br>
-<label>Phone: <input type="text" id="bulkPhone" required></label><br>
-<p>Hoodie Color Selection (Max 10 per color):</p>
-<table id="bulkTable">
-<tr><td>Black</td><td><input type="number" class="colorQty" data-color="Black" min="0" max="10" value="0"></td></tr>
-<tr><td>Burgundy</td><td><input type="number" class="colorQty" data-color="Burgundy" min="0" max="10" value="0"></td></tr>
-<tr><td>Gold</td><td><input type="number" class="colorQty" data-color="Gold" min="0" max="10" value="0"></td></tr>
-<tr><td>Grey</td><td><input type="number" class="colorQty" data-color="Grey" min="0" max="10" value="0"></td></tr>
-</table>
-<label>Delivery Method:</label>
-<select id="bulkDelivery" required>
-<option value="pickup">In-Person Pickup (Melrose St. 11237)</option>
-<option value="local">Local Brooklyn Delivery (+$5)</option>
-<option value="outside">Outside Brooklyn - Enter Shipping Address</option>
-</select><br>
-<label>Special Notes / Substitutions:<br><textarea id="bulkNotes"></textarea></label><br>
-<p>Total: $<span id="bulkTotal">0</span></p>
-<button type="button" onclick="saveBulkOrder()">Place Bulk Order</button>
-</form>
+<div id="exclusives" class="tabContent">
+  <h2>Limited Edition Drops</h2>
+  <div id="exclusiveImages"></div>
+  <input type="file" id="uploadExclusive" multiple accept="image/*">
+  <button class="saveBtn" onclick="saveImages('exclusive')">Save Images</button>
 </div>
 
-<div id="cashappTag" style="margin-top:20px;text-align:center;">
-<h4>Scan to Pay via CashApp</h4>
-<img src="cashapp_qr.png" alt="CashApp QR" style="width:100%; max-width:300px; border:2px solid gold; border-radius:8px;">
+<div id="crunchythangs" class="tabContent">
+  <h2>Crunchy Thangs</h2>
+  <div id="crunchyImages"></div>
+  <input type="file" id="uploadCrunchy" multiple accept="image/*">
+  <button class="saveBtn" onclick="saveImages('crunchy')">Save Images</button>
 </div>
-</section>
 
+<div id="missionfaq" class="tabContent">
+  <h2>Mission & Goals</h2>
+  <p><strong>Mission:</strong> High-quality, comfortable hoodies—available year-round with rustic style. Limited edition drops bring exclusive designs for those who want something truly unique. Every order is seamless, delivering standout pieces with creativity, authenticity, and comfort.</p>
+  <p><strong>Goal:</strong> Food truck initiative, Crunchy Thangs LLC, Southern inspiration, NY-driven.</p>
+  <h3>FAQ</h3>
+  <ul>
+    <li>Orders placed every Wednesday and Saturday A.M.</li>
+    <li>Local Brooklyn delivery +$5, in-person pickup free</li>
+    <li>Currently Cash/CashApp only. Card coming soon.</li>
+    <li>Hoodie sizes S–3XL, $75 each. Extra $10 for 2XL–3XL</li>
+    <li>Limited edition drops may sell out</li>
+    <li>Contact via phone provided when ordering or CashApp</li>
+  </ul>
+</div>
+
+<div id="checkout" class="tabContent">
+  <h2>Checkout</h2>
+  <div id="cashappTag"><img src="" alt="CashApp QR" class="thumbnail"></div>
+  <input type="file" id="cashappUpload" accept="image/*">
+  <button class="saveBtn" onclick="saveCashappQR()">Save QR</button>
+</div>
+
+<!-- Footer -->
 <footer>
-&copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024
+  &copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
 <script>
-emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS public key
-
-// Admin credentials
-const ADMIN_USER="thesoutherntable";
-const ADMIN_PASS="crunchythangs";
-const ADMIN_PIN="1812";
-
-function checkAdminLogin(){
-let user=document.getElementById("adminUsername").value.trim();
-let pass=document.getElementById("adminPassword").value.trim();
-let pin=document.getElementById("adminPin").value.trim();
-if(user===ADMIN_USER && pass===ADMIN_PASS && pin===ADMIN_PIN){
-document.getElementById("adminLoginOverlay").style.display="none";
-showSection('hoodies');
-}else{
-document.getElementById("loginError").innerText="Incorrect credentials";
-}
+/* Tab Function */
+function showSection(sectionId){
+  document.querySelectorAll('.tabContent').forEach(tab => tab.style.display='none');
+  document.getElementById(sectionId).style.display='block';
 }
 
-document.addEventListener("DOMContentLoaded",()=>{showSection('hoodies');});
-
-// Show selected tab
-function showSection(id){
-document.querySelectorAll("section").forEach(s=>s.style.display="none");
-document.getElementById(id).style.display="block";
-document.querySelectorAll("nav button").forEach(b=>b.style.background="#800020");
-document.querySelector(`nav button[onclick="showSection('${id}')"]`).style.background="gold";
+/* Customer Access */
+function openCustomer(){
+  let codeInput = document.getElementById('customerCode').value.trim();
+  if(codeInput === "1000"){
+    document.getElementById('startOverlay').style.display='none';
+    showSection('hoodies');
+  } else {
+    document.getElementById('codeError').innerText = "Incorrect access code!";
+  }
 }
 
-// Toggle single/bulk order forms
-function toggleOrderType() {
-let type=document.querySelector('input[name="orderType"]:checked').value;
-if(type==="single"){
-document.getElementById("singleOrderFields").style.display="block";
-document.getElementById("bulkOrderFields").style.display="none";
-}else{
-document.getElementById("singleOrderFields").style.display="none";
-document.getElementById("bulkOrderFields").style.display="block";
-updateBulkTotal();
-}
+/* Admin Access */
+function openAdmin(){
+  document.getElementById('startOverlay').style.display='none';
+  document.getElementById('adminLoginOverlay').style.display='flex';
 }
 
-// Display uploaded images per section
-function saveImages(section){
-let input=document.getElementById(section+'Upload');
-let container=document.getElementById(section+'Images');
-container.innerHTML="";
-for(let file of input.files){
-let reader=new FileReader();
-reader.onload=function(e){
-let img=document.createElement("img");
-img.src=e.target.result;
-img.className="thumbnail";
-container.appendChild(img);
-};
-reader.readAsDataURL(file);
-}
-alert(section+" images saved!");
+function loginAdmin(){
+  let user = document.getElementById('adminUser').value.trim();
+  let pass = document.getElementById('adminPass').value.trim();
+  let pin = document.getElementById('adminPin').value.trim();
+  if(user==="thesoutherntable" && pass==="crunchythangs" && pin==="1812"){
+    document.getElementById('adminLoginOverlay').style.display='none';
+    alert("Admin login successful!");
+  } else {
+    document.getElementById('adminError').innerText="Incorrect credentials!";
+  }
 }
 
-// Single Order
-function saveSingleOrder(){
-alert("Single order saved!");
-// Optionally integrate EmailJS here
+/* Save Header Logo */
+function saveHeaderLogo(){
+  let input=document.getElementById('headerLogoUpload');
+  if(input.files.length){
+    let reader=new FileReader();
+    reader.onload=function(e){
+      document.getElementById('headerLogo').src=e.target.result;
+      alert("Header logo updated!");
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
 }
 
-// Bulk total calculation
-function updateBulkTotal(){
-let total=0;
-document.querySelectorAll('.colorQty').forEach(i=>{
-let qty=parseInt(i.value)||0;
-total+=qty*75;
-});
-let delivery=document.getElementById('bulkDelivery').value;
-if(delivery==="local") total+=5;
-document.getElementById('bulkTotal').innerText=total;
+/* Save CashApp QR */
+function saveCashappQR(){
+  let input=document.getElementById('cashappUpload');
+  if(input.files.length){
+    let reader=new FileReader();
+    reader.onload=function(e){
+      document.querySelector('#cashappTag img').src=e.target.result;
+      alert("CashApp QR updated!");
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
 }
 
-// Bulk Order
-function saveBulkOrder(){
-alert("Bulk order saved!");
-// Optionally integrate EmailJS here
+/* Save Section Images */
+function saveImages(type){
+  let inputId = "";
+  let displayId = "";
+  if(type==="hoodie"){inputId="uploadHoodie"; displayId="hoodieImages";}
+  else if(type==="exclusive"){inputId="uploadExclusive"; displayId="exclusiveImages";}
+  else if(type==="crunchy"){inputId="uploadCrunchy"; displayId="crunchyImages";}
+  
+  let input=document.getElementById(inputId);
+  let display=document.getElementById(displayId);
+  display.innerHTML="";
+  if(input.files.length){
+    Array.from(input.files).forEach(file=>{
+      let reader=new FileReader();
+      reader.onload=function(e){
+        let img=document.createElement('img');
+        img.src=e.target.result;
+        img.className="thumbnail";
+        display.appendChild(img);
+      }
+      reader.readAsDataURL(file);
+    });
+    alert("Images saved!");
+  }
 }
-
-document.querySelectorAll('.colorQty').forEach(input=>{
-input.addEventListener('change', updateBulkTotal);
-});
 </script>
 </body>
 </html>
