@@ -6,43 +6,249 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Southern Table</title>
 <style>
-/* Base Styling */
-body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; font-size:16px; line-height:1.6; padding:20px; background:#800020; color:#fff; }
-h1,h2{font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif; font-weight:700;color:#000;text-align:center;}
-p,label,span{color:#fff;}
-.section{background:#900030;padding:20px;margin-bottom:30px;border-radius:10px;}
-img.logo,.item img{max-width:200px;display:block;margin:10px auto;}
-.item{background:#b03040;padding:15px;margin-bottom:20px;border-radius:8px;border:1px solid #ccc;}
-input,textarea,select{display:block;width:100%;margin-top:5px;padding:8px;border-radius:5px;border:1px solid #ccc;}
-
-/* Buttons with gold trim */
+body {
+    font-family:'Segoe UI', Helvetica, Arial, sans-serif;
+    background:#800020;
+    color:#fff;
+    padding:10px;
+    line-height:1.6;
+    margin:0;
+}
+h1,h2 {
+    font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif;
+    font-weight:700;
+    color:#000;
+    text-align:center;
+    margin-bottom:15px;
+}
+p,label,span { color:#fff; font-size:1em; }
+.section {
+    background:#900030;
+    padding:20px;
+    margin-bottom:25px;
+    border-radius:10px;
+}
+img.logo,.item img {
+    max-width:100%;
+    height:auto;
+    display:block;
+    margin:10px auto;
+}
+.item {
+    background:#b03040;
+    padding:15px;
+    margin-bottom:20px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+input,textarea,select {
+    display:block;
+    width:100%;
+    margin-top:8px;
+    margin-bottom:15px;
+    padding:12px;
+    border-radius:5px;
+    border:1px solid #ccc;
+    font-size:1em;
+}
 button{
-  padding:10px 20px;
-  cursor:pointer;
-  border-radius:5px;
-  border:2px solid gold; /* Gold trim */
-  background:#800020;
-  color:#fff;
-  font-weight:600;
-  font-family:'Segoe UI',Helvetica,Arial,sans-serif;
-  transition:0.3s;
+    padding:15px 25px;
+    cursor:pointer;
+    border-radius:5px;
+    border:2px solid gold;
+    background:#800020;
+    color:#fff;
+    font-weight:600;
+    font-size:1.1em;
+    width:100%;
+    margin-bottom:15px;
+    transition:0.3s;
 }
 button:hover{
-  background:#900030;
-  border-color:#ffd700; /* Brighter gold on hover */
+    background:#900030;
+    border-color:#ffd700;
 }
-
-/* Tables */
-table{width:100%;border-collapse:collapse;background:#fff;color:#000;}
-th,td{border:1px solid #ccc;padding:8px;text-align:center;}
-#hoodiesList,#exclusivesList,#hoodiesContainer,#exclusivesContainer{max-height:400px;overflow-y:auto;}
+table{width:100%;border-collapse:collapse;background:#fff;color:#000;font-size:0.9em;}
+th,td{border:1px solid #ccc;padding:6px;text-align:center;}
+.orders-container {
+    overflow-x:auto;
+    width:100%;
+    -webkit-overflow-scrolling: touch;
+}
+@media(max-width:1024px){
+    h1,h2{font-size:1.8em;}
+    input,select,textarea,button{font-size:1em;}
+    .section{padding:15px;margin-bottom:20px;}
+}
+@media(max-width:768px){
+    h1,h2{font-size:1.5em;}
+    input,select,textarea,button{font-size:0.95em;}
+    .section{padding:12px;margin-bottom:15px;}
+}
+@media(max-width:480px){
+    h1,h2{font-size:1.3em;}
+    input,select,textarea,button{font-size:0.9em;padding:10px;}
+    .section{padding:10px;margin-bottom:12px;}
+    table, th, td {font-size:0.8em;}
+}
 </style>
 </head>
 <body>
 
-<!-- Login Section -->
+<!-- Admin Login -->
 <div id="loginScreen" class="section">
   <h1>Welcome to The Southern Table</h1>
+  <p>Admin? Enter your credentials below. Customers can scroll down.</p>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button id="loginBtn">Login</button>
+</div>
+
+<!-- Admin Panel -->
+<div id="adminPanel" style="display:none;">
+  <h1>Admin Dashboard</h1>
+
+  <div class="section">
+    <h2>Edit Logo</h2>
+    <input type="file" id="logoUpload" accept="image/*">
+    <img id="logoPreview" src="" alt="Logo Preview">
+  </div>
+
+  <div class="section">
+    <h2>Edit Mission & Goal</h2>
+    <textarea id="aboutText" rows="4">Mission & Goal content editable via admin.</textarea>
+  </div>
+
+  <div class="section">
+    <h2>Edit FAQ</h2>
+    <textarea id="faqText" rows="4">Typical questions about orders, delivery, payment. Card payments coming soon!</textarea>
+  </div>
+
+  <div class="section">
+    <h2>Orders Log</h2>
+    <div class="orders-container">
+      <table id="ordersTable">
+        <thead>
+          <tr><th>Timestamp</th><th>Name</th><th>Size</th><th>Qty</th><th>Price</th><th>Phone</th><th>Delivery/Address</th><th>Payment</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Customer App -->
+<div id="customerApp">
+  <img id="logo" class="logo" src="default-logo.png" alt="Logo">
+
+  <div class="section">
+    <h2>Mission & Goal</h2>
+    <div id="about">Mission & Goal content editable via admin.</div>
+  </div>
+
+  <div class="section">
+    <h2>Hoodies</h2>
+    <label>Name:</label><input type="text" id="custName" placeholder="Your Name">
+    <label>Phone:</label><input type="text" id="custPhone" placeholder="Phone Number" required>
+    <label>Size:</label>
+    <select id="custSize">
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="2XL">2XL (+$10)</option>
+      <option value="3XL">3XL (+$10)</option>
+    </select>
+    <label>Quantity:</label><input type="number" id="custQty" value="1" min="1">
+    <label>Delivery:</label>
+    <select id="custDelivery">
+      <option value="In-Person Free">In-Person Free</option>
+      <option value="Brooklyn +$5">Brooklyn +$5</option>
+    </select>
+    <label>Address (if Brooklyn):</label>
+    <input type="text" id="custAddress" placeholder="Street, City, ZIP">
+    <label>Payment:</label>
+    <select id="custPayment">
+      <option value="Cash">Cash / CashApp</option>
+    </select>
+    <p>Total: $<span id="totalPrice">75</span></p>
+    <button id="submitOrder">Submit Order</button>
+  </div>
+
+  <div class="section">
+    <h2>FAQ</h2>
+    <div id="faq">Typical questions about orders, delivery, payment. Card payments coming soon!</div>
+  </div>
+</div>
+
+<script>
+// --- Admin Login ---
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Login script loaded");
+    const ADMIN_USER = "The Southern Table";
+    const ADMIN_PASS = "Crunchy Thangs";
+
+    const loginBtn = document.getElementById('loginBtn');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+
+    if(loginBtn && usernameInput && passwordInput){
+        loginBtn.addEventListener('click', () => {
+            const user = usernameInput.value.trim();
+            const pass = passwordInput.value.trim();
+            if(user === ADMIN_USER && pass === ADMIN_PASS){
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('customerApp').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadAdminData();
+            } else {
+                alert('Incorrect username or password');
+            }
+        });
+    } else {
+        console.error('Login elements not found.');
+    }
+});
+
+// --- Admin Data Load ---
+function loadAdminData(){
+    const about=localStorage.getItem('aboutText');
+    if(about) document.getElementById('aboutText').value=about;
+    const faq=localStorage.getItem('faqText');
+    if(faq) document.getElementById('faqText').value=faq;
+    const logo=localStorage.getItem('logoPreview');
+    if(logo) document.getElementById('logoPreview').src=logo;
+
+    // Load orders
+    const orders=JSON.parse(localStorage.getItem('ordersLog'))||[];
+    const tbody=document.querySelector('#ordersTable tbody');
+    tbody.innerHTML='';
+    orders.forEach(o=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${o.timestamp}</td><td>${o.name}</td><td>${o.size}</td><td>${o.quantity}</td><td>$${o.price}</td><td>${o.phone}</td><td>${o.delivery} ${o.address||''}</td><td>${o.payment}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+// --- Logo Upload ---
+document.getElementById('logoUpload').addEventListener('change',function(e){
+  const file=e.target.files[0];
+  if(file){ const reader=new FileReader(); reader.onload=e=>{document.getElementById('logoPreview').src=e.target.result; localStorage.setItem('logoPreview', e.target.result);}; reader.readAsDataURL(file); }
+});
+
+// --- Customer Order ---
+function calculateTotal(){
+  let base=75;
+  const size=document.getElementById('custSize').value;
+  const qty=Number(document.getElementById('custQty').value);
+  const delivery=document.getElementById('custDelivery').value;
+  let total=base*qty;
+  if(size==='2XL'||size==='3XL') total+=10*qty;
+  if(delivery==='Brooklyn +$5') total+=5;
+  document.getElementById('totalPrice').textContent=total;
+  return total;
+}
+document.get
   <p>Admin? Enter your credentials below. Customers can scroll down.</p>
   <input type="text" id="username" placeholder="Username">
   <input type="password" id="password" placeholder="Password">
