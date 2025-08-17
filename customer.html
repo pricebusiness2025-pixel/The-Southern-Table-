@@ -5,156 +5,196 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Southern Table - Customer</title>
 <style>
-body{margin:0;font-family:sans-serif;background:#800020;color:#fff;}
-header{display:flex;align-items:center;justify-content:center;padding:10px;background:#800020;}
-header img{height:50px;margin-right:10px;}
-nav{display:flex;justify-content:center;margin:10px;}
-nav button{margin:0 5px;padding:10px 15px;background:#800020;color:#fff;border:2px solid gold;cursor:pointer;}
-.tab{display:none;padding:20px;}
-h3{color:#000;}
-label,p{color:#fff;}
-#checkoutTab img{width:150px;margin:10px 0;}
-footer{background:#333;color:#fff;text-align:center;padding:10px;position:sticky;bottom:0;}
-input,select{padding:5px;margin:5px 0;}
-button{cursor:pointer;}
+  body { background: #800020; color: white; font-family: 'Sans-serif'; margin:0; padding:0; }
+  header { background: #800020; padding: 10px; text-align:center; position:sticky; top:0; z-index:1000; }
+  header img { max-height: 60px; }
+  nav { display:flex; justify-content:center; background:#800020; }
+  nav button { background:#800020; color:white; border:2px solid gold; margin:5px; padding:10px; cursor:pointer; }
+  nav button.active { background:gold; color:#800020; }
+  section { padding: 20px; display:none; }
+  .visible { display:block; }
+  .product-grid { display:flex; flex-wrap:wrap; gap:10px; }
+  .product-card { background:#fff; color:#000; padding:10px; flex:1 0 150px; text-align:center; border-radius:8px; }
+  .product-card img { width:100%; height:auto; border-radius:5px; }
+  .checkout-card { background:#fff; color:#000; padding:15px; border-radius:10px; max-width:400px; margin:auto; }
+  .sticky-footer { position:sticky; bottom:0; background:#800020; color:white; text-align:center; padding:10px; border-top:2px solid gold; }
+  input[type=number] { width:60px; }
+  select { padding:5px; }
 </style>
 </head>
 <body>
-  
+
 <header>
-  <img src="logo.png" alt="The Southern Table Logo">
-  <h1>The Southern Table</h1>
+  <img id="header-logo" src="" alt="The Southern Table Logo">
 </header>
 
 <nav>
-  <button onclick="openTab('hoodiesTab')">Hoodies</button>
-  <button onclick="openTab('exclusivesTab')">Exclusives</button>
-  <button onclick="openTab('missionTab')">Mission & Goals + FAQ</button>
-  <button onclick="openTab('checkoutTab')">Checkout</button>
+  <button data-tab="hoodies" class="active">Hoodies</button>
+  <button data-tab="exclusives">Exclusives</button>
+  <button data-tab="mission">Mission/FAQ</button>
+  <button data-tab="checkout">Checkout</button>
 </nav>
 
-<!-- Hoodies -->
-<div id="hoodiesTab" class="tab">
-  <h3>Hoodies</h3>
-  <p>Year-round hoodie collection. S–3XL. Extra $10 for 2XL and 3XL.</p>
-  <!-- Placeholder for images -->
-  <div id="hoodieImages"></div>
-</div>
+<!-- Hoodies Tab -->
+<section id="hoodies" class="visible">
+  <h2>Hoodies</h2>
+  <div class="product-grid" id="hoodie-grid"></div>
+</section>
 
-<!-- Exclusives -->
-<div id="exclusivesTab" class="tab">
-  <h3>Exclusives</h3>
-  <p>Limited edition drops. Add photos and descriptions from admin only.</p>
-  <div id="exclusiveImages"></div>
-</div>
+<!-- Exclusives Tab -->
+<section id="exclusives">
+  <h2>Exclusives</h2>
+  <div class="product-grid" id="exclusive-grid"></div>
+</section>
 
-<!-- Mission & Goals + FAQ -->
-<div id="missionTab" class="tab">
-  <h3>Mission & Goals</h3>
+<!-- Mission / FAQ -->
+<section id="mission">
+  <h2>Mission & Goals</h2>
   <p>High-quality, comfortable hoodies—available year-round with rustic style. Limited edition drops bring exclusive designs for those who want something truly unique. Every order is seamless, delivering standout pieces with creativity, authenticity, and comfort.</p>
-  <p>Goals:
-    <ul>
-      <li>Establish The Southern Table as a go-to source for stylish, durable hoodies.</li>
-      <li>Deliver limited edition drops that keep the brand fresh and exclusive.</li>
-      <li>Support the Crunchy Thangs LLC food truck initiative, combining Southern inspiration with NY-driven creativity.</li>
-      <li>Ensure a seamless ordering experience for customers with reliable delivery and in-person pickup options.</li>
-      <li>Build a cohesive, wavey movement that celebrates community, quality, and unique style.</li>
-    </ul>
-  </p>
   <h3>FAQ</h3>
   <ul>
-    <li><b>How long will it take to receive my hoodie?</b> 2–5 business days production, 3–7 days shipping (US Domestic)</li>
-    <li><b>When can I place an order?</b> Every Wednesday and Saturday A.M.</li>
-    <li><b>Do you offer local delivery?</b> Brooklyn +$5, in-person pickup free</li>
-    <li><b>Can I pay with a card?</b> Cash/CashApp only. Card coming soon</li>
-    <li><b>What sizes?</b> S–3XL, extra $10 for 2XL/3XL</li>
-    <li><b>Change/cancel order?</b> Contact ASAP, can't cancel after production starts</li>
-    <li><b>Limited edition?</b> Some drops are LTO, year-round basics always available</li>
-    <li><b>Contact?</b> Use phone provided at checkout or CashApp</li>
+    <li><strong>How long will it take to receive my hoodie?</strong> Standard production: 2–5 business days + US shipping 3–7 days.</li>
+    <li><strong>When can I place an order?</strong> Orders accepted every Wednesday and Saturday (A.M.).</li>
+    <li><strong>Do you offer local delivery?</strong> Local Brooklyn: +$5. In-person pickup free.</li>
+    <li><strong>Can I pay with a card?</strong> Cash/CashApp only. Card coming soon.</li>
+    <li><strong>Sizes:</strong> S–3XL. Extra $10 for 2XL and 3XL.</li>
+    <li><strong>Can I change/cancel order?</strong> Contact ASAP. Once production starts, cannot cancel.</li>
+    <li><strong>Are hoodies limited edition?</strong> Some LTO, year-round basics always available.</li>
   </ul>
+</section>
+
+<!-- Checkout Tab -->
+<section id="checkout">
+  <h2>Checkout</h2>
+  <div class="checkout-card">
+    <label>Hoodie Color:
+      <select id="checkout-color">
+        <option value="Black">Black</option>
+        <option value="Grey">Grey</option>
+        <option value="Burgundy">Burgundy</option>
+        <option value="Gold">Gold</option>
+      </select>
+    </label><br><br>
+    <label>Size:
+      <select id="checkout-size">
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+        <option value="2XL">2XL (+$10)</option>
+        <option value="3XL">3XL (+$10)</option>
+      </select>
+    </label><br><br>
+    <label>Quantity: <input type="number" id="checkout-qty" min="1" max="10" value="1"></label><br><br>
+    <label>Delivery:
+      <select id="checkout-delivery">
+        <option value="pickup">In-person Pickup (Free)</option>
+        <option value="brooklyn">Local Brooklyn +$5</option>
+        <option value="shipping">Direct Shipping (enter address)</option>
+      </select>
+    </label><br><br>
+    <div id="checkout-address" style="display:none;">
+      <label>Shipping Address: <input type="text" id="shipping-address"></label><br><br>
+    </div>
+    <p>Total: $<span id="checkout-total">75</span></p>
+    <p>Scan CashApp QR to pay or use Cash:</p>
+    <img id="cashapp-qr" src="" alt="CashApp QR" style="width:150px;"><br><br>
+    <button id="checkout-btn">Submit Order</button>
+  </div>
+</section>
+
+<div class="sticky-footer">
+  &copy; The Southern Table Est 2025 - Crunchy Thangs LLC 2024
 </div>
 
-<!-- Checkout -->
-<div id="checkoutTab" class="tab">
-  <h3>Checkout</h3>
-  <label>Color:
-    <select id="checkoutColor">
-      <option>Black</option>
-      <option>Burgundy</option>
-      <option>Gold</option>
-      <option>Grey</option>
-    </select>
-  </label>
-  <br>
-  <label>Size:
-    <select id="checkoutSize">
-      <option>S</option><option>M</option><option>L</option><option>XL</option><option>2XL</option><option>3XL</option>
-    </select>
-  </label>
-  <br>
-  <label>Quantity:
-    <input type="number" id="checkoutQty" min="1" max="10" value="1">
-  </label>
-  <br>
-  <label>Delivery:
-    <select id="checkoutDelivery">
-      <option value="0">In-person Pickup (Free)</option>
-      <option value="5">Brooklyn +$5</option>
-    </select>
-  </label>
-  <br>
-  <label>Payment Method:
-    <select id="checkoutPayment">
-      <option>Cash</option>
-      <option>CashApp</option>
-    </select>
-  </label>
-  <br>
-  <p>Total: $<span id="checkoutTotal">75</span></p>
-  <img id="cashAppImg" src="cashapp.png" alt="CashApp QR">
-  <br>
-  <button onclick="calculateTotal()">Update Total</button>
-  <button onclick="submitOrder()">Submit Order</button>
-    </div>
-
-    <footer>
-  &copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024
-</footer>
-
 <script>
-function openTab(tabId){
-  const tabs = document.querySelectorAll('.tab');
-  tabs.forEach(t => t.style.display='none');
-  document.getElementById(tabId).style.display='block';
-}
+  // Tabs
+  const tabs = document.querySelectorAll('nav button');
+  const sections = document.querySelectorAll('section');
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      sections.forEach(s => s.classList.remove('visible'));
+      document.getElementById(btn.dataset.tab).classList.add('visible');
+    });
+  });  
 
-// Show hoodies by default
-openTab('hoodiesTab');
+  // Show/hide shipping address
+  const deliverySelect = document.getElementById('checkout-delivery');
+  const addressDiv = document.getElementById('checkout-address');
+  deliverySelect.addEventListener('change', () => {
+    addressDiv.style.display = deliverySelect.value === 'shipping' ? 'block' : 'none';
+  });
 
-function calculateTotal(){
-  const qty = parseInt(document.getElementById('checkoutQty').value);
-  const size = document.getElementById('checkoutSize').value;
-  const delivery = parseInt(document.getElementById('checkoutDelivery').value);
-  let total = 75 * qty + delivery;
-  if(size === '2XL' || size === '3XL'){ total += 10 * qty; }
-  document.getElementById('checkoutTotal').innerText = total;
-}
+  // Load images from localStorage (admin uploads)
+  function loadImages() {
+    const hoodieGrid = document.getElementById('hoodie-grid');
+    hoodieGrid.innerHTML = '';
+    const exclusivesGrid = document.getElementById('exclusive-grid');
+    exclusivesGrid.innerHTML = '';
 
-function submitOrder(){
-  const order = {
-    color: document.getElementById('checkoutColor').value,
-    size: document.getElementById('checkoutSize').value,
-    qty: document.getElementById('checkoutQty').value,
-    delivery: document.getElementById('checkoutDelivery').selectedOptions[0].text,
-    payment: document.getElementById('checkoutPayment').value,
-    total: document.getElementById('checkoutTotal').innerText,
-    timestamp: new Date().toLocaleString()
-  };
-  let orders = JSON.parse(localStorage.getItem('orders')) || [];
-  orders.push(order);
-  localStorage.setItem('orders', JSON.stringify(orders));
-  alert('Order submitted! Admin will process payment.');
-}
+    const hoodies = JSON.parse(localStorage.getItem('adminHoodies') || '[]');
+    const exclusives = JSON.parse(localStorage.getItem('adminExclusives') || '[]');
+    const headerLogo = localStorage.getItem('headerLogo') || '';
+    const qr = localStorage.getItem('cashappQR') || '';
+
+    document.getElementById('header-logo').src = headerLogo;
+    document.getElementById('cashapp-qr').src = qr;
+
+    hoodies.forEach(h => {
+      const div = document.createElement('div');
+      div.className = 'product-card';
+      div.innerHTML = `<img src="${h.url}" alt="${h.name}"><p>${h.name}</p>`;
+      hoodieGrid.appendChild(div);
+    });
+
+  exclusives.forEach(e => {
+      const div = document.createElement('div');
+      div.className = 'product-card';
+      div.innerHTML = `<img src="${e.url}" alt="${e.name}"><p>${e.name}</p>`;
+      exclusivesGrid.appendChild(div);
+    });
+  }
+  loadImages();
+
+  // Checkout total calculation
+  const checkoutQty = document.getElementById('checkout-qty');
+  const checkoutSize = document.getElementById('checkout-size');
+  const checkoutDelivery = document.getElementById('checkout-delivery');
+  const totalEl = document.getElementById('checkout-total');
+
+  function updateTotal() {
+    let base = 75;
+    const sizeFee = (checkoutSize.value === '2XL' || checkoutSize.value === '3XL') ? 10 : 0;
+    let deliveryFee = 0;
+    if(checkoutDelivery.value === 'brooklyn') deliveryFee = 5;
+    let qty = parseInt(checkoutQty.value) || 1;
+    const total = (base + sizeFee) * qty + deliveryFee;
+    totalEl.textContent = total;
+  }
+
+  checkoutQty.addEventListener('input', updateTotal);
+  checkoutSize.addEventListener('change', updateTotal);
+  checkoutDelivery.addEventListener('change', updateTotal);
+  updateTotal();
+
+    // Submit Order (store locally)
+  document.getElementById('checkout-btn').addEventListener('click', () => {
+    const order = {
+      color: document.getElementById('checkout-color').value,
+      size: checkoutSize.value,
+      quantity: checkoutQty.value,
+      delivery: checkoutDelivery.value,
+      address: document.getElementById('shipping-address').value,
+      total: totalEl.textContent,
+      timestamp: new Date().toISOString()
+    };
+    const orders = JSON.parse(localStorage.getItem('customerOrders') || '[]');
+    orders.push(order);
+    localStorage.setItem('customerOrders', JSON.stringify(orders));
+    alert('Order submitted! Remember to pay via Cash/CashApp.');
+  });
 </script>
 
 </body>
