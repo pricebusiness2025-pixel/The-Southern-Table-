@@ -106,6 +106,7 @@ header>
 
   <h3>Checkout</h3>
   <div>
+
     <label>Single or Bulk:</label>
     <select id="orderType" onchange="calculateTotal()">
       <option value="single">Single</option>
@@ -144,7 +145,6 @@ function calculateTotal(){
   if(delivery==='brooklyn'){ price += 5; }
   document.getElementById('totalPrice').innerText = price;
 }
-
 function submitOrder(){
   let order = {
     type: document.getElementById('orderType').value,
@@ -181,7 +181,6 @@ function downloadMonthlyReceipts(){
   link.click();
   document.body.removeChild(link);
 }
-
 window.onload=function(){
   let savedLogo=localStorage.getItem('headerLogo');
   if(savedLogo){
