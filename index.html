@@ -107,4 +107,22 @@
   <h3>Checkout</h3>
   <div>  
 
-    
+    <label>Single or Bulk:</label>
+    <select id="orderType" onchange="calculateTotal()">
+      <option value="single">Single</option>
+      <option value="bulk">Bulk</option>
+    </select><br>
+    <label>Quantity:</label>
+    <input type="number" id="quantity" value="1" min="1" max="10" onchange="calculateTotal()"><br>
+    <label>Delivery Method:</label>
+    <select id="deliveryMethod" onchange="calculateTotal()">
+      <option value="pickup">In-Person Pickup (Free)</option>
+      <option value="brooklyn">Brooklyn Delivery (+$5)</option>
+      <option value="shipping">Shipping (Enter Address)</option>
+    </select><br>
+    <p>Total: $<span id="totalPrice">75</span></p>
+    <p>Payment: Cash (single), CashApp (bulk). Card coming soon.</p>
+    <img id="customerCashQR" src="" alt="CashApp QR" style="max-height:100px;">
+    <button onclick="submitOrder()">Place Order</button>
+  </div>
+</div>    
