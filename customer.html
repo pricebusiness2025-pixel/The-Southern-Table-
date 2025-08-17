@@ -48,3 +48,27 @@ img.thumbnail { width:100px; height:100px; object-fit:cover; margin:5px; border:
   <p>Bulk orders: CashApp only (Card coming soon)</p>
   <div id="checkoutQR"></div>
 </div>
+
+  <script>
+// Load saved admin data
+function loadData(){
+  // Hoodie
+  const hoodieData = JSON.parse(localStorage.getItem('hoodieData'));
+  if(hoodieData){
+    document.getElementById('hoodieText').innerText = hoodieData.desc;
+    const container = document.getElementById('hoodieImages');
+    container.innerHTML = '';
+    hoodieData.images.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.className = 'thumbnail';
+      container.appendChild(img);
+    });
+  }
+
+  // Exclusives
+  const exclusiveData = JSON.parse(localStorage.getItem('exclusiveData'));
+  if(exclusiveData){
+    document.getElementById('exclusiveText').innerText = exclusiveData.desc;
+    const container = document.getElement
+    
