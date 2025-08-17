@@ -130,3 +130,132 @@
 <footer>
   &copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024
 </footer>  
+
+  <script>
+let adminUsername = 'thesoutherntable';
+let adminPassword = 'crunchythangs';
+let adminPin = 1812;
+
+let hoodies = [], exclusives=[], crunchy=[], cashQR=[];
+let monthlyReceipts = []; 
+
+function login(){
+  let u = document.getElementById('username').value.trim().toLowerCase();
+  let p = document.getElementById('password').value.trim().toLowerCase();
+  let pin = parseInt(document.getElementById('pin').value);
+  let code = document.getElementById('username').value.trim();
+  if(u===adminUsername && p===adminPassword && pin===adminPin){
+    showTab('roleSelectTab');
+  } else if(code==='1000'){
+    showTab('customerTab');
+  } else{
+    alert('Incorrect login or code');
+  }
+}
+
+function showTab(tabId){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  if(tabId==='customerTab') loadCustomerImages();
+}
+
+function uploadHeader(event){
+  let file = event.target.files[0];
+  if(!file) return;
+  let url = URL.createObjectURL(file);
+  document.getElementById('headerLogo').src = url;
+  document.getElementById('customerHeaderLogo').src = url;
+  localStorage.setItem('headerLogo', url);
+}
+
+function uploadImages(event,type){
+  let files = event.target.files;
+  if(!files) return;
+  let gallery = document.getElementById(type+'Gallery') || document.getElementById('cashQRPreview');
+  gallery.innerHTML='';
+  files=Array.from(files);
+  files.forEach(f=>{
+    let url=URL.createObjectURL(f);
+    if(type==='hoodies'){ hoodies.push({src:url,name:f.name}); gallery.innerHTML+=`<img src="${url}" class="thumbnail">`; }
+    if(type==='exclusives'){ exclusives.push({src:url,name:f.name}); gallery.innerHTML+=`<img src="${url}" class="thumbnail">`; }
+    if(type==='crunchy'){ crunchy.push({src:url,name:f.name}); gallery.innerHTML+=`<img src="${url}" class="thumbnail">`; }
+    if(type==='cashQR'){ cashQR.push({src:url,name:f.name}); document.getElementById('cashQRPreview').src=url; document.getElementById('customerCashQR').src=url; }
+  });
+  loadCustomerImages();
+}
+
+function loadCustomerImages(){
+  let cHood = document.getElementById('customerHoodies');
+  let cExcl = document.getElementById('customerExclusives');
+  let cCrunch = document.getElementById('customerCrunchy');
+  cHood.innerHTML=''; cExcl.innerHTML=''; cCrunch.innerHTML='';
+  hoodies.forEach(h=>cHood.innerHTML+=`<img src="${h.src}" class="thumbnail">`);
+  exclusives.forEach(e=>cExcl.innerHTML+=`<img src="${e.src}" class="thumbnail">`);
+  crunchy.forEach(c=>cCrunch.innerHTML+=`<img src="${c.src}" class="thumbnail">`);
+}
+
+function calculateTotal() {
+  let type = document.getElementById('orderType').value;
+  let qty = parseInt(document.getElementById('quantity').value) || 1;
+  let deliveryOption = document.getElementById('deliveryMethod').value;
+  let basePrice = 75;
+  let deliveryFee = 0;
+  if(deliveryOption==='brooklyn') deliveryFee=5;
+  else deliveryFee=0;
+  let total = basePrice * qty + deliveryFee;
+  document.getElementById('totalPrice').innerText = total;
+}
+
+function submitOrder(){
+  let type = document.getElementById('orderType').value;
+  let qty = parseInt(document.getElementById('quantity').value) || 1;
+  let deliveryOption = document.getElementById('deliveryMethod').value;
+  let total = parseInt(document.getElementById('totalPrice').innerText);
+
+  let order = {
+    type, qty, deliveryOption, total, date: new Date()
+  };
+  monthlyReceipts.push(order);
+  alert('Order submitted! Admin can view in monthly receipts.');
+  updateReceiptList();
+}
+
+function updateReceiptList(){
+  let container = document.getElementById('receiptList');
+  container.innerHTML = '';
+  monthlyReceipts.forEach((r,i)=>{
+    container.innerHTML += `<p>${i+1}. ${r.type.toUpperCase()} | Qty: ${r.qty} | Delivery: ${r.deliveryOption} | Total: $${r.total} | Date: ${r.date.toLocaleString()}</p>`;
+  });
+}
+
+function downloadMonthlyReceipts(){
+  iffunction downloadMonthlyReceipts(){
+  if(monthlyReceipts.length === 0){
+    alert('No receipts to download.');
+    return;
+  }
+  let csvContent = "data:text/csv;charset=utf-8,";
+  csvContent += "Order#,Type,Quantity,Delivery,Total,Date\n";
+  monthlyReceipts.forEach((r, i) => {
+    csvContent += `${i+1},${r.type},${r.qty},${r.deliveryOption},${r.total},${r.date.toLocaleString()}\n`;
+  });
+  let encodedUri = encodeURI(csvContent);
+  let link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "monthly_receipts.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Load stored header logo if exists
+window.onload = function(){
+  let savedLogo = localStorage.getItem('headerLogo');
+  if(savedLogo){
+    document.getElementById('headerLogo').src = savedLogo;
+    document.getElementById('customerHeaderLogo').src = savedLogo;
+  }
+};
+</script>
+</body>
+</html>
