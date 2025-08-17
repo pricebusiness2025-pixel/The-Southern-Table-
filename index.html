@@ -25,6 +25,10 @@ header>
   <img id="customerHeaderLogo" src="" alt="Header Logo" style="max-height:60px;"><br>
   <strong>The Southern Table</strong>
 </header>
+header>
+  <img id="customerHeaderLogo" src="" alt="Header Logo" style="max-height:60px;"><br>
+  <strong>The Southern Table</strong>
+</header>
 
 <div id="loginTab" class="tab active">
   <h2>Login</h2>
@@ -67,8 +71,8 @@ header>
   <h3>Monthly Receipts</h3>
   <button class="saveReceipt" onclick="downloadMonthlyReceipts()">Download Monthly Receipts CSV</button>
   <div id="receiptList"></div>
-</div>
-
+</div>  
+  
 <!-- Customer Tab -->
 <div id="customerTab" class="tab">
   <h2>The Southern Table - Customer</h2>
@@ -106,7 +110,6 @@ header>
 
   <h3>Checkout</h3>
   <div>
-
     <label>Single or Bulk:</label>
     <select id="orderType" onchange="calculateTotal()">
       <option value="single">Single</option>
@@ -130,8 +133,7 @@ header>
 <footer>
   &copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024
 </footer>
-
-crunchy.forEach(c=>cCrunch.innerHTML+=`<img src="${c.src}" class="thumbnail">`);
+ crunchy.forEach(c=>cCrunch.innerHTML+=`<img src="${c.src}" class="thumbnail">`);
 }
 
 function calculateTotal(){
@@ -145,6 +147,7 @@ function calculateTotal(){
   if(delivery==='brooklyn'){ price += 5; }
   document.getElementById('totalPrice').innerText = price;
 }
+
 function submitOrder(){
   let order = {
     type: document.getElementById('orderType').value,
@@ -181,6 +184,7 @@ function downloadMonthlyReceipts(){
   link.click();
   document.body.removeChild(link);
 }
+
 window.onload=function(){
   let savedLogo=localStorage.getItem('headerLogo');
   if(savedLogo){
@@ -192,6 +196,3 @@ window.onload=function(){
 </body>
 </html>
 
-        
-  
-  
