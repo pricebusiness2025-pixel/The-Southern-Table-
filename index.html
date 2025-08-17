@@ -21,4 +21,23 @@
 </style>
 </head>
 <body>
+<header>
+  <img id="customerHeaderLogo" src="" alt="Header Logo" style="max-height:60px;"><br>
+  <strong>The Southern Table</strong>
+</header>
+
+<div id="loginTab" class="tab active">
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Username"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <input type="number" id="pin" placeholder="4-digit PIN"><br>
+  <button onclick="login()">Login</button>
+  <p>Customer Entry Code: <strong>1000</strong></p>
+</div>
+
+<div id="roleSelectTab" class="tab">
+  <h2>Select Mode</h2>
+  <button onclick="showTab('adminTab')">Admin</button>
+  <button onclick="showTab('customerTab')">Customer</button>
+</div>
   
