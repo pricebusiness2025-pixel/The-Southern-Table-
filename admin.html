@@ -16,3 +16,96 @@ button:hover { background-color:#a00030; }
 </head>
 <body>
   
+<h1>Admin Dashboard</h1>
+
+<div class="tab">
+  <h2>Header Image</h2>
+  <input type="file" id="headerImageInput">
+  <button onclick="saveHeaderImage()">Save Header</button>
+  <div id="headerPreview"></div>
+</div>
+
+<div class="tab">
+  <h2>Footer Image</h2>
+  <input type="file" id="footerImageInput">
+  <button onclick="saveFooterImage()">Save Footer</button>
+  <div id="footerPreview"></div>
+</div>
+
+<div class="tab">
+  <h2>Hoodie Selection</h2>
+  <textarea id="hoodieDesc" placeholder="Enter description for hoodies..."></textarea>
+  <input type="file" id="hoodieImageInput" multiple>
+  <button onclick="saveHoodieSelection()">Save Hoodie Info</button>
+  <div id="hoodiePreview"></div>
+</div>
+
+<div class="tab">
+  <h2>Exclusives</h2>
+  <textarea id="exclusiveDesc" placeholder="Enter description for exclusives..."></textarea>
+  <input type="file" id="exclusiveImageInput" multiple>
+  <button onclick="saveExclusiveSelection()">Save Exclusives</button>
+  <div id="exclusivePreview"></div>
+</div>
+
+<div class="tab">
+  <h2>Checkout - CashApp QR</h2>
+  <input type="file" id="checkoutQR">
+  <button onclick="saveCheckoutQR()">Save QR</button>
+  <div id="checkoutPreview"></div>
+</div>
+
+<script>
+// Utility to save and preview images
+function readAndStoreImage(fileInput, storageKey, previewId){
+  const files = fileInput.files;
+  const preview = document.getElementById(previewId);
+  preview.innerHTML = "";
+  if(files.length > 0){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      localStorage.setItem(storageKey, e.target.result);
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.className = 'thumbnail';
+      preview.appendChild(img);
+    }
+    reader.readAsDataURL(files[0]);
+  }
+}
+
+// Header/Footer
+function saveHeaderImage(){ readAndStoreImage(document.getElementById('headerImageInput'),'headerImage','headerPreview'); }
+function saveFooterImage(){ readAndStoreImage(document.getElementById('footerImageInput'),'footerImage','footerPreview'); }
+
+// Hoodie & Exclusives multiple images
+function readAndStoreMultipleImages(fileInput, storageKey, descInputId, previewId){
+  const files = fileInput.files;
+  const preview = document.getElementById(previewId);
+  const desc = document.getElementById(descInputId).value;
+  let imagesData = [];
+  for(let f of files){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      imagesData.push(e.target.result);
+      localStorage.setItem(storageKey, JSON.stringify({desc, images: imagesData}));
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.className = 'thumbnail';
+      preview.appendChild(img);
+    }
+    reader.readAsDataURL(f);
+  }
+}
+
+// Hoodie
+function saveHoodieSelection(){ readAndStoreMultipleImages(document.getElementById('hoodieImageInput'),'hoodieData','hoodieDesc','hoodiePreview'); }
+// Exclusives
+function saveExclusiveSelection(){ readAndStoreMultipleImages(document.getElementById('exclusiveImageInput'),'exclusiveData','exclusiveDesc','exclusivePreview'); }
+
+// Checkout QR
+function saveCheckoutQR(){ readAndStoreImage(document.getElementById('checkoutQR'),'checkoutQR','checkoutPreview'); }
+</script>
+
+</body>
+</html>
