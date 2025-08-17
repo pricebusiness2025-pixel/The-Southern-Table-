@@ -1,116 +1,35 @@
-<!-- index.html - Admin/Customer Login -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Southern Table Portal</title>
+<title>The Southern Table - Login</title>
 <style>
-body { font-family: Arial, sans-serif; background: #800000; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin:0; }
-.container { background: #fff; color: #000; padding: 30px; border-radius: 12px; text-align: center; width: 320px; }
-input { width: 100%; padding: 10px; margin: 8px 0; border-radius: 6px; border:1px solid #ccc; }
-button { width: 100%; padding: 10px; margin-top:10px; border-radius:6px; border:none; background:#800000; color:white; border: 2px solid gold; cursor:pointer; }
-button:hover { background:#a00000; }
-.hidden { display:none; }
+  body { font-family: 'Arial', sans-serif; background-color: #800020; color: white; display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; margin:0; }
+  h1 { margin-bottom:30px; }
+  input { padding:10px; font-size:18px; border-radius:5px; border:none; width:250px; margin-bottom:20px; text-align:center; }
+  button { padding:10px 20px; font-size:18px; background-color:#800020; color:white; border:2px solid gold; border-radius:5px; cursor:pointer; }
+  button:hover { background-color:#a00030; }
 </style>
 </head>
 <body>
-<div class="container">
-<h2>The Southern Table Portal</h2>
-<select id="role">
-<option value="">-- Select Role --</option>
-<option value="admin">Admin</option>
-<option value="customer">Customer</option>
-</select>
 
-<div id="adminLogin" class="hidden">
-<input type="password" id="adminPassword" placeholder="Admin Password">
-<input type="password" id="adminPin" placeholder="Admin Pin">
-<button onclick="loginAdmin()">Login as Admin</button>
-</div>
-
-<div id="customerLogin" class="hidden">
-<input type="password" id="customerPin" placeholder="Customer Pin">
-<button onclick="loginCustomer()">Login as Customer</button>
-</div>
-</div>
+<h1>The Southern Table</h1>
+<input type="text" id="loginInput" placeholder="Enter Admin/Customer code">
+<button onclick="login()">Enter</button>
 
 <script>
-const roleSelect = document.getElementById('role');
-const adminLogin = document.getElementById('adminLogin');
-const customerLogin = document.getElementById('customerLogin');
-
-roleSelect.addEventListener('change', () => {
-  if(roleSelect.value==='admin') {
-    adminLogin.classList.remove('hidden');
-    customerLogin.classList.add('hidden');
-  } else if(roleSelect.value==='customer') {
-    customerLogin.classList.remove('hidden');
-    adminLogin.classList.add('hidden');
+function login() {
+  const userInput = document.getElementById('loginInput').value.trim();
+  if(userInput === "crunchythangs" || userInput === "1812"){
+    window.location.href = "admin.html";
+  } else if(userInput === "1000"){
+    window.location.href = "customer.html";
   } else {
-    adminLogin.classList.add('hidden');
-    customerLogin.classList.add('hidden');
+    alert("Incorrect code. Try again.");
   }
-});
-
-function loginAdmin(){
- const password = document.getElementById('adminPassword').value;
- const pin = document.getElementById('adminPin').value;
- if(password==='crunchythangs' && pin==='1812'){
-   window.location.href='admin.html';
- } else { alert('Invalid Admin Credentials'); }
-}
-
-function loginCustomer(){
- const pin = document.getElementById('customerPin').value;
- if(pin==='1000'){
-   window.location.href='customer.html';
- } else { alert('Invalid Customer Pin'); }
 }
 </script>
+
 </body>
 </html>
-
-<section id="checkout">
-  <h2>Checkout</h2>
-  <div id="cartItems"></div>
-  <div class="cart-total">Grand Total: $<span id="grandTotal">0</span></div>
-  <button onclick="confirmOrder()">Confirm Order</button>
-  <p>Cash for single orders. Bulk via CashApp. Card coming soon.</p>
-  <img id="checkoutThumb" class="thumb" src="">
-</section>
-
-<script>
-// Confirm Order and save to monthly receipt
-function confirmOrder(){
-  const hoodies = document.querySelectorAll('#cartItems .cart-item');
-  let grandTotal = 0;
-  hoodies.forEach(item=>{
-    const qty = parseInt(item.querySelector('input[type=number]').value)||0;
-    const size = item.querySelector('.sizeSelect').value;
-    let price = 75; if(size==='2XL'||size==='3XL'){price+=10;}
-    grandTotal += qty*price;
-
-    if(qty>0){
-      saveOrder({
-        timestamp: new Date().toLocaleString(),
-        month: new Date().toLocaleString('default',{month:'long', year:'numeric'}),
-        items: item.innerText.split('-')[0].trim(),
-        qty: qty,
-        size: size,
-        total: qty*price,
-        delivery: 'Brooklyn +$5 / In Person Pick up info'
-      });
-    }
-  });
-  alert('Order confirmed! Total: $'+grandTotal);
-  updateCart(); // reset totals
-}
-
-// Save order to localStorage for admin receipts
-function saveOrder(order){
-  let allOrders = JSON.parse(localStorage.getItem('allOrders')||'[]');
-  allOrders.push(order);
-  localStorage.setItem('allOrders', JSON.stringify(allOrders));
-}
-</script>
