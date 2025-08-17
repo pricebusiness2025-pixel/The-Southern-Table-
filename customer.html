@@ -5,70 +5,165 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Southern Table - Customer</title>
 <style>
-body { font-family:'Arial', sans-serif; background-color:#800020; color:white; margin:0; padding:20px; }
-h1,h2 { margin-bottom:15px; }
-.tab { margin-bottom:20px; border-bottom:1px solid gold; padding-bottom:10px; }
-img.thumbnail { width:100px; height:100px; object-fit:cover; margin:5px; border:1px solid white; }
+body{font-family:sans-serif;margin:0;padding:0;background:#800020;color:#fff;}
+header, footer{padding:10px;text-align:center;}
+header{background:#800020;color:#fff;}
+footer{background:#500010;color:#fff;position:sticky;bottom:0;}
+.tab-buttons{display:flex;justify-content:center;background:#500010;}
+.tab-buttons button{flex:1;padding:10px;margin:2px;background:#800020;color:#fff;border:1px solid gold;cursor:pointer;font-weight:bold;}
+.tab-content{padding:20px;display:none;}
+.thumbnail{height:80px;margin:5px;border:1px solid #fff;}
+.cart-item{margin-bottom:5px;}
 </style>
 </head>
 <body>
 
-<h1>Welcome to The Southern Table</h1>
+<header>
+<h1 id="headerImage">The Southern Table</h1>
+</header>
 
-<div class="tab">
-  <h2>Mission & Goals</h2>
-  <p>High-quality, comfortable hoodies—available year-round with rustic style. Limited edition drops bring exclusive designs for those who want something truly unique. Every order is seamless, delivering standout pieces with creativity, authenticity, and comfort.</p>
-  <p>Food truck initiative, Crunchy Thangs LLC, Southern inspiration....NY driven.</p>
+<div id="pinScreen">
+<h2>Enter Customer Pin</h2>
+<input type="text" id="customerPin" placeholder="Pin">
+<button onclick="checkCustomerPin()">Enter</button>
+<div id="pinMsg" style="color:red;margin-top:10px;"></div>
+</div>
+    
+<div id="customerPanel" style="display:none;">
+<div class="tab-buttons">
+<button onclick="openTab('custHoodies')">Hoodies</button>
+<button onclick="openTab('custExclusives')">Exclusives</button>
+<button onclick="openTab('custCheckout')">Checkout</button>
 </div>
 
-<div class="tab">
-  <h2>FAQ</h2>
-  <p><strong>How long will it take to receive my hoodie?</strong> Standard production 2–5 business days via Printify. Shipping 3–7 days. LTO items may take slightly longer.</p>
-  <p><strong>When can I place an order?</strong> Orders are accepted every Wednesday and Saturday (A.M.).</p>
-  <p><strong>Local delivery?</strong> Brooklyn +$5. In-person pickup free.</p>
-  <p><strong>Payment?</strong> Cash or CashApp only. Card coming soon.</p>
-  <p><strong>Sizes?</strong> S–3XL. Extra $10 fee for 2XL and 3XL.</p>
+<div id="custHoodies" class="tab-content">
+<h2>Hoodie Selection</h2>
+<p id="hoodieDesc"></p>
+<div id="hoodiePreview"></div>
 </div>
 
-<div class="tab">
-  <h2>Hoodie Selection</h2>
-  <p id="hoodieText"></p>
-  <div id="hoodieImages"></div>
+<div id="custExclusives" class="tab-content">
+<h2>Exclusives</h2>
+<p id="exclusiveDesc"></p>
+<div id="exclusivePreview"></div>
 </div>
 
-<div class="tab">
-  <h2>Exclusives</h2>
-  <p id="exclusiveText"></p>
-  <div id="exclusiveImages"></div>
+<div id="custCheckout" class="tab-content">
+<h2>Checkout</h2>
+<div id="checkoutPreview"></div>
+
+<h3>Shopping Cart</h3>
+<div id="cartList"></div>
+<p>Total: $<span id="cartTotal">0</span></p>
+
+<h3>Payment Options</h3>
+<p>Cash for single orders, CashApp for bulk orders. Card coming soon!</p>
+<div id="cashappQR"></div>
 </div>
 
-<div class="tab">
-  <h2>Checkout</h2>
-  <p>Single orders: Cash/CashApp</p>
-  <p>Bulk orders: CashApp only (Card coming soon)</p>
-  <div id="checkoutQR"></div>
-</div>
+<footer>
+<p>&copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024</p>
+</footer>
 
-  <script>
-// Load saved admin data
-function loadData(){
-  // Hoodie
+ <script>
+// Customer pin
+const CUSTOMER_PIN = '1000';
+let cart = [];
+
+// Pin check
+function checkCustomerPin(){
+  const pin = document.getElementById('customerPin').value;
+  const msg = document.getElementById('pinMsg');
+  if(pin === CUSTOMER_PIN){
+    document.getElementById('pinScreen').style.display = 'none';
+    document.getElementById('customerPanel').style.display = 'block';
+    openTab('custHoodies');
+    loadContent();
+    loadCart();
+  } else {
+    msg.innerText = "Incorrect pin.";
+  }
+}
+
+// Tab switch
+function openTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(tab => tab.style.display='none');
+  document.getElementById(tabId).style.display='block';
+}
+
+// Load images and descriptions
+function loadContent(){
+  // Hoodies
   const hoodieData = JSON.parse(localStorage.getItem('hoodieData'));
   if(hoodieData){
-    document.getElementById('hoodieText').innerText = hoodieData.desc;
-    const container = document.getElementById('hoodieImages');
-    container.innerHTML = '';
-    hoodieData.images.forEach(src => {
+    document.getElementById('hoodieDesc').innerText = hoodieData.desc || '';
+    const preview = document.getElementById('hoodiePreview');
+    preview.innerHTML = '';
+    hoodieData.images.forEach(src=>{
       const img = document.createElement('img');
       img.src = src;
       img.className = 'thumbnail';
-      container.appendChild(img);
+      preview.appendChild(img);
+      // Add to cart click
+      img.onclick = ()=>addToCart('Hoodie', src, 75);
     });
   }
-
   // Exclusives
   const exclusiveData = JSON.parse(localStorage.getItem('exclusiveData'));
   if(exclusiveData){
-    document.getElementById('exclusiveText').innerText = exclusiveData.desc;
-    const container = document.getElement
-    
+    document.getElementById('exclusiveDesc').innerText = exclusiveData.desc || '';
+    const preview = document.getElementById('exclusivePreview');
+    preview.innerHTML = '';
+    exclusiveData.images.forEach(src=>{
+      const img = document.createElement('img');
+      img.src = src;
+      img.className = 'thumbnail';
+      preview.appendChild(img);
+      img.onclick = ()=>addToCart('Exclusive', src, 90);
+    });
+  } 
+
+    // Checkout QR
+  const checkoutData = JSON.parse(localStorage.getItem('checkoutData'));
+  if(checkoutData){
+    const qrDiv = document.getElementById('cashappQR');
+    qrDiv.innerHTML = '';
+    checkoutData.images.forEach(src=>{
+      const img = document.createElement('img');
+      img.src = src;
+      img.className = 'thumbnail';
+      qrDiv.appendChild(img);
+    });
+  }
+}
+
+// Cart
+function addToCart(name, src, price){
+  if(cart.length>=10){alert('Max 10 items per order'); return;}
+  const timestamp = new Date().toLocaleString();
+  cart.push({name, src, price, timestamp});
+  loadCart();
+}
+
+function loadCart(){
+  const list = document.getElementById('cartList');
+  list.innerHTML = '';
+  let total = 0;
+  cart.forEach((item, idx)=>{
+    const div = document.createElement('div');
+    div.className='cart-item';
+    div.innerHTML=`${item.name} - $${item.price} (${item.timestamp}) <button onclick="removeCart(${idx})">Remove</button>`;
+    list.appendChild(div);
+    total += item.price;
+  });
+  document.getElementById('cartTotal').innerText=total;
+}
+
+function removeCart(idx){
+  cart.splice(idx,1);
+  loadCart();
+}
+</script>
+
+</body>
+</html>
