@@ -3,131 +3,188 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Southern Table - Admin</title>
+<title>The Southern Table - Admin & Customer Portal</title>
 <style>
 body{font-family:sans-serif;margin:0;padding:0;background:#800020;color:#fff;}
-header{background:#800020;color:#fff;padding:10px;text-align:center;}
-.tab-buttons{display:flex;justify-content:center;background:#500010;}
-.tab-buttons button{flex:1;padding:10px;margin:2px;background:#800020;color:#fff;border:1px solid gold;cursor:pointer;font-weight:bold;}
-.tab-content{padding:20px;display:none;}
-input,textarea{display:block;margin:10px 0;padding:5px;width:100%;}
-.thumbnail{height:80px;margin:5px;border:1px solid #fff;}
+header,footer{padding:10px;text-align:center;}
+header{background:#800020;color:#fff;}
+footer{background:#500010;color:#fff;position:sticky;bottom:0;}
+nav{display:flex;justify-content:center;gap:10px;margin:10px 0;}
+button{margin:3px;padding:5px;background:#800020;color:#fff;border:1px solid gold;cursor:pointer;}
+section{padding:20px;}
+.thumbnail{height:80px;margin:5px;border:1px solid #fff;display:block;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
 </style>
 </head>
 <body>
 
 <header>
-<h1>The Southern Table - Admin Panel</h1>
+<h1>The Southern Table</h1>
 </header>
 
-<!-- Admin Login Screen -->
-<div id="loginScreen">
-<h2>Admin Login</h2>
-<input type="password" id="adminPassword" placeholder="Password">
-<input type="text" id="adminPin" placeholder="Pin">
-<button onclick="checkAdminLogin()">Login</button>
-<div id="loginMsg" style="color:red;margin-top:10px;"></div>
+<section id="loginScreen">
+<h2>Login</h2>
+<label>Username: <input type="text" id="username"></label><br>
+<label>Password: <input type="password" id="password"></label><br>
+<label>Pin: <input type="number" id="pin"></label><br>
+<button id="loginBtn">Login</button>
+<p id="loginMsg"></p>
+</section>
+
+<section id="selectionScreen" style="display:none;">
+<h2>Select Mode</h2>
+<button id="adminModeBtn">Admin</button>
+<button id="customerModeBtn">Customer</button>
+</section>
+
+<section id="adminScreen" style="display:none;">
+<nav>
+<button data-tab="missionTab">Mission & Goals</button>
+<button data-tab="faqTab">FAQ</button>
+<button data-tab="hoodiesTab">Hoodies</button>
+<button data-tab="exclusiveTab">Exclusives</button>
+<button data-tab="checkoutTab">Checkout</button>
+</nav>
+
+<div id="missionTab" class="tab-content active">
+<h3>Mission & Goals</h3>
+<p>High-quality, comfortable hoodies—available year-round with rustic style. Limited edition drops bring exclusive designs for those who want something truly unique. Every order is seamless, delivering standout pieces with creativity, authenticity, and comfort.</p>
+<p>Food truck initiative, Crunchy Thangs LLC, Southern inspiration....NY driven.</p>
 </div>
 
-<!-- Admin Tabs -->
-<div id="adminPanel" style="display:none;">
-<div class="tab-buttons">
-<button onclick="openTab('headerFooter')">Header/Footer</button>
-<button onclick="openTab('hoodies')">Hoodies</button>
-<button onclick="openTab('exclusives')">Exclusives</button>
-<button onclick="openTab('checkout')">Checkout</button>
+<div id="faqTab" class="tab-content">
+<h3>FAQ</h3>
+<ul>
+<li><b>How long will it take to receive my hoodie?</b> 2–5 business days production + 3–7 domestic shipping. LTO drops may take longer.</li>
+<li><b>When can I place an order?</b> Every Wednesday and Saturday morning.</li>
+<li><b>Local delivery?</b> Brooklyn +$5, In-person pickup free.</li>
+<li><b>Payment?</b> Cash/CashApp only, card coming soon.</li>
+<li><b>Sizes?</b> S–3XL. 2XL/3XL +$10.</li>
+<li><b>Change/cancel order?</b> Contact ASAP. Once production begins, cannot cancel.</li>
+<li><b>Limited edition?</b> Yes, some drops are LTO. Year-round basics always available.</li>
+<li><b>Contact?</b> Phone number provided or CashApp if needed.</li>
+</ul>
 </div>
 
-<div id="headerFooter" class="tab-content">
-<h2>Header Image</h2>
-<input type="file" id="headerImageInput">
-<button onclick="saveHeaderImage()">Save Header</button>
-<div id="headerPreview"></div>
-
-<h2>Footer Image</h2>
-<input type="file" id="footerImageInput">
-<button onclick="saveFooterImage()">Save Footer</button>
-<div id="footerPreview"></div>
+<div id="hoodiesTab" class="tab-content">
+<h3>Hoodies</h3>
+<input type="file" id="uploadHoodie" multiple>
+<div id="adminHoodieImages"></div>
 </div>
 
-<div id="hoodies" class="tab-content">
-<h2>Hoodie Selection</h2>
-<textarea id="hoodieDesc" placeholder="Enter hoodie description here..."></textarea>
-<input type="file" id="hoodieImageInput" multiple>
-<button onclick="saveHoodieSelection()">Save Hoodie Info</button>
-<div id="hoodiePreview"></div>
+<div id="exclusiveTab" class="tab-content">
+<h3>Exclusives</h3>
+<input type="file" id="uploadExclusive" multiple>
+<div id="adminExclusiveImages"></div>
 </div>
 
-<div id="exclusives" class="tab-content">
-<h2>Exclusives</h2>
-<textarea id="exclusiveDesc" placeholder="Enter exclusive description here..."></textarea>
-<input type="file" id="exclusiveImageInput" multiple>
-<button onclick="saveExclusiveSelection()">Save Exclusives</button>
-<div id="exclusivePreview"></div>
+<div id="checkoutTab" class="tab-content">
+<h3>Checkout</h3>
+<input type="file" id="uploadCheckout" multiple>
+<div id="adminCheckoutImages"></div>
 </div>
 
-<div id="checkout" class="tab-content">
-<h2>Checkout - CashApp QR</h2>
-<input type="file" id="checkoutQR">
-<button onclick="saveCheckoutQR()">Save QR</button>
-<div id="checkoutPreview"></div>
+</section>
+
+<section id="customerScreen" style="display:none;">
+<h2>Customer Portal</h2>
+<p>Enter code to access:</p>
+<input type="number" id="customerCode">
+<button id="customerEnterBtn">Enter</button>
+<div id="customerContent" style="display:none;">
+<h3>Hoodies & Exclusives</h3>
+<p>Browse products here. All images are preloaded. Checkout via Cash or CashApp. Card coming soon.</p>
 </div>
-</div>
+</section>
+
+<footer>
+<p>&copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024</p>
+</footer>
 
 <script>
-// Admin credentials
-const ADMIN_PASSWORD = 'crunchythangs';
-const ADMIN_PIN = '1812';
+// === Login ===
+const ADMIN_USER='thesoutherntable';
+const ADMIN_PW='crunchythangs';
+const ADMIN_PIN=1812;
+const CUSTOMER_PIN=1000;
 
-// Login function
-function checkAdminLogin(){
-  const pw = document.getElementById('adminPassword').value;
-  const pin = document.getElementById('adminPin').value;
-  const msg = document.getElementById('loginMsg');
-  if(pw === ADMIN_PASSWORD && pin === ADMIN_PIN){
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
-    openTab('headerFooter');
+document.getElementById('loginBtn').onclick=function(){
+  const user=document.getElementById('username').value;
+  const pw=document.getElementById('password').value;
+  const pin=parseInt(document.getElementById('pin').value);
+  if(user===ADMIN_USER && pw===ADMIN_PW && pin===ADMIN_PIN){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('selectionScreen').style.display='block';
   } else {
-    msg.innerText = "Incorrect password or pin.";
+    document.getElementById('loginMsg').innerText='Incorrect login.';
   }
-}
+};
 
-// Tab switching
-function openTab(tabId){
-  const tabs = document.querySelectorAll('.tab-content');
-  tabs.forEach(tab => tab.style.display = 'none');
-  document.getElementById(tabId).style.display = 'block';
-}
+// === Selection Screen ===
+document.getElementById('adminModeBtn').onclick=function(){
+  document.getElementById('selectionScreen').style.display='none';
+  document.getElementById('adminScreen').style.display='block';
+};
+document.getElementById('customerModeBtn').onclick=function(){
+  document.getElementById('selectionScreen').style.display='none';
+  document.getElementById('customerScreen').style.display='block';
+};
 
-// Multiple images handler
-function saveMultipleImages(fileInputId, storageKey, descInputId, previewId){
-  const files = document.getElementById(fileInputId).files;
-  const desc = descInputId ? document.getElementById(descInputId).value : '';
-  let existingData = JSON.parse(localStorage.getItem(storageKey)) || {desc:'', images:[]};
-  const preview = document.getElementById(previewId);
-
-  for(let f of files){
-    const reader = new FileReader();
-    reader.onload = function(e){
-      existingData.images.push(e.target.result);
-      existingData.desc = desc;
-      localStorage.setItem(storageKey, JSON.stringify(existingData));
-      const img = document.createElement('img');
-      img.src = e.target.result;
-      img.className = 'thumbnail';
-      preview.appendChild(img);
-    }
-    reader.readAsDataURL(f);
+// === Customer Access Code ===
+document.getElementById('customerEnterBtn').onclick=function(){
+  const code=parseInt(document.getElementById('customerCode').value);
+  if(code===CUSTOMER_PIN){
+    document.getElementById('customerContent').style.display='block';
+  } else {
+    alert('Incorrect code.');
   }
-}
+};
 
-// Wrapper functions
-function saveHoodieSelection(){ saveMultipleImages('hoodieImageInput','hoodieData','hoodieDesc','hoodiePreview'); }
-function saveExclusiveSelection(){ saveMultipleImages('exclusiveImageInput','exclusiveData','exclusiveDesc','exclusivePreview'); }
-function saveHeaderImage(){ saveMultipleImages('headerImageInput','headerData',null,'headerPreview'); }
-function saveFooterImage(){ saveMultipleImages('footerImageInput','footerData',null,'footerPreview'); }
-function saveCheckoutQR(){ saveMultipleImages('checkoutQR','checkoutData',null,'checkoutPreview'); }
+// === Tab navigation ===
+document.querySelectorAll('#adminScreen nav button').forEach(btn=>{
+  btn.onclick=()=>{
+    const target=btn.getAttribute('data-tab');
+    document.querySelectorAll('.tab-content').forEach(tab=>tab.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+  };
+});
+
+// === Image Upload & Delete ===
+function loadAdminImages(type, containerId){
+  const dataKey=type+'Data';
+  const data=JSON.parse(localStorage.getItem(dataKey)) || {images:[],desc:''};
+  const container=document.getElementById(containerId);
+  container.innerHTML='';
+  data.images.forEach((src,idx)=>{
+    const div=document.createElement('div');
+    div.style.display='inline-block';
+    const img=document.createElement('img'); img.src=src; img.className='thumbnail';
+    const btn=document.createElement('button'); btn.innerText='Delete';
+    btn.onclick=()=>{if(confirm('Delete this image?')){data.images.splice(idx,1);localStorage.setItem(dataKey,JSON.stringify(data));loadAdminImages(type,containerId);}};
+    div.appendChild(img); div.appendChild(btn); container.appendChild(div);
+  });
+}
+function handleUpload(type, containerId, inputId){
+  const input=document.getElementById(inputId);
+  input.addEventListener('change',()=>{
+    const files=Array.from(input.files);
+    if(!files.length) return;
+    const dataKey=type+'Data';
+    const data=JSON.parse(localStorage.getItem(dataKey)) || {images:[],desc:''};
+    files.forEach(file=>{
+      const reader=new FileReader();
+      reader.onload=(e)=>{data.images.push(e.target.result);localStorage.setItem(dataKey,JSON.stringify(data));loadAdminImages(type,containerId);};
+      reader.readAsDataURL(file);
+    });
+  });
+}
+handleUpload('hoodie','adminHoodieImages','uploadHoodie');
+handleUpload('exclusive','adminExclusiveImages','uploadExclusive');
+handleUpload('checkout','adminCheckoutImages','uploadCheckout');
+loadAdminImages('hoodie','adminHoodieImages');
+loadAdminImages('exclusive','adminExclusiveImages');
+loadAdminImages('checkout','adminCheckoutImages');
 </script>
 
 </body>
