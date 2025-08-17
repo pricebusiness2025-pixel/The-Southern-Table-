@@ -1,261 +1,72 @@
+<!-- index.html - Admin/Customer Login -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Southern Table</title>
+<title>The Southern Table Portal</title>
 <style>
-  body { margin:0; font-family:'Segoe UI', sans-serif; background:#800020; color:#fff; }
-  header, footer { text-align:center; padding:10px; background:#800020; color:#fff; }
-  footer { position:sticky; bottom:0; background:#222; color:#fff; }
-  nav button { margin:5px; padding:10px 15px; border:2px solid gold; background:#800020; color:#fff; cursor:pointer; }
-  .tab { display:none; padding:20px; }
-  .tab.active { display:block; }
-  .thumbnail { width:80px; height:80px; margin:5px; object-fit:cover; border:1px solid #ccc; }
-  input, select, textarea { margin:5px 0; width:100%; padding:5px; }
-  .cart { cursor:pointer; font-size:1.5em; }
-  .gallery { display:flex; flex-wrap:wrap; }
-  h2 { color:black; }
-  p { color:white; }
-  button.saveReceipt { margin-top:10px; background:gold; color:black; border:none; padding:5px 10px; cursor:pointer; }
+body { font-family: Arial, sans-serif; background: #800000; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin:0; }
+.container { background: #fff; color: #000; padding: 30px; border-radius: 12px; text-align: center; width: 320px; }
+input { width: 100%; padding: 10px; margin: 8px 0; border-radius: 6px; border:1px solid #ccc; }
+button { width: 100%; padding: 10px; margin-top:10px; border-radius:6px; border:none; background:#800000; color:white; border: 2px solid gold; cursor:pointer; }
+button:hover { background:#a00000; }
+.hidden { display:none; }
 </style>
 </head>
 <body>
-<header>
-  <img id="customerHeaderLogo" src="" alt="Header Logo" style="max-height:60px;"><br>
-  <strong>The Southern Table</strong>
-</header>
+<div class="container">
+<h2>The Southern Table Portal</h2>
+<select id="role">
+<option value="">-- Select Role --</option>
+<option value="admin">Admin</option>
+<option value="customer">Customer</option>
+</select>
 
-<div id="loginTab" class="tab active">
-  <h2>Login</h2>
-  <input type="text" id="username" placeholder="Username"><br>
-  <input type="password" id="password" placeholder="Password"><br>
-  <input type="number" id="pin" placeholder="4-digit PIN"><br>
-  <button onclick="login()">Login</button>
-  <p>Customer Entry Code: <strong>1000</strong></p>
+<div id="adminLogin" class="hidden">
+<input type="password" id="adminPassword" placeholder="Admin Password">
+<input type="password" id="adminPin" placeholder="Admin Pin">
+<button onclick="loginAdmin()">Login as Admin</button>
 </div>
 
-<div id="roleSelectTab" class="tab">
-  <h2>Select Mode</h2>
-  <button onclick="showTab('adminTab')">Admin</button>
-  <button onclick="showTab('customerTab')">Customer</button>
+<div id="customerLogin" class="hidden">
+<input type="password" id="customerPin" placeholder="Customer Pin">
+<button onclick="loginCustomer()">Login as Customer</button>
 </div>
-  
-<!-- Admin Tab -->
-<div id="adminTab" class="tab">
-  <h2>Admin Panel</h2>
-  <h3>Header Logo Upload</h3>
-  <input type="file" accept="image/*" onchange="uploadHeader(event)">
-  <img id="headerLogo" src="" alt="Header Preview" style="max-height:60px;"><br><br>
-
-  <h3>Hoodies Gallery</h3>
-  <input type="file" multiple accept="image/*" onchange="uploadImages(event,'hoodies')">
-  <div id="hoodieGallery" class="gallery"></div>
-
-  <h3>Exclusives Gallery</h3>
-  <input type="file" multiple accept="image/*" onchange="uploadImages(event,'exclusives')">
-  <div id="exclusivesGallery" class="gallery"></div>
-
-  <h3>Crunchy Thangs Gallery</h3>
-  <input type="file" multiple accept="image/*" onchange="uploadImages(event,'crunchy')">
-  <div id="crunchyGallery" class="gallery"></div>
-
-  <h3>CashApp QR Upload</h3>
-  <input type="file" accept="image/*" onchange="uploadImages(event,'cashQR')">
-  <img id="cashQRPreview" src="" style="max-height:100px;"><br><br>
-
-  <h3>Monthly Receipts</h3>
-  <button class="saveReceipt" onclick="downloadMonthlyReceipts()">Download Monthly Receipts CSV</button>
-  <div id="receiptList"></div>
 </div>
 
-<!-- Customer Tab -->
-<div id="customerTab" class="tab">
-  <h2>The Southern Table - Customer</h2>
-  <img id="customerHeaderLogo" src="" alt="Header Logo" style="max-height:60px;"><br><br>
+<script>
+const roleSelect = document.getElementById('role');
+const adminLogin = document.getElementById('adminLogin');
+const customerLogin = document.getElementById('customerLogin');
 
-  <h3>Mission & Goals / FAQ</h3>
-  <p><strong>Mission:</strong> High-quality, comfortable hoodies—available year-round with rustic style. Limited edition drops bring exclusive designs for those who want something truly unique. Every order is seamless, delivering standout pieces with creativity, authenticity, and comfort.</p>
-  <p><strong>Goal:</strong> Food truck initiative, Crunchy Thangs LLC, Southern inspiration....NY driven.</p>
-  <p><strong>FAQ:</strong><br>
-     Q: How long will it take to receive my hoodie?<br>
-     A: Made-to-order via Printify. Production 2–5 business days, shipping 3–7 business days.<br>
-     Q: When can I place an order?<br>
-     A: Orders every Wednesday and Saturday A.M.<br>
-     Q: Local delivery?<br>
-     A: Brooklyn +$5, in-person pickup free.<br>
-     Q: Payment?<br>
-     A: Cash (single), CashApp (bulk). Card coming soon.<br>
-     Q: Sizes?<br>
-     A: S–3XL. Extra $10 for 2XL/3XL.<br>
-     Q: Order changes?<br>
-     A: Submit before Wed/Sat.<br>
-     Q: Limited edition?<br>
-     A: Some drops LTO, basics year-round.<br>
-     Q: Contact?<br>
-     A: Phone or CashApp.</p>
-
-  <h3>Hoodies</h3>
-  <div id="customerHoodies" class="gallery"></div>
-
-  <h3>Exclusives</h3>
-  <div id="customerExclusives" class="gallery"></div>
-
-  <h3>Crunchy Thangs</h3>
-  <div id="customerCrunchy" class="gallery"></div>
-
-  <h3>Checkout</h3>
-  <div>  
-
-    <label>Single or Bulk:</label>
-    <select id="orderType" onchange="calculateTotal()">
-      <option value="single">Single</option>
-      <option value="bulk">Bulk</option>
-    </select><br>
-    <label>Quantity:</label>
-    <input type="number" id="quantity" value="1" min="1" max="10" onchange="calculateTotal()"><br>
-    <label>Delivery Method:</label>
-    <select id="deliveryMethod" onchange="calculateTotal()">
-      <option value="pickup">In-Person Pickup (Free)</option>
-      <option value="brooklyn">Brooklyn Delivery (+$5)</option>
-      <option value="shipping">Shipping (Enter Address)</option>
-    </select><br>
-    <p>Total: $<span id="totalPrice">75</span></p>
-    <p>Payment: Cash (single), CashApp (bulk). Card coming soon.</p>
-    <img id="customerCashQR" src="" alt="CashApp QR" style="max-height:100px;">
-    <button onclick="submitOrder()">Place Order</button>
-  </div>
-</div>    
-
-<footer>
-  &copy; The Southern Table Est 2025 | Crunchy Thangs LLC 2024
-</footer>  
-
-  <script>
-let adminUsername = 'thesoutherntable';
-let adminPassword = 'crunchythangs';
-let adminPin = 1812;
-
-let hoodies = [], exclusives=[], crunchy=[], cashQR=[];
-let monthlyReceipts = []; 
-
-function login(){
-  let u = document.getElementById('username').value.trim().toLowerCase();
-  let p = document.getElementById('password').value.trim().toLowerCase();
-  let pin = parseInt(document.getElementById('pin').value);
-  let code = document.getElementById('username').value.trim();
-  if(u===adminUsername && p===adminPassword && pin===adminPin){
-    showTab('roleSelectTab');
-  } else if(code==='1000'){
-    showTab('customerTab');
-  } else{
-    alert('Incorrect login or code');
+roleSelect.addEventListener('change', () => {
+  if(roleSelect.value==='admin') {
+    adminLogin.classList.remove('hidden');
+    customerLogin.classList.add('hidden');
+  } else if(roleSelect.value==='customer') {
+    customerLogin.classList.remove('hidden');
+    adminLogin.classList.add('hidden');
+  } else {
+    adminLogin.classList.add('hidden');
+    customerLogin.classList.add('hidden');
   }
+});
+
+function loginAdmin(){
+ const password = document.getElementById('adminPassword').value;
+ const pin = document.getElementById('adminPin').value;
+ if(password==='crunchythangs' && pin==='1812'){
+   window.location.href='admin.html';
+ } else { alert('Invalid Admin Credentials'); }
 }
 
-function showTab(tabId){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-  if(tabId==='customerTab') loadCustomerImages();
+function loginCustomer(){
+ const pin = document.getElementById('customerPin').value;
+ if(pin==='1000'){
+   window.location.href='customer.html';
+ } else { alert('Invalid Customer Pin'); }
 }
-
-function uploadHeader(event){
-  let file = event.target.files[0];
-  if(!file) return;
-  let url = URL.createObjectURL(file);
-  document.getElementById('headerLogo').src = url;
-  document.getElementById('customerHeaderLogo').src = url;
-  localStorage.setItem('headerLogo', url);
-}
-
-function uploadImages(event,type){
-  let files = event.target.files;
-  if(!files) return;
-  let gallery = document.getElementById(type+'Gallery') || document.getElementById('cashQRPreview');
-  gallery.innerHTML='';
-  files=Array.from(files);
-  files.forEach(f=>{
-    let url=URL.createObjectURL(f);
-    if(type==='hoodies'){ hoodies.push({src:url,name:f.name}); gallery.innerHTML+=`<img src="${url}" class="thumbnail">`; }
-    if(type==='exclusives'){ exclusives.push({src:url,name:f.name}); gallery.innerHTML+=`<img src="${url}" class="thumbnail">`; }
-    if(type==='crunchy'){ crunchy.push({src:url,name:f.name}); gallery.innerHTML+=`<img src="${url}" class="thumbnail">`; }
-    if(type==='cashQR'){ cashQR.push({src:url,name:f.name}); document.getElementById('cashQRPreview').src=url; document.getElementById('customerCashQR').src=url; }
-  });
-  loadCustomerImages();
-}
-
-function loadCustomerImages(){
-  let cHood = document.getElementById('customerHoodies');
-  let cExcl = document.getElementById('customerExclusives');
-  let cCrunch = document.getElementById('customerCrunchy');
-  cHood.innerHTML=''; cExcl.innerHTML=''; cCrunch.innerHTML='';
-  hoodies.forEach(h=>cHood.innerHTML+=`<img src="${h.src}" class="thumbnail">`);
-  exclusives.forEach(e=>cExcl.innerHTML+=`<img src="${e.src}" class="thumbnail">`);
-  crunchy.forEach(c=>cCrunch.innerHTML+=`<img src="${c.src}" class="thumbnail">`);
-}
-
-function calculateTotal() {
-  let type = document.getElementById('orderType').value;
-  let qty = parseInt(document.getElementById('quantity').value) || 1;
-  let deliveryOption = document.getElementById('deliveryMethod').value;
-  let basePrice = 75;
-  let deliveryFee = 0;
-  if(deliveryOption==='brooklyn') deliveryFee=5;
-  else deliveryFee=0;
-  let total = basePrice * qty + deliveryFee;
-  document.getElementById('totalPrice').innerText = total;
-}
-
-function submitOrder(){
-  let type = document.getElementById('orderType').value;
-  let qty = parseInt(document.getElementById('quantity').value) || 1;
-  let deliveryOption = document.getElementById('deliveryMethod').value;
-  let total = parseInt(document.getElementById('totalPrice').innerText);
-
-  let order = {
-    type, qty, deliveryOption, total, date: new Date()
-  };
-  monthlyReceipts.push(order);
-  alert('Order submitted! Admin can view in monthly receipts.');
-  updateReceiptList();
-}
-
-function updateReceiptList(){
-  let container = document.getElementById('receiptList');
-  container.innerHTML = '';
-  monthlyReceipts.forEach((r,i)=>{
-    container.innerHTML += `<p>${i+1}. ${r.type.toUpperCase()} | Qty: ${r.qty} | Delivery: ${r.deliveryOption} | Total: $${r.total} | Date: ${r.date.toLocaleString()}</p>`;
-  });
-}
-
-function downloadMonthlyReceipts(){
-  iffunction downloadMonthlyReceipts(){
-  if(monthlyReceipts.length === 0){
-    alert('No receipts to download.');
-    return;
-  }
-  let csvContent = "data:text/csv;charset=utf-8,";
-  csvContent += "Order#,Type,Quantity,Delivery,Total,Date\n";
-  monthlyReceipts.forEach((r, i) => {
-    csvContent += `${i+1},${r.type},${r.qty},${r.deliveryOption},${r.total},${r.date.toLocaleString()}\n`;
-  });
-  let encodedUri = encodeURI(csvContent);
-  let link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "monthly_receipts.csv");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-// Load stored header logo if exists
-window.onload = function(){
-  let savedLogo = localStorage.getItem('headerLogo');
-  if(savedLogo){
-    document.getElementById('headerLogo').src = savedLogo;
-    document.getElementById('customerHeaderLogo').src = savedLogo;
-  }
-};
 </script>
 </body>
 </html>
