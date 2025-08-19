@@ -1,44 +1,96 @@
-const express = require('express');
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Website</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
 
-const app = express();
-const PORT = 3000;
+    /* Header */
+    header {
+        margin-bottom: 20px;
+    }
 
-// Storage for uploaded files
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'images'),
-    filename: (req, file, cb) => cb(null, file.originalname)
-});
-const upload = multer({ storage });
+    header input[type="text"] {
+        padding: 8px;
+        font-size: 1em;
+        width: 300px;
+    }
 
-app.use(express.static('.'));
-app.use(express.json());
+    /* Gallery grid */
+    #gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
 
-// Upload multiple images
-app.post('/upload', upload.array('photos'), (req, res) => {
-    updateImagesList();
-    res.send('Uploaded successfully!');
-});
+    .gallery-item {
+        text-align: center;
+        position: relative;
+    }
 
-// Delete image
-app.post('/delete', (req, res) => {
-    const filename = req.body.filename;
-    fs.unlink(path.join('images', filename), err => {
-        if (err) return res.status(500).send(err);
-        updateImagesList();
-        res.send('Deleted successfully!');
+    #gallery img {
+        width: 100%;
+        height: auto;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        object-fit: cover;
+        transition: transform 0.2s;
+    }
+
+    #gallery img:hover {
+        transform: scale(1.05);
+        border-color: #888;
+    }
+
+    .caption {
+        margin-top: 5px;
+        font-size: 0.9em;
+        color: #555;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Welcome to My Website</h1>
+    <input type="text" placeholder="Header input...">
+</header>
+
+<h2>My Image Gallery</h2>
+<div id="gallery"></div>
+
+<!-- Scripts -->
+<script src="images_list.js"></script>
+<script>
+const gallery = document.getElementById("gallery");
+
+// Automatically create gallery items
+images.forEach(filename => {
+    const imgPath = `images/${filename}`;
+    fetch(imgPath).then(res => {
+        if (!res.ok) return; // skip missing images
+        const item = document.createElement("div");
+        item.className = "gallery-item";
+
+        const img = document.createElement("img");
+        img.src = imgPath;
+        img.alt = filename;
+
+        const caption = document.createElement("div");
+        caption.className = "caption";
+        caption.textContent = filename.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+
+        item.appendChild(img);
+        item.appendChild(caption);
+        gallery.appendChild(item);
     });
 });
+</script>
 
-// Generate images_list.js
-function updateImagesList() {
-    const files = fs.readdirSync('images').filter(f => fs.lstatSync(path.join('images', f)).isFile());
-    let content = 'const images = [\n';
-    files.forEach(f => content += ` "${f}",\n`);
-    content += '];';
-    fs.writeFileSync('images_list.js', content);
-}
-
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+</body>
+</html>
