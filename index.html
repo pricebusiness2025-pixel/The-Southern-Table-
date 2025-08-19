@@ -5,77 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Website</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-    }
-
-    /* Gallery grid */
-    #gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 15px;
-    }
-
-    .gallery-item {
-        text-align: center;
-    }
-
-    #gallery img {
-        width: 100%;
-        height: auto;
-        border: 2px solid #ccc;
-        border-radius: 8px;
-        object-fit: cover;
-        transition: transform 0.2s;
-    }
-
-    #gallery img:hover {
-        transform: scale(1.05);
-        border-color: #888;
-    }
-
-    .caption {
-        margin-top: 5px;
-        font-size: 0.9em;
-        color: #555;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    header input[type="text"] { padding: 8px; width: 300px; }
+    #gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+    .gallery-item { text-align: center; position: relative; }
+    #gallery img { width: 100%; border: 2px solid #ccc; border-radius: 8px; object-fit: cover; transition: transform 0.2s; }
+    #gallery img:hover { transform: scale(1.05); border-color: #888; }
+    .caption { margin-top: 5px; font-size: 0.9em; color: #555; }
 </style>
 </head>
 <body>
 
-    <!-- Your existing content -->
+<header>
     <h1>Welcome to My Website</h1>
-    <p>Here’s some text that you already had on your page.</p>
+    <input type="text" placeholder="Header input...">
+</header>
 
-    <!-- Image gallery container -->
-    <h2>My Image Gallery</h2>
-    <div id="gallery"></div>
+<h2>My Image Gallery</h2>
+<div id="gallery"></div>
 
-    <!-- Scripts -->
-    <script src="images_list.js"></script>
-    <script>
-        const gallery = document.getElementById("gallery");
+<script src="images_list.js"></script>
+<script>
+const gallery = document.getElementById("gallery");
 
-        // Automatically create image elements with captions
-        images.forEach(filename => {
-            const item = document.createElement("div");
-            item.className = "gallery-item";
-
-            const img = document.createElement("img");
-            img.src = `images/${filename}`;
-            img.alt = filename;
-
-            const caption = document.createElement("div");
-            caption.className = "caption";
-            // Remove file extension and replace dashes/underscores with spaces
-            caption.textContent = filename.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
-
-            item.appendChild(img);
-            item.appendChild(caption);
-            gallery.appendChild(item);
-        });
-    </script>
+images.forEach(filename => {
+    const imgPath = `images/${filename}`;
+    fetch(imgPath).then(res => {
+        if (!res.ok) return;
+        const item = document.createElement("div");
+        item.className = "gallery-item";
+        const img = document.createElement("img");
+        img.src = imgPath;
+        img.alt = filename;
+        const caption = document.createElement("div");
+        caption.className = "caption";
+        caption.textContent = filename.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+        item.appendChild(img);
+        item.appendChild(caption);
+        gallery.appendChild(item);
+    });
+});
+</script>
 
 </body>
 </html>
