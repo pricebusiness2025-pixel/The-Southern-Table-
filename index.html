@@ -3,33 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Southern Table - Login</title>
+<title>My Website</title>
 <style>
-  body { font-family: 'Arial', sans-serif; background-color: #800020; color: white; display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; margin:0; }
-  h1 { margin-bottom:30px; }
-  input { padding:10px; font-size:18px; border-radius:5px; border:none; width:250px; margin-bottom:20px; text-align:center; }
-  button { padding:10px 20px; font-size:18px; background-color:#800020; color:white; border:2px solid gold; border-radius:5px; cursor:pointer; }
-  button:hover { background-color:#a00030; }
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+
+    /* Gallery grid */
+    #gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .gallery-item {
+        text-align: center;
+    }
+
+    #gallery img {
+        width: 100%;
+        height: auto;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        object-fit: cover;
+        transition: transform 0.2s;
+    }
+
+    #gallery img:hover {
+        transform: scale(1.05);
+        border-color: #888;
+    }
+
+    .caption {
+        margin-top: 5px;
+        font-size: 0.9em;
+        color: #555;
+    }
 </style>
 </head>
 <body>
 
-<h1>The Southern Table</h1>
-<input type="text" id="loginInput" placeholder="Enter Admin/Customer code">
-<button onclick="login()">Enter</button>
+    <!-- Your existing content -->
+    <h1>Welcome to My Website</h1>
+    <p>Here’s some text that you already had on your page.</p>
 
-<script>
-function login() {
-  const userInput = document.getElementById('loginInput').value.trim();
-  if(userInput === "crunchythangs" || userInput === "1812"){
-    window.location.href = "admin.html";
-  } else if(userInput === "1000"){
-    window.location.href = "customer.html";
-  } else {
-    alert("Incorrect code. Try again.");
-  }
-}
-</script>
+    <!-- Image gallery container -->
+    <h2>My Image Gallery</h2>
+    <div id="gallery"></div>
+
+    <!-- Scripts -->
+    <script src="images_list.js"></script>
+    <script>
+        const gallery = document.getElementById("gallery");
+
+        // Automatically create image elements with captions
+        images.forEach(filename => {
+            const item = document.createElement("div");
+            item.className = "gallery-item";
+
+            const img = document.createElement("img");
+            img.src = `images/${filename}`;
+            img.alt = filename;
+
+            const caption = document.createElement("div");
+            caption.className = "caption";
+            // Remove file extension and replace dashes/underscores with spaces
+            caption.textContent = filename.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+
+            item.appendChild(img);
+            item.appendChild(caption);
+            gallery.appendChild(item);
+        });
+    </script>
 
 </body>
 </html>
