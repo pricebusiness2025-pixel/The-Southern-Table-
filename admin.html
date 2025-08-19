@@ -1,90 +1,62 @@
-<!-- Admin page snippet -->
-<div id="adminHoodieUpload">
-    <h3>Hoodies Section</h3>
-    <input type="file" id="hoodieFile" multiple accept="image/*">
-    <input type="text" id="hoodieDesc" placeholder="Enter description">
-    <button id="hoodieSave">Save Hoodies</button>
-    <div id="hoodiePreview"></div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Gallery Manager</title>
+<style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    form { margin-bottom: 20px; }
+    button { margin-left: 10px; }
+</style>
+</head>
+<body>
 
-<div id="adminExclusivesUpload">
-    <h3>Exclusives Section</h3>
-    <input type="file" id="exclusivesFile" multiple accept="image/*">
-    <input type="text" id="exclusivesDesc" placeholder="Enter description">
-    <button id="exclusivesSave">Save Exclusives</button>
-    <div id="exclusivesPreview"></div>
-</div>
+<h1>Admin Gallery Manager</h1>
 
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="photos" multiple>
+    <button type="submit">Upload</button>
+</form>
+
+<h2>Existing Images</h2>
+<div id="adminGallery"></div>
+
+<script src="images_list.js"></script>
 <script>
-// Helper: Preview uploaded images
-function previewImages(fileInput, previewContainer) {
-    const files = Array.from(fileInput.files);
-    previewContainer.innerHTML = '';
-    files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.classList.add('previewImg');
-            previewContainer.appendChild(img);
+const adminGallery = document.getElementById('adminGallery');
+
+function loadAdminGallery() {
+    adminGallery.innerHTML = '';
+    images.forEach(filename => {
+        const div = document.createElement('div');
+        div.textContent = filename;
+        const btn = document.createElement('button');
+        btn.textContent = 'Delete';
+        btn.onclick = () => {
+            fetch('/delete', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({filename})
+            }).then(() => loadAdminGallery());
         };
-        reader.readAsDataURL(file);
+        div.appendChild(btn);
+        adminGallery.appendChild(div);
     });
 }
 
-// Hoodies upload & save
-document.getElementById('hoodieFile').addEventListener('change', () => {
-    previewImages(document.getElementById('hoodieFile'), document.getElementById('hoodiePreview'));
-});
+loadAdminGallery();
 
-document.getElementById('hoodieSave').addEventListener('click', () => {
-    const files = Array.from(document.getElementById('hoodieFile').files);
-    const desc = document.getElementById('hoodieDesc').value;
-    if (!files.length) return alert("Please select at least one image.");
+document.getElementById('uploadForm').onsubmit = e => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    fetch('/upload', { method: 'POST', body: formData })
+        .then(() => {
+            loadAdminGallery();
+            e.target.reset();
+        });
+};
+</script>
 
-    const savedHoodies = JSON.parse(localStorage.getItem('hoodieImages') || '[]');
-
-    files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-            savedHoodies.push({ src: e.target.result, desc: desc });
-            localStorage.setItem('hoodieImages', JSON.stringify(savedHoodies));
-            renderCustomerGallery(); // optional: update live preview if admin sees customer view
-        };
-        reader.readAsDataURL(file);
-    });
-
-    document.getElementById('hoodieDesc').value = '';
-    document.getElementById('hoodieFile').value = '';
-    document.getElementById('hoodiePreview').innerHTML = '';
-});
-
-// Exclusives upload & save (same logic)
-document.getElementById('exclusivesFile').addEventListener('change', () => {
-    previewImages(document.getElementById('exclusivesFile'), document.getElementById('exclusivesPreview'));
-});
-
-document.getElementById('exclusivesSave').addEventListener('click', () => {
-    const files = Array.from(document.getElementById('exclusivesFile').files);
-    const desc = document.getElementById('exclusivesDesc').value;
-    if (!files.length) return alert("Please select at least one image.");
-
-    const savedExclusives = JSON.parse(localStorage.getItem('exclusivesImages') || '[]');
-
-    files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-            savedExclusives.push({ src: e.target.result, desc: desc });
-            localStorage.setItem('exclusivesImages', JSON.stringify(savedExclusives));
-            renderCustomerGallery(); // optional
-        };
-        reader.readAsDataURL(file);
-    });
-
-    document.getElementById('exclusivesDesc').value = '';
-    document.getElementById('exclusivesFile').value = '';
-    document.getElementById('exclusivesPreview').innerHTML = '';
-});
-                                       </script>
-
-
+</body>
+</html>
