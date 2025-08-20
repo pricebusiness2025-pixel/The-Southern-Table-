@@ -1,1 +1,183 @@
+// ==== Cart Functions ====
+function renderCart(){
+  const cart = loadCart();
+  const tbody = $('cartBody'); tbody.innerHTML='';
+  let total=0, count=0;
+  cart.forEach(item=>{
+    const product = PRODUCTS.find(p=>p.id===item.id);
+    if(!product) return;
+    const subtotal = product.price*item.qty;
+    total += subtotal; count += item.qty;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${product.name}</td>
+      <td>${product.type}</td>
+      <td>$${product.price.toFixed(2)}</td>
+      <td><input type="number" class="qty-input" min="1" value="${item.qty}" data-id="${item.id}"></td>
+      <td>$${subtotal.toFixed(2)}</td>
+      <td><button class="removeBtn" data-id="${item.id}">Remove</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  $('cartTotal').textContent = total.toFixed(2);
+  $('cartItemsCount').textContent = count;
+  $('cartCount').textContent = count;
 
+  // Qty change listeners
+  document.querySelectorAll('.qty-input').forEach(input=>{
+    input.addEventListener('change', e=>{
+      const id = e.target.dataset.id;
+      let val = parseInt(e.target.value);
+      if(isNaN(val)||val<1) val=1; e.target.value=val;
+      const cart = loadCart();
+      const c = cart.find(c=>c.id===id);
+      if(c){ c.qty=val; saveCart(cart); renderCart(); }
+    });
+  });
+
+  // Remove buttons
+  document.querySelectorAll('.removeBtn').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const id = e.target.dataset.id;
+      let cart = loadCart();
+      cart = cart.filter(c=>c.id!==id);
+      saveCart(cart); renderCart();
+    });
+  });
+}
+
+$('clearCartBtn').addEventListener('click', ()=>{
+  if(confirm('Clear all items from cart?')){
+    saveCart([]); renderCart();
+  }
+});
+$('checkoutBtn').addEventListener('click', ()=>{
+  alert('Checkout via CashApp QR in cart tab.');
+});
+
+// ==== Render Products ====
+function renderProducts(){
+  const hoodieGrid = $('hoodieGrid'); hoodieGrid.innerHTML='';
+  const exclusiveGrid = $('exclusiveGrid'); exclusiveGrid.innerHTML='';
+  PRODUCTS.forEach(p=>{
+    const card = document.createElement('div'); card.className='card product-card';
+    card.innerHTML = `
+      <img src="${p.img||''}" alt="${p.name}">
+      <div>${p.name}</div>
+      <div class="price">$${p.price.toFixed(2)}</div>
+      <button class="addCartBtn" data-id="${p.id}">Add to Cart</button>
+    `;
+    if(p.type==='Hoodie') hoodieGrid.appendChild(card);
+    if(p.type==='Exclusive') exclusiveGrid.appendChild(card);
+  });
+
+  document.querySelectorAll('.addCartBtn').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const id = e.target.dataset.id;
+      const cart = loadCart();
+      const existing = cart.find(c=>c.id===id);
+      if(existing){ existing.qty+=1; } else { cart.push({id,qty:1}); }
+      saveCart(cart); renderCart();
+    });
+  });
+}
+
+// ==== Admin Login & Dashboard ====
+$('adminTab').addEventListener('click', ()=>{
+  const pwd = prompt('Enter Admin Password:');
+  if(pwd===PASSWORD){
+    $('adminDashboard').style.display='block';
+    renderAdminImages();
+  } else { alert('Incorrect password'); }
+});
+
+function renderAdminImages(){
+  const hoodiesImgs = loadJSON(HOODIES_IMG_KEY,['','','','']);
+  const exclImgs = loadJSON(EXCL_IMG_KEY,['','','','']);
+
+  const hoodiesDiv = $('hoodiesImageInputs'); hoodiesDiv.innerHTML='';
+  hoodiesImgs.forEach((img,i)=>{
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = `
+      <input type="text" id="hoodieImg${i}" placeholder="Hoodie Image URL" value="${img}">
+      <button onclick="saveHoodieImage(${i})">Save</button>
+      <button onclick="deleteHoodieImage(${i})">Delete</button>
+    `;
+    hoodiesDiv.appendChild(wrapper);
+  });
+
+  const exclDiv = $('exclusivesImageInputs'); exclDiv.innerHTML='';
+  exclImgs.forEach((img,i)=>{
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = `
+      <input type="text" id="exclImg${i}" placeholder="Exclusive Image URL" value="${img}">
+      <button onclick="saveExclImage(${i})">Save</button>
+      <button onclick="deleteExclImage(${i})">Delete</button>
+    `;
+    exclDiv.appendChild(wrapper);
+  });
+
+  $('mainHeaderImg').src = localStorage.getItem(HEADER_KEY)||'';
+  $('hoodiesHeaderImg0').src = hoodiesImgs[0]||'';
+  $('exclusivesHeaderImg0').src = exclImgs[0]||'';
+  $('missionHeaderImg').src = loadJSON(MISSION_KEY,{}).img||'';
+  $('infoHeaderImg').src = loadJSON(INFO_KEY,{}).img||'';
+  $('missionText').textContent = loadJSON(MISSION_KEY,{}).text||'';
+  $('infoText').textContent = loadJSON(INFO_KEY,{}).text||'';
+  $('cashAppQR').src = localStorage.getItem(CASHAPP_KEY)||'';
+}
+
+// ==== Admin Save/Delete Functions ====
+function saveHoodieImage(i){ 
+  const imgs = loadJSON(HOODIES_IMG_KEY,['','','','']);
+  imgs[i] = $('hoodieImg'+i).value;
+  saveJSON(HOODIES_IMG_KEY,imgs);
+  renderAdminImages();
+}
+function deleteHoodieImage(i){
+  const imgs = loadJSON(HOODIES_IMG_KEY,['','','','']);
+  imgs[i]=''; saveJSON(HOODIES_IMG_KEY,imgs); renderAdminImages();
+}
+function saveExclImage(i){
+  const imgs = loadJSON(EXCL_IMG_KEY,['','','','']);
+  imgs[i]=$('exclImg'+i).value;
+  saveJSON(EXCL_IMG_KEY,imgs); renderAdminImages();
+}
+function deleteExclImage(i){
+  const imgs = loadJSON(EXCL_IMG_KEY,['','','','']);
+  imgs[i]=''; saveJSON(EXCL_IMG_KEY,imgs); renderAdminImages();
+}
+$('saveMainHeaderBtn').addEventListener('click',()=>{
+  const url = $('mainHeaderImgInput').value;
+  localStorage.setItem(HEADER_KEY,url); $('mainHeaderImg').src=url;
+});
+$('deleteMainHeaderBtn').addEventListener('click',()=>{
+  localStorage.removeItem(HEADER_KEY); $('mainHeaderImg').src='';
+});
+$('saveMissionBtn').addEventListener('click',()=>{
+  const data = { text:$('missionTextInput').value, img:$('missionImgInput').value };
+  saveJSON(MISSION_KEY,data); $('missionText').textContent=data.text; $('missionHeaderImg').src=data.img;
+});
+$('deleteMissionImgBtn').addEventListener('click',()=>{
+  const data = loadJSON(MISSION_KEY,{}); data.img=''; saveJSON(MISSION_KEY,data); $('missionHeaderImg').src='';
+});
+$('saveInfoBtn').addEventListener('click',()=>{
+  const data = { text:$('infoTextInput').value, img:$('infoImgInput').value };
+  saveJSON(INFO_KEY,data); $('infoText').textContent=data.text; $('infoHeaderImg').src=data.img;
+});
+$('deleteInfoImgBtn').addEventListener('click',()=>{
+  const data = loadJSON(INFO_KEY,{}); data.img=''; saveJSON(INFO_KEY,data); $('infoHeaderImg').src='';
+});
+$('saveCashAppBtn').addEventListener('click',()=>{
+  const url = $('cashAppInput').value; localStorage.setItem(CASHAPP_KEY,url); $('cashAppQR').src=url;
+});
+$('deleteCashAppBtn').addEventListener('click',()=>{ localStorage.removeItem(CASHAPP_KEY); $('cashAppQR').src=''; });
+
+// ==== Initial Render ====
+renderProducts();
+renderCart();
+renderAdminImages();
+  </script>
+</body>
+      </html>
+        
