@@ -5,113 +5,125 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Southern Table</title>
 <style>
-body {
-  font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  padding: 20px;
-  background: #800020;
-  color: #fff;
-  margin:0;
-}
-h1,h2{font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif;font-weight:700;color:#ffd700;text-align:center;letter-spacing:0.5px;margin-bottom:10px;}
-p,label,span{color:#fff;font-weight:400;}
-.section{background:#900030;padding:20px;margin-bottom:30px;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,0.2);font-size:15px;}
-img.logo,.item img,.admin-item img{max-width:200px;display:block;margin:10px auto;}
-.item,.admin-item{background:#b03040;padding:15px;margin-bottom:20px;border-radius:8px;border:1px solid #ccc;font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif;}
-button{padding:10px 20px;cursor:pointer;border-radius:5px;border:2px solid gold;background:#800020;color:#fff;font-weight:600;font-family:'Segoe UI',Helvetica,Arial,sans-serif;margin-top:5px;}
+body {font-family:'Segoe UI',Helvetica,Arial,sans-serif;margin:0;padding:20px;background:#800020;color:#fff;}
+h1,h2{color:#ffd700;text-align:center;margin-bottom:10px;}
+.section{background:#900030;padding:20px;margin-bottom:30px;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+img.logo,.item img{max-width:200px;display:block;margin:10px auto;}
+.item{background:#b03040;padding:10px;margin-bottom:15px;border-radius:8px;}
+button{padding:8px 15px;margin-top:5px;border-radius:5px;border:2px solid gold;background:#800020;color:#fff;font-weight:600;cursor:pointer;}
 button:hover{background:#900030;border-color:#ffd700;}
-input,textarea,select{display:block;width:100%;margin-top:5px;padding:8px;border-radius:5px;border:1px solid #ccc;font-family:'Segoe UI',Helvetica,Arial,sans-serif;}
-table{width:100%;border-collapse:collapse;background:#fff;color:#000;font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif;}
-th,td{border:1px solid #ccc;padding:8px;text-align:center;}
-#hoodiesContainer,#exclusivesContainer,#cartContainer{max-height:500px;overflow-y:auto;}
-.tabs button{padding:10px 15px;margin-right:5px;background:#800020;color:#fff;border:none;border-bottom:2px solid gold;cursor:pointer;}
+input,textarea{display:block;width:100%;margin-top:5px;padding:8px;border-radius:5px;border:1px solid #ccc;}
+.tabs button{padding:8px 12px;margin-right:5px;background:#800020;color:#fff;border:none;border-bottom:2px solid gold;cursor:pointer;}
 .tabs button.active{background:#900030;font-weight:700;border-bottom:4px solid gold;}
 .cart-box{background:#900030;padding:10px;margin-top:10px;border-radius:8px;}
-.admin-item input.priceInput{margin-top:5px;}
 </style>
 </head>
 <body>
 
-<!-- Login Section -->
+<!-- Login -->
 <div id="loginScreen" class="section">
-  <h1>Welcome to The Southern Table</h1>
-  <p>Admin? Enter your credentials below. Customers can scroll down.</p>
-  <input type="text" id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
+<h1>Welcome To The Southern Table</h1>
+<p>Admin? Enter your credentials below:</p>
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="password" placeholder="Password">
+<button id="loginBtn">Login</button>
 </div>
 
 <!-- Admin Panel -->
 <div id="adminPanel" style="display:none;">
-  <h1>The Southern Table - Admin Dashboard</h1>
+<h1>Admin Dashboard</h1>
+<button id="adminLogout">Logout</button>
 
-  <div class="tabs">
-    <button class="tabBtn active" onclick="showAdminTab('hoodiesTab')">Hoodies</button>
-    <button class="tabBtn" onclick="showAdminTab('exclusivesTab')">Exclusives</button>
-  </div>
+<div class="section">
+<h2>Header Image</h2>
+<input type="file" id="headerUpload">
+<img id="headerPreview" src="">
+<button id="saveHeader">Save Header</button>
+</div>
 
-  <!-- Hoodies -->
-  <div id="hoodiesTab" class="section admin-tab">
-    <h2>Hoodies</h2>
-    <div id="headerHoodie" class="admin-item">
-      <label>Header Image:</label>
-      <input type="file" class="imageUpload" data-index="header">
-      <img class="imagePreview" src="">
-      <button class="deleteBtn">Delete Image</button>
-      <textarea class="itemText" placeholder="Header Text"></textarea>
-    </div>
-    <div id="hoodiesContainer"></div>
-    <button id="addHoodieBtn">Add Hoodie Slot</button>
-  </div>
+<div class="tabs">
+<button class="tabBtn active" onclick="showAdminTab('hoodiesTab')">Hoodies</button>
+<button class="tabBtn" onclick="showAdminTab('exclusivesTab')">Exclusives</button>
+<button class="tabBtn" onclick="showAdminTab('missionTab')">Mission/Goals</button>
+<button class="tabBtn" onclick="showAdminTab('faqTab')">FAQ</button>
+</div>
 
-  <!-- Exclusives -->
-  <div id="exclusivesTab" class="section admin-tab" style="display:none;">
-    <h2>Exclusives</h2>
-    <div id="exclusivesContainer"></div>
-    <button id="addExclusiveBtn">Add Exclusive Slot</button>
-  </div>
+<!-- Hoodies Tab -->
+<div id="hoodiesTab" class="section admin-tab">
+<h2>Hoodies</h2>
+<div id="hoodiesContainer"></div>
+<button id="addHoodieBtn">Add Hoodie Slot</button>
+</div>
 
-  <button id="saveBtn">Save All Changes</button>
-</div
+<!-- Exclusives Tab -->
+<div id="exclusivesTab" class="section admin-tab" style="display:none;">
+<h2>Exclusives</h2>
+<textarea id="exclusivesText" rows="5">Items coming soon!</textarea>
+</div>
 
-  <!-- Customer Panel -->
-<div id="customerApp">
-  <div class="tabs">
-    <button class="tabBtn active" onclick="showCustomerTab('hoodiesCustomer')">Hoodies</button>
-    <button class="tabBtn" onclick="showCustomerTab('exclusivesCustomer')">Exclusives</button>
-  </div>
+<!-- Mission/Goals Tab -->
+<div id="missionTab" class="section admin-tab" style="display:none;">
+<h2>Mission/Goals</h2>
+<textarea id="missionText" rows="5">Enter your Mission/Goals here.</textarea>
+</div>
 
-  <div id="hoodiesCustomer" class="section customer-tab">
-    <h2>Hoodies</h2>
-    <img id="headerHoodieCustomer" src="" class="logo">
-    <div id="hoodiesList"></div>
-  </div>
+<!-- FAQ Tab -->
+<div id="faqTab" class="section admin-tab" style="display:none;">
+<h2>FAQ</h2>
+<textarea id="faqText" rows="5">Shipping within USA only. Local deliveries in Brooklyn +$5. International shipping not available.</textarea>
+</div>
 
-  <div id="exclusivesCustomer" class="section customer-tab" style="display:none;">
-    <h2>Exclusives</h2>
-    <div id="exclusivesList"></div>
-  </div>
+<button id="saveAll">Save All Changes</button>
+</div>
 
-  <button id="viewCartBtn">View Cart</button>
-  <div id="cartContainer" class="cart-box" style="display:none;">
-    <h2>Your Cart</h2>
-    <div id="cartItems"></div>
-    <p>Total: $<span id="cartTotal">0</span></p>
-    <button id="checkoutBtn">Checkout</button>
-  </div>
+<!-- Customer Panel -->
+<div id="customerApp" style="display:none;">
+<img id="headerCustomer" class="logo" src="">
+<div class="tabs">
+<button class="tabBtn active" onclick="showCustomerTab('hoodiesCustomer')">Hoodies</button>
+<button class="tabBtn" onclick="showCustomerTab('exclusivesCustomer')">Exclusives</button>
+<button class="tabBtn" onclick="showCustomerTab('missionCustomer')">Mission/Goals</button>
+<button class="tabBtn" onclick="showCustomerTab('faqCustomer')">FAQ</button>
+</div>
+
+<div id="hoodiesCustomer" class="section customer-tab">
+<h2>Hoodies</h2>
+<div id="hoodiesList"></div>
+</div>
+
+<div id="exclusivesCustomer" class="section customer-tab" style="display:none;">
+<h2>Exclusives</h2>
+<div id="exclusivesList"></div>
+</div>
+
+<div id="missionCustomer" class="section customer-tab" style="display:none;">
+<h2>Mission/Goals</h2>
+<div id="missionView"></div>
+</div>
+
+<div id="faqCustomer" class="section customer-tab" style="display:none;">
+<h2>FAQ</h2>
+<div id="faqView"></div>
+</div>
+
+<button id="viewCartBtn">View Cart</button>
+<div id="cartContainer" class="cart-box" style="display:none;">
+<h2>Your Cart</h2>
+<div id="cartItems"></div>
+<p>Total: $<span id="cartTotal">0</span></p>
+<button id="checkoutBtn">Checkout</button>
+</div>
 </div>
 
 <script>
-// --- Login ---
+// --- Admin Login ---
 const ADMIN_USER="Southern";
 const ADMIN_PASS="Crunchy";
 document.getElementById('loginBtn').addEventListener('click',()=>{
-  const user=document.getElementById('username').value;
-  const pass=document.getElementById('password').value;
-  if(user===ADMIN_USER && pass===ADMIN_PASS){
+  const u=document.getElementById('username').value;
+  const p=document.getElementById('password').value;
+  if(u===ADMIN_USER && p===ADMIN_PASS){
     document.getElementById('loginScreen').style.display='none';
-    document.getElementById('customerApp').style.display='none';
     document.getElementById('adminPanel').style.display='block';
     loadAdminData();
   } else { alert('Incorrect username or password'); }
@@ -119,150 +131,157 @@ document.getElementById('loginBtn').addEventListener('click',()=>{
 
 // --- Tabs ---
 function showAdminTab(id){
-  document.querySelectorAll('.admin-tab').forEach(tab=>tab.style.display='none');
+  document.querySelectorAll('.admin-tab').forEach(t=>t.style.display='none');
   document.getElementById(id).style.display='block';
   document.querySelectorAll('.tabBtn').forEach(b=>b.classList.remove('active'));
   event.currentTarget.classList.add('active');
 }
 function showCustomerTab(id){
-  document.querySelectorAll('.customer-tab').forEach(tab=>tab.style.display='none');
+  document.querySelectorAll('.customer-tab').forEach(t=>t.style.display='none');
   document.getElementById(id).style.display='block';
   document.querySelectorAll('#customerApp .tabBtn').forEach(b=>b.classList.remove('active'));
   event.currentTarget.classList.add('active');
 }
 
-// --- Admin Data ---
-let hoodies=[],exclusives=[];
+// --- Admin Functions ---
+let hoodies=[];
 function loadAdminData(){
-  const header=localStorage.getItem('headerHoodie'); 
-  if(header) document.querySelector('#headerHoodie .imagePreview').src=header;
-  hoodies=JSON.parse(localStorage.getItem('hoodiesItems'))||[];
-  exclusives=JSON.parse(localStorage.getItem('exclusivesItems'))||[];
-  renderItems();
+  const header=localStorage.getItem('headerImg');
+  if(header) document.getElementById('headerPreview').src=header;
+  hoodies=JSON.parse(localStorage.getItem('hoodies'))||[];
+  renderHoodiesAdmin();
+  document.getElementById('exclusivesText').value=localStorage.getItem('exclusives')||'Items coming soon!';
+  document.getElementById('missionText').value=localStorage.getItem('mission')||'Enter your Mission/Goals here.';
+  document.getElementById('faqText').value=localStorage.getItem('faq')||'Shipping within USA only. Local deliveries in Brooklyn +$5. International shipping not available.';
 }
 
-// --- Admin Functions ---
-function createItemHTML(item,index,type){
-  const container=document.createElement('div');
-  container.classList.add('admin-item');
-  container.innerHTML=`
-    <label>Image:</label>
-    <input type="file" class="imageUpload" data-index="${index}" data-type="${type}">
-    <img class="imagePreview" src="${item.img}">
-    <button class="deleteBtn">Delete Image</button>
-    <textarea class="itemText" placeholder="Name/Description">${item.text||''}</textarea>
-    <input type="number" placeholder="Price" class="priceInput" value="${item.price||0}">
-  `;
-  container.querySelector('.imageUpload').addEventListener('change',e=>{
-    const file=e.target.files[0];
-    if(file){
-      const reader=new FileReader();
-      reader.onload=e=>{container.querySelector('.imagePreview').src=e.target.result;};
-      reader.readAsDataURL(file);
-    }
+function renderHoodiesAdmin(){
+  const container=document.getElementById('hoodiesContainer');
+  container.innerHTML='';
+  hoodies.forEach((h,i)=>{
+    const div=document.createElement('div'); div.classList.add('item');
+    div.innerHTML=`
+      <input type="file" class="imgUpload" data-index="${i}">
+      <img class="imgPreview" src="${h.img||''}">
+      <button class="saveImgBtn">Save Image</button>
+      <button class="delBtn">Delete</button>
+      <textarea class="hText">${h.text||''}</textarea>
+      <input type="number" class="hPrice" placeholder="Price" value="${h.price||75}">
+    `;
+    container.appendChild(div);
+
+    // Image preview
+    div.querySelector('.imgUpload').addEventListener('change',e=>{
+      const f=e.target.files[0];
+      if(f){
+        const r=new FileReader();
+        r.onload=e=>div.querySelector('.imgPreview').src=e.target.result;
+        r.readAsDataURL(f);
+      }
+    });
+
+    // Save image individually
+    div.querySelector('.saveImgBtn').addEventListener('click',()=>{
+      hoodies[i].img=div.querySelector('.imgPreview').src;
+      localStorage.setItem('hoodies',JSON.stringify(hoodies));
+      alert('Image saved for this slot!');
+    });
+
+    // Delete image
+    div.querySelector('.delBtn').addEventListener('click',()=>{
+      div.querySelector('.imgPreview').src='';
+      hoodies[i].img='';
+      localStorage.setItem('hoodies',JSON.stringify(hoodies));
+    });
   });
-  container.querySelector('.deleteBtn').addEventListener('click',()=>{container.querySelector('.imagePreview').src='';});
-  return container;
 }
-function renderItems(){
-  const hc=document.getElementById('hoodiesContainer');
-  hc.innerHTML=''; hoodies.forEach((item,i)=>hc.appendChild(createItemHTML(item,i,'hoodies')));
-  const ec=document.getElementById('exclusivesContainer');
-  ec.innerHTML=''; exclusives.forEach((item,i)=>ec.appendChild(createItemHTML(item,i,'exclusives')));
-}
-document.getElementById('addHoodieBtn').addEventListener('click',()=>{hoodies.push({img:'',text:'',price:0});renderItems();});
-document.getElementById('addExclusiveBtn').addEventListener('click',()=>{exclusives.push({img:'',text:'',price:0});renderItems();});
-document.getElementById('saveBtn').addEventListener('click',()=>{
-  localStorage.setItem('headerHoodie',document.querySelector('#headerHoodie .imagePreview').src);
-  hoodies=Array.from(document.getElementById('hoodiesContainer').children).map(div=>({
-    img: div.querySelector('.imagePreview').src,
-    text: div.querySelector('.itemText').value,
-    price: div.querySelector('.priceInput').value
-  }));
-  localStorage.setItem('hoodiesItems',JSON.stringify(hoodies));
-  exclusives=Array.from(document.getElementById('exclusivesContainer').children).map(div=>({
-    img: div.querySelector('.imagePreview').src,
-    text: div.querySelector('.itemText').value,
-    price: div.querySelector('.priceInput').value
-  }));
-  localStorage.setItem('exclusivesItems',JSON.stringify(exclusives));
-  alert('All changes saved!');
-  loadCustomerContent();
+
+document.getElementById('addHoodieBtn').addEventListener('click',()=>{
+  if(hoodies.length>=6){alert('Max 6 hoodie slots'); return;}
+  hoodies.push({img:'',text:'',price:75});
+  renderHoodiesAdmin();
 });
 
-// --- Customer Functions ---
-function loadCustomerContent(){
-  const header=localStorage.getItem('headerHoodie'); 
-  if(header) document.getElementById('headerHoodieCustomer').src=header;
+document.getElementById('saveHeader').addEventListener('click',()=>{
+  localStorage.setItem('headerImg',document.getElementById('headerPreview').src);
+  alert('Header saved');
+});
 
-  const hoodiesData=JSON.parse(localStorage.getItem('hoodiesItems'))||[];
+document.getElementById('saveAll').addEventListener('click',()=>{
+  hoodies=Array.from(document.getElementById('hoodiesContainer').children).map(div=>({
+    img: div.querySelector('.imgPreview').src,
+    text: div.querySelector('.hText').value,
+    price: Number(div.querySelector('.hPrice').value)
+  }));
+  localStorage.setItem('hoodies',JSON.stringify(hoodies));
+  localStorage.setItem('exclusives',document.getElementById('exclusivesText').value);
+  localStorage.setItem('mission',document.getElementById('missionText').value);
+  localStorage.setItem('faq',document.getElementById('faqText').value);
+  alert('All changes saved!');
+});
+
+document.getElementById('adminLogout').addEventListener('click',()=>{
+  document.getElementById('adminPanel').style.display='none';
+  document.getElementById('loginScreen').style.display='block';
+});
+
+// --- Customer View ---
+function loadCustomerContent(){
+  const header=localStorage.getItem('headerImg');
+  if(header) document.getElementById('headerCustomer').src=header;
+
+  const hoodiesData=JSON.parse(localStorage.getItem('hoodies'))||[];
   const hoodiesList=document.getElementById('hoodiesList'); hoodiesList.innerHTML='';
-  hoodiesData.forEach(item=>{
+  hoodiesData.forEach(h=>{
     const div=document.createElement('div'); div.classList.add('item');
-    div.innerHTML=`<img src="${item.img}"><strong>${item.text}</strong><p>Price: $${item.price}</p>`;
-    const btn=document.createElement('button'); btn.textContent="Add to Cart";
-    btn.addEventListener('click',()=>addToCart(item));
+    div.innerHTML=`<img src="${h.img}"><strong>${h.text}</strong><p>$${h.price}</p>`;
+    const btn=document.createElement('button'); btn.textContent='Add to Cart';
+    btn.addEventListener('click',()=>addToCart(h));
     div.appendChild(btn); hoodiesList.appendChild(div);
   });
 
-  const exclusivesData=JSON.parse(localStorage.getItem('exclusivesItems'))||[];
-  const exclusivesList=document.getElementById('exclusivesList'); exclusivesList.innerHTML='';
-  exclusivesData.forEach(item=>{
-    const div=document.createElement('div'); div.classList.add('item');
-    div.innerHTML=`<img src="${item.img}"><strong>${item.text}</strong><p>Price: $${item.price}</p>`;
-    const btn=document.createElement('button'); btn.textContent="Add to Cart";
-    btn.addEventListener('click',()=>addToCart(item));
-    div.appendChild(btn); exclusivesList.appendChild(div);
-  });
+  document.getElementById('exclusivesList').innerText=localStorage.getItem('exclusives')||'Items coming soon!';
+  document.getElementById('missionView').innerText=localStorage.getItem('mission')||'Enter your Mission/Goals here.';
+  document.getElementById('faqView').innerText=localStorage.getItem('faq')||'Shipping within USA only. Local deliveries in Brooklyn +$5. International shipping not available.';
 }
 
-// --- Cart Functions ---
+// --- Cart ---
 let cart=JSON.parse(localStorage.getItem('cart'))||[];
 function addToCart(item){
-  let qty=prompt("Enter quantity:","1");
-  if(!qty) return;
-  qty=Number(qty);
-  const existing=cart.find(c=>c.text===item.text);
-  if(existing){ existing.qty+=qty; } else { cart.push({...item,qty}); }
-  saveCart();
-  alert(`Added ${qty} x ${item.text} to cart`);
+  let qty=prompt('Quantity','1'); if(!qty) return; qty=Number(qty);
+  let price=Number(item.price); if(qty>=2) price+=10;
+  const delivery=prompt('Delivery: Brooklyn +$5 or enter address','Brooklyn');
+  cart.push({...item,qty,price,delivery});
+  localStorage.setItem('cart',JSON.stringify(cart));
+  alert(`Added ${qty} x ${item.text}`);
 }
-function saveCart(){ localStorage.setItem('cart',JSON.stringify(cart)); }
-
 document.getElementById('viewCartBtn').addEventListener('click',()=>{
-  const c=document.getElementById('cartContainer');
-  c.style.display=c.style.display==='none'?'block':'none';
-  renderCart();
+  const c=document.getElementById('cartContainer'); c.style.display=c.style.display==='none'?'block':'none'; renderCart();
 });
-
 function renderCart(){
-  const container=document.getElementById('cartItems');
-  container.innerHTML='';
+  const container=document.getElementById('cartItems'); container.innerHTML='';
   let total=0;
   cart.forEach((item,i)=>{
-    const div=document.createElement('div'); div.classList.add('cart-item');
-    div.innerHTML=`<strong>${item.text}</strong> - $${item.price} x ${item.qty}`;
-    const plus=document.createElement('button'); plus.textContent="+";
-    plus.addEventListener('click',()=>{item.qty+=1; saveCart(); renderCart();});
-    const minus=document.createElement('button'); minus.textContent="-";
-    minus.addEventListener('click',()=>{item.qty-=1; if(item.qty<=0) cart.splice(i,1); saveCart(); renderCart();});
-    const remove=document.createElement('button'); remove.textContent="Remove";
+    const div=document.createElement('div'); div.innerText=`${item.text} - $${item.price} x ${item.qty} (${item.delivery})`;
+    const remove=document.createElement('button'); remove.textContent='Remove';
     remove.addEventListener('click',()=>{cart.splice(i,1); saveCart(); renderCart();});
-    div.appendChild(plus); div.appendChild(minus); div.appendChild(remove);
-    container.appendChild(div);
-    total+=Number(item.price)*item.qty;
+    div.appendChild(remove); container.appendChild(div);
+    total+=item.price*item.qty;
   });
-  document.getElementById('cartTotal').textContent=total.toFixed(2);
+  document.getElementById('cartTotal').innerText=total.toFixed(2);
 }
-
+function saveCart(){localStorage.setItem('cart',JSON.stringify(cart));}
 document.getElementById('checkoutBtn').addEventListener('click',()=>{
-  if(cart.length===0){ alert("Cart is empty!"); return; }
-  if(confirm("Proceed to checkout?")){ cart=[]; saveCart(); renderCart(); alert("Cart cleared!"); }
+  if(cart.length===0){alert('Cart empty'); return;}
+  if(confirm('Checkout?')){cart=[]; saveCart(); renderCart(); alert('Order placed!');}
 });
 
-// Init
-window.addEventListener('load',loadCustomerContent);
+// --- Init ---
+window.addEventListener('load',()=>{
+  loadCustomerContent();
+});
 setInterval(loadCustomerContent,2000);
 </script>
 </body>
-</html>
+  </html>
+  
