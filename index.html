@@ -1,309 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Southern Table</title>
-<style>
-/* Combined Styling */
-body {
-  font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  padding: 20px;
-  background: #800020;
-  color: #fff;
-}
-h1,h2{font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif;font-weight:700;color:#000;text-align:center;letter-spacing:0.5px;}
-p,label,span{color:#fff;font-weight:400;}
-.section{background:#900030;padding:20px;margin-bottom:30px;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,0.2);font-size:15px;}
-img.logo,.item img{max-width:200px;display:block;margin:10px auto;}
-.item{background:#b03040;padding:15px;margin-bottom:20px;border-radius:8px;border:1px solid #ccc;font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif;}
-button{padding:10px 20px;cursor:pointer;border-radius:5px;border:2px solid gold;background:#800020;color:#fff;font-weight:600;font-family:'Segoe UI',Helvetica,Arial,sans-serif;}
-button:hover{background:#900030;border-color:#ffd700;}
-input,textarea,select{display:block;width:100%;margin-top:5px;padding:8px;border-radius:5px;border:1px solid #ccc;font-family:'Segoe UI',Helvetica,Arial,sans-serif;}
-table{width:100%;border-collapse:collapse;background:#fff;color:#000;font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif;}
-th,td{border:1px solid #ccc;padding:8px;text-align:center;}
-#hoodiesList,#exclusivesList,#hoodiesContainer,#exclusivesContainer{max-height:400px;overflow-y:auto;}
-</style>
+  <meta charset="UTF-8">
+  <title>Crunchy Thangs</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#fafafa; }
+    header { background:#222; color:#fff; padding:15px; text-align:center; }
+    nav { background:#444; display:flex; }
+    nav button { flex:1; padding:12px; border:none; background:#444; color:white; cursor:pointer; }
+    nav button:hover { background:#666; }
+    section { display:none; padding:20px; }
+    .active { display:block; }
+    .product { border:1px solid #ccc; padding:10px; margin:10px; display:inline-block; width:200px; text-align:center; }
+    .cart-item { border-bottom:1px solid #ddd; padding:5px; }
+    #adminPanel { background:#f0f0f0; padding:20px; }
+    input, textarea { margin:5px 0; padding:5px; width:100%; }
+    button.action { background:#28a745; color:#fff; border:none; padding:8px 12px; cursor:pointer; }
+    button.action:hover { background:#218838; }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Crunchy Thangs</h1>
+  </header>
+  <nav>
+    <button onclick="showTab('home')">Home</button>
+    <button onclick="showTab('hoodies')">Hoodies</button>
+    <button onclick="showTab('exclusive')">Exclusive</button>
+    <button onclick="showTab('mission')">Mission/Goals</button>
+    <button onclick="showTab('faq')">FAQ</button>
+    <button onclick="showTab('cart')">Cart</button>
+    <button onclick="showTab('loginScreen')">Admin</button>
+  </nav>
 
-<!-- Login Section -->
-<div id="loginScreen" class="section">
-  <h1>Welcome to The Southern Table</h1>
-  <p>Admin? Enter your credentials below. Customers can scroll down.</p>
-  <input type="text" id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
-</div>
+  <!-- Sections -->
+  <section id="home" class="active">
+    <h2>Welcome to Crunchy Thangs</h2>
+    <p>One stop shop for exclusives and more!</p>
+    <img src="home.jpg" alt="Home" width="300">
+  </section>
 
-<!-- Admin Panel -->
-<div id="adminPanel" style="display:none;">
-  <h1>The Southern Table - Admin Dashboard</h1>
-
-  <!-- Logo -->
-  <div class="section">
-    <h2>Edit Logo</h2>
-    <input type="file" id="logoUpload" accept="image/*">
-    <img id="logoPreview" src="">
-  </div>
-
-  <!-- About -->
-  <div class="section">
-    <h2>Edit Mission & Goal</h2>
-    <textarea id="aboutText" rows="4">Mission & Goal content editable via admin.</textarea>
-  </div>
-
-  <!-- FAQ -->
-  <div class="section">
-    <h2>Edit FAQ</h2>
-    <textarea id="faqText" rows="4">Typical questions about orders, delivery, payment.</textarea>
-  </div>
-
-  <!-- Hoodies -->
-  <div class="section">
-    <h2>Manage Hoodies</h2>
-    <button id="addHoodieBtn">Add Hoodie</button>
-    <div id="hoodiesContainer"></div>
-  </div>
-
-  <!-- Exclusives -->
-  <div class="section">
-    <h2>Manage Exclusives</h2>
-    <button id="addExclusiveBtn">Add Exclusive Item</button>
-    <div id="exclusivesContainer"></div>
-  </div>
-
-  <!-- Orders Summary -->
-  <div class="section">
-    <h2>Orders Summary</h2>
-    <p>Total Orders: <span id="totalOrders">0</span></p>
-    <p>Total Revenue: $<span id="totalRevenue">0</span></p>
-    <p>Total Hoodies Sold: <span id="totalHoodies">0</span></p>
-    <p>Total Exclusives Sold: <span id="totalExclusives">0</span></p>
-  </div>
-
-  <!-- Orders Log Table -->
-  <div class="section">
-    <h2>Orders Log</h2>
-    <table id="ordersTable">
-      <thead>
-        <tr><th>Timestamp</th><th>Type</th><th>Item Name</th><th>Quantity</th><th>Price</th><th>Delivery/Pickup</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-
-  <button id="saveBtn">Save All Changes</button>
-</div>
-
-<!-- Customer App -->
-<div id="customerApp">
-  <img id="logo" class="logo" src="default-logo.png" alt="Logo">
-
-  <div class="section">
-    <h2>Mission & Goal</h2>
-    <div id="about">Mission & Goal content editable via admin.</div>
-  </div>
-
-  <div class="section">
+  <section id="hoodies">
     <h2>Hoodies</h2>
     <div id="hoodiesList"></div>
-  </div>
+  </section>
 
-  <div class="section">
-    <h2>Exclusives</h2>
-    <div id="exclusivesList"></div>
-  </div>
+  <section id="exclusive">
+    <h2>Exclusive</h2>
+    <div id="exclusiveList"></div>
+  </section>
 
-  <div class="section">
+  <section id="mission">
+    <h2>Mission & Goals</h2>
+    <p>We aim to provide the crunchiest gear around.</p>
+    <img src="mission.jpg" alt="Mission" width="300">
+  </section>
+
+  <section id="faq">
     <h2>FAQ</h2>
-    <div id="faq">Typical questions about orders, delivery, payment.</div>
-  </div>
-</div>
+    <p>Q: How do I order?<br>A: Add to cart and checkout.</p>
+    <p>Q: Do you ship internationally?<br>A: Yes we do!</p>
+  </section>
 
-<script>
-// --- Combined JS ---
-const ADMIN_USER = "ADMIN2015";
-const ADMIN_PASS = "Crunchy2025";
+  <section id="cart">
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <p>Total: $<span id="cartTotal">0</span></p>
+    <h3>Checkout</h3>
+    <p>Scan QR to pay with CashApp:</p>
+    <img src="cashapp_qr.png" alt="CashApp QR" width="200">
+  </section>
 
-// Login
-document.getElementById('loginBtn').addEventListener('click',()=>{
-  const user=document.getElementById('username').value;
-  const pass=document.getElementById('password').value;
-  if(user===ADMIN_USER && pass===ADMIN_PASS){
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('customerApp').style.display='none';
-    document.getElementById('adminPanel').style.display='block';
-    loadAdminData();
-    refreshOrders();
-  } else { alert('Incorrect username or password'); }
-});
+  <!-- Admin Login -->
+  <section id="loginScreen">
+    <h2>Admin Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button id="loginBtn" class="action">Login</button>
+  </section>
 
-// Admin Data
-let hoodies=[],exclusives=[];
-function loadAdminData(){
-  ['aboutText','faqText','logoPreview'].forEach(sec=>{
-    const stored=localStorage.getItem(sec);
-    if(stored){ if(sec==='logoPreview') document.getElementById(sec).src=stored; else document.getElementById(sec).value=stored; }
-  });
-  hoodies=JSON.parse(localStorage.getItem('hoodiesItems'))||[];
-  exclusives=JSON.parse(localStorage.getItem('exclusivesItems'))||[];
-  renderItems();
-}
+  <!-- Admin Panel -->
+  <section id="adminPanel">
+    <h2>Admin Panel</h2>
+    <h3>Add Product</h3>
+    <input id="prodName" placeholder="Product Name">
+    <input id="prodPrice" placeholder="Price">
+    <input id="prodCat" placeholder="Category (hoodies/exclusive)">
+    <input id="prodImg" placeholder="Image URL">
+    <button id="addProdBtn" class="action">Add Product</button>
+    <h3>Current Products</h3>
+    <div id="adminData"></div>
+    <h3>Orders</h3>
+    <div id="adminOrders"></div>
+  </section>
 
-document.getElementById('logoUpload').addEventListener('change',function(e){
-  const file=e.target.files[0];
-  if(file){ const reader=new FileReader(); reader.onload=e=>{document.getElementById('logoPreview').src=e.target.result;}; reader.readAsDataURL(file); }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Southern Table</title>
-<style>
-/* Combined Styling */
-body {
-  font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  padding: 20px;
-  background: #800020;
-  color: #fff;
-}
-h1,h2{font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif;font-weight:700;color:#000;text-align:center;letter-spacing:0.5px;}
-p,label,span{color:#fff;font-weight:400;}
-.section{background:#900030;padding:20px;margin-bottom:30px;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,0.2);font-size:15px;}
-img.logo,.item img{max-width:200px;display:block;margin:10px auto;}
-.item{background:#b03040;padding:15px;margin-bottom:20px;border-radius:8px;border:1px solid #ccc;font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif;}
-button{padding:10px 20px;cursor:pointer;border-radius:5px;border:2px solid gold;background:#800020;color:#fff;font-weight:600;font-family:'Segoe UI',Helvetica,Arial,sans-serif;}
-button:hover{background:#900030;border-color:#ffd700;}
-input,textarea,select{display:block;width:100%;margin-top:5px;padding:8px;border-radius:5px;border:1px solid #ccc;font-family:'Segoe UI',Helvetica,Arial,sans-serif;}
-table{width:100%;border-collapse:collapse;background:#fff;color:#000;font-family:'Gill Sans','Segoe UI',Helvetica,Arial,sans-serif;}
-th,td{border:1px solid #ccc;padding:8px;text-align:center;}
-#hoodiesList,#exclusivesList,#hoodiesContainer,#exclusivesContainer{max-height:400px;overflow-y:auto;}
-</style>
-</head>
-<body>
+  <script>
+    // --- Tabs ---
+    function showTab(tab){
+      document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+    }
 
-<!-- Login Section -->
-<div id="loginScreen" class="section">
-  <h1>Welcome to The Southern Table</h1>
-  <p>Admin? Enter your credentials below. Customers can scroll down.</p>
-  <input type="text" id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
-</div>
+    // --- Data Storage ---
+    const PRODUCTS_KEY='products';
+    const ORDERS_KEY='orders';
 
-<!-- Admin Panel -->
-<div id="adminPanel" style="display:none;">
-  <h1>The Southern Table - Admin Dashboard</h1>
+    function loadProducts(){
+      return JSON.parse(localStorage.getItem(PRODUCTS_KEY))||[];
+    }
+    function saveProducts(p){
+      localStorage.setItem(PRODUCTS_KEY,JSON.stringify(p));
+    }
 
-  <!-- Logo -->
-  <div class="section">
-    <h2>Edit Logo</h2>
-    <input type="file" id="logoUpload" accept="image/*">
-    <img id="logoPreview" src="">
-  </div>
+    // --- Display Products ---
+    function displayProducts(){
+      const p=loadProducts();
+      const hoodies=document.getElementById('hoodiesList');
+      const excl=document.getElementById('exclusiveList');
+      hoodies.innerHTML=''; excl.innerHTML='';
+      p.forEach((prod,i)=>{
+        const div=document.createElement('div');
+        div.className='product';
+        div.innerHTML=`<img src="${prod.img}" width="100"><h4>${prod.name}</h4><p>$${prod.price}</p><button onclick="addToCart(${i})">Add to Cart</button>`;
+        if(prod.cat==='hoodies') hoodies.appendChild(div);
+        if(prod.cat==='exclusive') excl.appendChild(div);
+      });
+    }
 
-  <!-- About -->
-  <div class="section">
-    <h2>Edit Mission & Goal</h2>
-    <textarea id="aboutText" rows="4">Mission & Goal content editable via admin.</textarea>
-  </div>
+    // --- Cart ---
+    let cart=[];
+    function addToCart(i){
+      const p=loadProducts()[i];
+      cart.push(p);
+      updateCart();
+    }
+    function updateCart(){
+      const c=document.getElementById('cartItems');
+      c.innerHTML='';
+      let total=0;
+      cart.forEach((item,i)=>{
+        const div=document.createElement('div');
+        div.className='cart-item';
+        div.textContent=`${item.name} - $${item.price}`;
+        c.appendChild(div);
+        total+=Number(item.price);
+      });
+      document.getElementById('cartTotal').textContent=total;
+    }
 
-  <!-- FAQ -->
-  <div class="section">
-    <h2>Edit FAQ</h2>
-    <textarea id="faqText" rows="4">Typical questions about orders, delivery, payment.</textarea>
-  </div>
+    // --- Admin Auth ---
+    const ADMIN_USER = "ADMIN2015";
+    const ADMIN_PASS = "Crunchy2025";
 
-  <!-- Hoodies -->
-  <div class="section">
-    <h2>Manage Hoodies</h2>
-    <button id="addHoodieBtn">Add Hoodie</button>
-    <div id="hoodiesContainer"></div>
-  </div>
+    document.getElementById('loginBtn').addEventListener('click',()=>{
+      const user=document.getElementById('username').value;
+      const pass=document.getElementById('password').value;
+      if(user===ADMIN_USER && pass===ADMIN_PASS){
+        document.getElementById('loginScreen').style.display='none';
+        document.getElementById('customerApp').style.display='none';
+        document.getElementById('adminPanel').style.display='block';
+        loadAdminData();
+        refreshOrders();
+      } else { alert('Incorrect username or password'); }
+    });
 
-  <!-- Exclusives -->
-  <div class="section">
-    <h2>Manage Exclusives</h2>
-    <button id="addExclusiveBtn">Add Exclusive Item</button>
-    <div id="exclusivesContainer"></div>
-  </div>
+    // --- Admin Data Functions ---
+    function loadAdminData(){
+      const p=JSON.parse(localStorage.getItem('products'))||[];
+      const container=document.getElementById('adminData');
+      container.innerHTML='';
+      p.forEach((prod,i)=>{
+        const div=document.createElement('div');
+        div.textContent=`${i+1}. ${prod.name} ($${prod.price})`;
+        container.appendChild(div);
+      });
+    }
 
-  <!-- Orders Summary -->
-  <div class="section">
-    <h2>Orders Summary</h2>
-    <p>Total Orders: <span id="totalOrders">0</span></p>
-    <p>Total Revenue: $<span id="totalRevenue">0</span></p>
-    <p>Total Hoodies Sold: <span id="totalHoodies">0</span></p>
-    <p>Total Exclusives Sold: <span id="totalExclusives">0</span></p>
-  </div>
+    function refreshOrders(){
+      const o=JSON.parse(localStorage.getItem('orders'))||[];
+      const container=document.getElementById('adminOrders');
+      container.innerHTML='';
+      o.forEach((order,i)=>{
+        const div=document.createElement('div');
+        div.textContent=`${i+1}. ${order.name} - $${order.total}`;
+        container.appendChild(div);
+      });
+    }
 
-  <!-- Orders Log Table -->
-  <div class="section">
-    <h2>Orders Log</h2>
-    <table id="ordersTable">
-      <thead>
-        <tr><th>Timestamp</th><th>Type</th><th>Item Name</th><th>Quantity</th><th>Price</th><th>Delivery/Pickup</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+    // --- Add Product ---
+    document.getElementById('addProdBtn').addEventListener('click',()=>{
+      const name=document.getElementById('prodName').value;
+      const price=document.getElementById('prodPrice').value;
+      const cat=document.getElementById('prodCat').value.toLowerCase();
+      const img=document.getElementById('prodImg').value;
+      const p=loadProducts();
+      p.push({name,price,cat,img});
+      saveProducts(p);
+      displayProducts();
+      loadAdminData();
+      alert("Product Added!");
+    });
 
-  <button id="saveBtn">Save All Changes</button>
-</div>
-
-<!-- Customer App -->
-<div id="customerApp">
-  <img id="logo" class="logo" src="default-logo.png" alt="Logo">
-
-  <div class="section">
-    <h2>Mission & Goal</h2>
-    <div id="about">Mission & Goal content editable via admin.</div>
-  </div>
-
-  <div class="section">
-    <h2>Hoodies</h2>
-    <div id="hoodiesList"></div>
-  </div>
-
-  <div class="section">
-    <h2>Exclusives</h2>
-    <div id="exclusivesList"></div>
-  </div>
-
-  <div class="section">
-    <h2>FAQ</h2>
-    <div id="faq">Typical questions about orders, delivery, payment.</div>
-  </div>
-</div>
-
-<script>
-// --- Admin Data Functions ---
-function loadAdminData(){
-  const p=JSON.parse(localStorage.getItem('products'))||[];
-  const container=document.getElementById('adminData');
-  container.innerHTML='';
-  p.forEach((prod,i)=>{
-    const div=document.createElement('div');
-    div.textContent=`${i+1}. ${prod.name} ($${prod.price})`;
-    container.appendChild(div);
-  });
-}
-
-function refreshOrders(){
-  const o=JSON.parse(localStorage.getItem('orders'))||[];
-  const container=document.getElementById('adminOrders');
-  container.innerHTML='';
-  o.forEach((order,i)=>{
-    const div=document.createElement('div');
-    div.textContent=`${i+1}. ${order.name} - $${order.total}`;
-    container.appendChild(div);
-  });
-}
-</script>
+    // --- Init ---
+    displayProducts();
+  </script>
 </body>
-</html>
+  </html>
+  
