@@ -29,24 +29,70 @@ input,textarea{display:block;width:100%;margin-top:5px;padding:8px;border-radius
 <button id="loginBtn">Login</button>
 </div>
 
-<!-- Admin Panel -->
-<div id="adminPanel" style="display:none;">
-<h1>Admin Dashboard</h1>
-<button id="adminLogout">Logout</button>
 
-<div class="section">
-<h2>Header Image</h2>
-<input type="file" id="headerUpload">
-<img id="headerPreview" src="">
-<button id="saveHeader">Save Header</button>
+  <div class="section">
+    <h2>Header Image</h2>
+    <input type="file" id="headerUpload">
+    <img id="headerPreview" src="">
+    <button id="saveHeader">Save Header</button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tabBtn active" onclick="showAdminTab('hoodiesTab')">Hoodies</button>
+    <button class="tabBtn" onclick="showAdminTab('exclusivesTab')">Exclusives</button>
+    <button class="tabBtn" onclick="showAdminTab('missionTab')">Mission/Goals</button>
+    <button class="tabBtn" onclick="showAdminTab('faqTab')">FAQ</button>
+  </div>
+
+  <!-- Hoodies Tab -->
+  <div id="hoodiesTab" class="section admin-tab">
+    <h2>Hoodies</h2>
+    <div id="hoodiesContainer"></div>
+    <button id="addHoodieBtn">Add Hoodie Slot</button>
+  </div>
+
+  <!-- Exclusives Tab -->
+  <div id="exclusivesTab" class="section admin-tab" style="display:none;">
+    <h2>Exclusives</h2>
+    <textarea id="exclusivesText" rows="5">Items coming soon!</textarea>
+  </div>
+
+  <!-- Mission/Goals Tab -->
+  <div id="missionTab" class="section admin-tab" style="display:none;">
+    <h2>Mission/Goals</h2>
+    <textarea id="missionText" rows="5">Enter your Mission/Goals here.</textarea>
+  </div>
+
+  <!-- FAQ Tab -->
+  <div id="faqTab" class="section admin-tab" style="display:none;">
+    <h2>FAQ</h2>
+    <textarea id="faqText" rows="5">Shipping within USA only. Local deliveries in Brooklyn +$5. International shipping not available.</textarea>
+  </div>
+
+  <button id="saveAll">Save All Changes</button>
 </div>
 
-<div class="tabs">
-<button class="tabBtn active" onclick="showAdminTab('hoodiesTab')">Hoodies</button>
-<button class="tabBtn" onclick="showAdminTab('exclusivesTab')">Exclusives</button>
-<button class="tabBtn" onclick="showAdminTab('missionTab')">Mission/Goals</button>
-<button class="tabBtn" onclick="showAdminTab('faqTab')">FAQ</button>
-</div>
+<script>
+
+  // --- Preview Customer View ---
+document.getElementById('previewCustomer').addEventListener('click', ()=>{
+  document.getElementById('adminPanel').style.display='none';
+  document.getElementById('customerApp').style.display='block';
+  document.getElementById('previewCustomer').style.display='none';
+  document.getElementById('backAdmin').style.display='inline-block';
+  loadCustomerContent();
+});
+
+// --- Back to Admin ---
+document.getElementById('backAdmin').addEventListener('click', ()=>{
+  document.getElementById('customerApp').style.display='none';
+  document.getElementById('adminPanel').style.display='block';
+  document.getElementById('previewCustomer').style.display='inline-block';
+  document.getElementById('backAdmin').style.display='none';
+});
+</script>
+
 
 <!-- Hoodies Tab -->
 <div id="hoodiesTab" class="section admin-tab">
