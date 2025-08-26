@@ -2,128 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login Page</title>
+  <title>Welcome</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background: #f2f2f2;
+      color: #333;
     }
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      width: 320px;
-      text-align: center;
-    }
-    h1 {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: #800020; /* Burgundy */
-    }
-    input[type="text"], input[type="password"], input[type="submit"] {
-      width: 90%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid grey;
-    }
-    input[type="submit"] {
+
+    header {
       background: #800020; /* Burgundy */
       color: white;
-      cursor: pointer;
-      border: none;
+      padding: 15px;
+      text-align: center;
     }
-    input[type="submit"]:hover {
-      background: #b8860b; /* Gold */
-    }
-    .note {
-      font-size: 12px;
-      color: grey;
-      margin-top: 10px;
-    }
-  </style>
-  <script>
-    function loginAdmin(event) {
-      event.preventDefault();
-      let user = document.getElementById("adminUser").value;
-      let pass = document.getElementById("adminPass").value;
-      if (user === "southern" && pass === "crunchy") {
-        window.location.href = "admin.html";
-      } else {
-        alert("Invalid admin credentials");
-      }
-    }
-    function loginCustomer(event) {
-      event.preventDefault();
-      let pin = document.getElementById("customerPin").value;
-      if (pin === "1000") {
-        window.location.href = "customer.html";
-      } else {
-        alert("Invalid customer PIN");
-      }
-    }
-  </script>
-</head>
-<body>
-  <div class="container">
-    <h1>Login Portal</h1>
 
-    <!-- Admin Login -->
-    <form onsubmit="loginAdmin(event)">
-      <label>Admin Login:</label><br>
-      <input type="text" id="adminUser" placeholder="Username"><br>
-      <input type="password" id="adminPass" placeholder="Password"><br>
-      <input type="submit" value="Login as Admin">
-    </form>
+    nav {
+      background: #333;
+      overflow: hidden;
+    }
 
-    <!-- Customer Login -->
-    <form onsubmit="loginCustomer(event)">
-      <label>Customer PIN:</label><br>
-      <input type="password" id="customerPin" placeholder="Enter PIN"><br>
-      <input type="submit" value="Login as Customer">
-    </form>
-
-    <p class="note">Admin login requires username and password. Customer PIN is 1000.</p>
-  </div>
-</body>
-</html>      background: #0077cc;
+    nav a {
+      float: left;
+      display: block;
       color: white;
-      cursor: pointer;
+      text-align: center;
+      padding: 14px 20px;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      background: #800020;
+      color: gold;
+    }
+
+    .container {
+      margin: 40px auto;
+      padding: 20px;
+      width: 320px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      text-align: center;
+      color: #800020;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #800020;
+      color: gold;
       border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
     }
-    input[type="submit"]:hover {
-      background: #005fa3;
+
+    button:hover {
+      background: gold;
+      color: #800020;
     }
-    .note {
-      font-size: 12px;
-      color: #555;
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      padding: 15px;
+      background: #333;
+      color: white;
     }
   </style>
 </head>
 <body>
+
+  <header>
+    <h1>Welcome</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="admin.html">Admin</a>
+    <a href="customer.html">Customer</a>
+  </nav>
+
   <div class="container">
-    <h1>Login Portal</h1>
-    <form action="admin.html" method="get">
-      <label>Admin PIN:</label><br>
-      <input type="password" name="adminpin" placeholder="Enter admin PIN"><br>
-      <input type="submit" value="Login as Admin">
+    <h2>Login</h2>
+    <form>
+      <label for="user">Username</label>
+      <input type="text" id="user" name="user" required>
+
+      <label for="pass">Password</label>
+      <input type="password" id="pass" name="pass" required>
+
+      <button type="submit">Login</button>
     </form>
-    <form action="customer.html" method="get">
-      <label>Customer PIN:</label><br>
-      <input type="password" name="customerpin" placeholder="Enter customer PIN"><br>
-      <input type="submit" value="Login as Customer">
-    </form>
-    <p class="note">Admin PIN required for admin page, Customer PIN is 1000.</p>
   </div>
+
+  <footer>
+    <p>&copy; 2025 Your Website</p>
+  </footer>
+
 </body>
-    </html>
+</html>
 
 
 
