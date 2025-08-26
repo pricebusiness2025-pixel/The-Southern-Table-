@@ -1,1 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2f7;
+      margin: 0;
+      padding: 0;
+    }
+    .tabs {
+      display: flex;
+      background: #0077cc;
+      padding: 10px;
+    }
+    .tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      background: #0077cc;
+      color: white;
+      text-decoration: none;
+      border-right: 1px solid #005fa3;
+    }
+    .tab:last-child {
+      border-right: none;
+    }
+    .tab:hover {
+      background: #005fa3;
+    }
+    .content {
+      padding: 20px;
+    }
+    .logout {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .logout a {
+      padding: 10px 20px;
+      border-radius: 8px;
+      background: crimson;
+      color: white;
+      text-decoration: none;
+    }
+    .logout a:hover {
+      background: darkred;
+    }
+  </style>
+</head>
+<body>
+  <div class="tabs">
+    <a href="admin.html" class="tab">Dashboard</a>
+    <a href="admin.html" class="tab">Manage Customers</a>
+    <a href="admin.html" class="tab">Reports</a>
+  </div>
+
+  <div class="content">
+    <h2>Welcome Admin</h2>
+    <p>Here you can manage your platform settings, customers, and reports.</p>
+
+    <div class="logout">
+      <a href="index.html">Logout</a>
+    </div>
+  </div>
+</body>
+</html>
 
