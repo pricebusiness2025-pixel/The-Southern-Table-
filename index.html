@@ -15,26 +15,85 @@
       height: 100vh;
     }
     .container {
-      background: #fff;
+      background: white;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      width: 300px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      width: 320px;
       text-align: center;
     }
     h1 {
       font-size: 20px;
       margin-bottom: 20px;
+      color: #800020; /* Burgundy */
     }
-    input[type="password"], input[type="submit"] {
+    input[type="text"], input[type="password"], input[type="submit"] {
       width: 90%;
       padding: 10px;
       margin: 8px 0;
       border-radius: 8px;
-      border: 1px solid #ccc;
+      border: 1px solid grey;
     }
     input[type="submit"] {
-      background: #0077cc;
+      background: #800020; /* Burgundy */
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+    input[type="submit"]:hover {
+      background: #b8860b; /* Gold */
+    }
+    .note {
+      font-size: 12px;
+      color: grey;
+      margin-top: 10px;
+    }
+  </style>
+  <script>
+    function loginAdmin(event) {
+      event.preventDefault();
+      let user = document.getElementById("adminUser").value;
+      let pass = document.getElementById("adminPass").value;
+      if (user === "southern" && pass === "crunchy") {
+        window.location.href = "admin.html";
+      } else {
+        alert("Invalid admin credentials");
+      }
+    }
+    function loginCustomer(event) {
+      event.preventDefault();
+      let pin = document.getElementById("customerPin").value;
+      if (pin === "1000") {
+        window.location.href = "customer.html";
+      } else {
+        alert("Invalid customer PIN");
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Login Portal</h1>
+
+    <!-- Admin Login -->
+    <form onsubmit="loginAdmin(event)">
+      <label>Admin Login:</label><br>
+      <input type="text" id="adminUser" placeholder="Username"><br>
+      <input type="password" id="adminPass" placeholder="Password"><br>
+      <input type="submit" value="Login as Admin">
+    </form>
+
+    <!-- Customer Login -->
+    <form onsubmit="loginCustomer(event)">
+      <label>Customer PIN:</label><br>
+      <input type="password" id="customerPin" placeholder="Enter PIN"><br>
+      <input type="submit" value="Login as Customer">
+    </form>
+
+    <p class="note">Admin login requires username and password. Customer PIN is 1000.</p>
+  </div>
+</body>
+</html>      background: #0077cc;
       color: white;
       cursor: pointer;
       border: none;
