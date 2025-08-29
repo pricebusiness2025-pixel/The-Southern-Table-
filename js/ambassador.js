@@ -1,4 +1,3 @@
-
 // Ambassador credentials: TST code → 4-digit PIN
 const ambassadorCredentials = {
   "TST001": "0105",
@@ -50,4 +49,35 @@ document.addEventListener("DOMContentLoaded", () => {
     inputPin.addEventListener("keydown", (e) => { if (e.key === "Enter") handleLogin(); });
   }
 });
+
+function handleLogout() {
+  sessionStorage.removeItem("ambassadorLoggedIn");
+  document.getElementById("ambassadorMsg").textContent = "Logged out.";
+  document.getElementById("ambassadorLogoutBtn").style.display = "none";
+  document.getElementById("ambassadorCode").style.display = "inline-block";
+  document.getElementById("ambassadorPin").style.display = "inline-block";
+  document.getElementById("ambassadorLoginBtn").style.display = "inline-block";
+}
+
+// Show logout button if already logged in
+document.addEventListener("DOMContentLoaded", () => {
+  const loggedIn = sessionStorage.getItem("ambassadorLoggedIn");
+  const logoutBtn = document.getElementById("ambassadorLogoutBtn");
+  const codeInput = document.getElementById("ambassadorCode");
+  const pinInput = document.getElementById("ambassadorPin");
+  const loginBtn = document.getElementById("ambassadorLoginBtn");
+  
+  if (loggedIn) {
+    document.getElementById("ambassadorMsg").textContent = `Welcome back, ${loggedIn}.`;
+    logoutBtn.style.display = "inline-block";
+    codeInput.style.display = "none";
+    pinInput.style.display = "none";
+    loginBtn.style.display = "none";
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", handleLogout);
+  }
+});
+      
   
