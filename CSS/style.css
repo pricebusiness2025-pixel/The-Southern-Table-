@@ -1,1 +1,188 @@
 
+/* -------------------------------
+   Global Reset & Body
+--------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Georgia", "Times New Roman", serif;
+  background-color: #fdfcf5; /* off-white newspaper paper */
+  color: #222; /* dark text for readability */
+  line-height: 1.6;
+  padding: 20px;
+}
+
+/* -------------------------------
+   Header
+--------------------------------- */
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  font-family: 'Arial', sans-serif; /* clean sans for the title */
+  font-size: 2.5em;
+  color: #800020; /* burgundy */
+  margin-bottom: 5px;
+  letter-spacing: 2px;
+}
+
+header p {
+  font-size: 1em;
+  color: #555;
+  font-style: italic;
+}
+
+/* -------------------------------
+   Navigation
+--------------------------------- */
+nav {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #800020; /* burgundy */
+  margin: 0 15px;
+  font-weight: bold;
+  font-family: 'Arial', sans-serif;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #d4af37; /* gold accent */
+}
+
+/* -------------------------------
+   Sections
+--------------------------------- */
+section {
+  margin-bottom: 40px;
+  padding: 20px;
+  background-color: #f8f6ed;
+  border: 1px solid #e0ddd0;
+  border-radius: 8px;
+}
+
+section h2 {
+  font-family: 'Arial', sans-serif;
+  color: #800020; /* burgundy headers */
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+}
+
+section p {
+  margin-bottom: 10px;
+}
+
+/* -------------------------------
+   Buttons
+--------------------------------- */
+.cta-button {
+  background-color: #800020; /* burgundy */
+  color: #d4af37; /* gold text */
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #d4af37; /* gold hover */
+  color: #800020; /* burgundy text on hover */
+}
+
+/* -------------------------------
+   Inputs
+--------------------------------- */
+input[type="text"],
+input[type="password"] {
+  padding: 6px 10px;
+  margin-right: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #800020; /* burgundy focus */
+}
+
+/* -------------------------------
+   Messages
+--------------------------------- */
+.success {
+  color: green;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* -------------------------------
+   Avatars & Houses
+--------------------------------- */
+.avatar {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  transition: top 1s ease, left 1s ease;
+  cursor: pointer;
+}
+
+.house {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+}
+
+/* -------------------------------
+   Speech Bubbles
+--------------------------------- */
+.speech-bubble {
+  font-size: 0.8em;
+  font-weight: bold;
+  background-color: #d4af37; /* gold */
+  color: #800020; /* burgundy text */
+  border-radius: 5px;
+  padding: 3px 6px;
+  z-index: 10;
+  position: absolute;
+}
+
+/* -------------------------------
+   Chat
+--------------------------------- */
+#admin-chat {
+  background-color: #fdf9e3;
+  border: 2px solid #800020; /* burgundy border */
+}
+
+#chat-log {
+  font-family: monospace;
+}
+
+#chat-input {
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #800020; /* burgundy border */
+}
+
+#chat-input:focus {
+  border-color: #d4af37; /* gold focus */
+}
