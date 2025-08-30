@@ -1,72 +1,70 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Southern Table Tribune</title>
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <title>Crunchy Thangs | Home</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<header>
-  <h1>The Southern Table Tribune</h1>
-  <p>Est. 2025 – “Fueling Crunchy Thangs, One Hoodie at a Time”</p>
-</header>
+  <header>
+    <h1>Crunchy Thangs</h1>
+    <p>Where Crunchy Meets Cozy</p>
+  </header>
 
-<nav>
-  <a href="#hoodies">Hoodies</a>
-  <a href="#exclusives">Exclusives</a>
-  <a href="#about">About</a>
-  <a href="#admin-login">Admin</a>
-</nav>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="ambassador.html">Exclusives</a>
+    <a href="#about">About</a>
+  </nav>
 
-<section id="hoodies">
-  <h2>🗞️ Hoodies</h2>
-  <p>[A.I.V.A handles catalog & checkout here.]</p>
-  <a href="#" class="cta-button">Shop Hoodies</a>
-</section>
+  <!-- -------------------------
+       Hoodies Section
+  -------------------------- -->
+  <section id="hoodies">
+    <h2>Hoodies</h2>
+    <div class="product" style="margin-bottom:15px;">
+      <strong>Crunchy Thangs Hoodie - Burgundy</strong>
+      <button class="cta-button">Add to Cart</button>
+    </div>
+    <div class="product" style="margin-bottom:15px;">
+      <strong>Crunchy Thangs Hoodie - Gold</strong>
+      <button class="cta-button">Add to Cart</button>
+    </div>
+  </section>
 
-<section id="exclusives">
-  <h2>🔒 Exclusives</h2>
-  <p>Enter Ambassador Code + 4-digit PIN to unlock exclusive drops.</p>
-  <input type="text" id="ambassadorCode" placeholder="Enter Code" />
-  <input type="password" id="ambassadorPin" placeholder="Enter PIN" maxlength="4" />
-  <button class="cta-button" onclick="checkCode()">Unlock</button>
-  <p id="exclusive-message"></p>
-  <div id="exclusive-products" style="display:none;">
-    <h3>Exclusive Hoodie Collection</h3>
-    <ul>
-      <li>Gold Label Hoodie</li>
-      <li>Founders Edition Hoodie</li>
-      <li>Crunchy Thangs x TST Collab</li>
-    </ul>
-  </div>
-</section>
+  <!-- -------------------------
+       Exclusives Preview
+  -------------------------- -->
+  <section id="exclusives">
+    <h2>Exclusives</h2>
+    <p>VIP Ambassadors get early access to limited editions. <a href="ambassador.html" class="cta-button">Enter Code</a></p>
+  </section>
 
-<section id="about">
-  <h2>✍️ About – Mission TST</h2>
-  <p>Our mission is to create style rooted in tradition, while fueling Crunchy Thangs — the food, culture, and community.</p>
-</section>
+  <!-- -------------------------
+       About Section
+  -------------------------- -->
+  <section id="about">
+    <h2>About Crunchy Thangs</h2>
+    <p>Our mission: To bring comfort, style, and a little bit of crunchy attitude to your daily life.</p>
+    <p>Trinity AI avatars help us manage, pack, and celebrate every order while keeping the fun alive!</p>
+  </section>
 
-<section id="admin-login">
-  <h2>🛠️ Admin Control Panel</h2>
-  <input type="text" id="adminUser" placeholder="Username" />
-  <input type="password" id="adminPass" placeholder="Password" />
-  <button class="cta-button" onclick="adminLogin()">Log In</button>
-  <p id="admin-message"></p>
-</section>
+  <!-- -------------------------
+       Avatars & Houses (Hidden Layer)
+  -------------------------- -->
+  <div id="ai-avatars"></div>
+  <div id="houses"></div>
 
-<!-- Placeholder for Trinity Avatars -->
-<div id="ai-avatars"></div>
+  <!-- -------------------------
+       AI Log Section
+  -------------------------- -->
+  <section id="ai-log-section">
+    <h2>Trinity Activity Log</h2>
+    <div id="ai-log" style="min-height:50px; padding:10px; background:#fdf9e3; border:1px solid #800020;"></div>
+  </section>
 
-<!-- Placeholder for houses -->
-<div id="houses"></div>
-
-<!-- JS Scripts -->
-<script src="js/main.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/customer.js"></script>
-
+  <script src="js/main.js"></script>
+  <script src="js/customer.js"></script>
 </body>
 </html>
-
