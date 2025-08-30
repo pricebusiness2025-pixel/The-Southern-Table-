@@ -1,5 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Southern Table Tribune</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <h1>The Southern Table Tribune</h1>
+  <p>Est. 2025 – “Fueling Crunchy Thangs, One Hoodie at a Time”</p>
+</header>
+
+<nav>
+  <a href="#hoodies">Hoodies</a>
+  <a href="#exclusives">Exclusives</a>
+  <a href="#about">About</a>
+  <a href="#admin-login">Admin</a>
+</nav>
+
+<section id="hoodies">
+  <h2>🗞️ Hoodies</h2>
+  <p>[A.I.V.A handles catalog & checkout here.]</p>
+  <a href="#" class="cta-button">Shop Hoodies</a>
+</section>
+
+<section id="exclusives">
+  <h2>🔒 Exclusives</h2>
+  <p>Enter Ambassador Code + 4-digit PIN to unlock exclusive drops.</p>
+  <input type="text" id="ambassadorCode" placeholder="Enter Code" />
+  <input type="password" id="ambassadorPin" placeholder="Enter PIN" maxlength="4" />
+  <button class="cta-button" onclick="checkCode()">Unlock</button>
+  <p id="exclusive-message"></p>
+  <div id="exclusive-products" style="display:none;">
+    <h3>Exclusive Hoodie Collection</h3>
+    <ul>
+      <li>Gold Label Hoodie</li>
+      <li>Founders Edition Hoodie</li>
+      <li>Crunchy Thangs x TST Collab</li>
+    </ul>
+  </div>
+</section>
+
+<section id="about">
+  <h2>✍️ About – Mission TST</h2>
+  <p>Our mission is to create style rooted in tradition, while fueling Crunchy Thangs — the food, culture, and community.</p>
+</section>
+
+<section id="admin-login">
+  <h2>🛠️ Admin Control Panel</h2>
+  <input type="text" id="adminUser" placeholder="Username" />
+  <input type="password" id="adminPass" placeholder="Password" />
+  <button class="cta-button" onclick="adminLogin()">Log In</button>
+  <p id="admin-message"></p>
+</section>
+
+<!-- Placeholder for Trinity Avatars -->
+<div id="ai-avatars"></div>
+
+<!-- Placeholder for houses -->
+<div id="houses"></div>
+
 <!-- JS Scripts -->
-<script scr="js/main.js"></script>
+<script src="js/main.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/customer.js"></script>
+
 </body>
+</html>
+
