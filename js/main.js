@@ -197,5 +197,4 @@ function handleAdminCommand(cmd) {
   } else if(parts[0] === "task" && document.getElementById(parts[1])){
     startAvatarTask(parts[1]);
   }
-   }
-    
+}
