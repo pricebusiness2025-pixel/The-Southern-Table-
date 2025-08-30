@@ -1,15 +1,48 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel | Crunchy Thangs</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
+  <header>
+    <h1>Crunchy Thangs Admin</h1>
+    <p>Manage Trinity and Keep Everything Running Smoothly</p>
+  </header>
 
+  <section id="admin-login">
+    <h2>Admin Login</h2>
+    <p>Enter your credentials to control the avatars and monitor activity.</p>
+    
+    <input type="text" id="adminUser" placeholder="Username">
+    <input type="password" id="adminPass" placeholder="Password">
+    <button class="cta-button" onclick="adminLogin()">Log In</button>
 
+    <div id="admin-message"></div>
+  </section>
 
+  <!-- -------------------------
+       Admin Chat Panel
+  -------------------------- -->
+  <!-- Populated dynamically after login -->
+  <div id="admin-chat"></div>
 
+  <!-- -------------------------
+       Avatars & Houses (hidden)
+  -------------------------- -->
+  <div id="ai-avatars"></div>
+  <div id="houses"></div>
 
+  <!-- -------------------------
+       AI Log Section
+  -------------------------- -->
+  <section id="ai-log-section">
+    <h2>Trinity Activity Log</h2>
+    <div id="ai-log" style="min-height:50px; padding:10px; background:#fdf9e3; border:1px solid #800020;"></div>
+  </section>
 
-
-
-
-<!-- JS Scripts -->
-<script src="js/main.js"></script>
-<script scr="js/auth.js"></script>
-<script scr="js/admin.js"></script>
+  <script src="js/main.js"></script>
 </body>
+</html>
